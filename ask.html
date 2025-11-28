@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask Anything | NEBC Teens</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <style>
+        :root {
+            --primary: #6a5af9;
+            --secondary: #d66efd;
+            --accent: #ff6b8b;
+            --success: #4cd964;
+            --warning: #ffcc00;
+            --text: #333333;
+            --text-light: #6c757d;
+            --bg: #f8f9fa;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --card-shadow: rgba(0, 0, 0, 0.1);
+            --nav-bg: rgba(255, 255, 255, 0.95);
+            --glow: 0 0 20px rgba(106, 90, 249, 0.3);
+            --transition: all 0.3s ease;
+        }
+
+        .dark-mode {
+            --primary: #8b7eff;
+            --secondary: #e58eff;
+            --accent: #ff8ba7;
+            --text: #f8f9fa;
+            --text-light: #adb5bd;
+            --bg: #121212;
+            --card-bg: rgba(30, 30, 30, 0.8);
+            --card-shadow: rgba(0, 0, 0, 0.3);
+            --nav-bg: rgba(30, 30, 30, 0.95);
+            --glow: 0 0 20px rgba(139, 126, 255, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: var(--transition);
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            height: 40vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+            border-radius: 0 0 30px 30px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            margin-bottom: 40px;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .hero-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating Elements */
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            animation: float 15s infinite linear;
+        }
+
+        .sparkle {
+            position: absolute;
+            color: white;
+            font-size: 1.5rem;
+            opacity: 0.7;
+            animation: sparkle 3s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, 50px) rotate(90deg); }
+            50% { transform: translate(0, 100px) rotate(180deg); }
+            75% { transform: translate(-20px, 50px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.8rem;
+            margin: 40px 0 20px;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50%;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        /* Question Form */
+        .question-form {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin: 30px 0;
+            transition: var(--transition);
+        }
+
+        .question-form:hover {
+            box-shadow: 0 15px 35px var(--card-shadow), var(--glow);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+            transition: var(--transition);
+            min-height: 120px;
+            resize: vertical;
+            font-size: 1rem;
+        }
+
+        .dark-mode .form-textarea {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(106, 90, 249, 0.2);
+        }
+
+        .anonymous-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        .toggle-text {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1.1rem;
+            width: 100%;
+            box-shadow: 0 5px 15px rgba(106, 90, 249, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(106, 90, 249, 0.5);
+        }
+
+        /* Questions Feed */
+        .questions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: calc(var(--delay) * 0.1s);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px var(--card-shadow), var(--glow);
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .answer-text {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            padding: 15px;
+            background: rgba(106, 90, 249, 0.05);
+            border-radius: 10px;
+        }
+
+        .question-reactions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .reaction {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .reaction:hover {
+            transform: scale(1.1);
+            background: rgba(106, 90, 249, 0.1);
+        }
+
+        /* Categories */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .category-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: calc(var(--delay) * 0.1s);
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px var(--card-shadow), var(--glow);
+        }
+
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.8rem;
+            margin: 0 auto 15px;
+            box-shadow: 0 5px 15px rgba(106, 90, 249, 0.3);
+        }
+
+        .category-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .category-desc {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Engagement Features */
+        .engagement-section {
+            margin: 60px 0 40px;
+        }
+
+        .engagement-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .engagement-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: calc(var(--delay) * 0.1s);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .engagement-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px var(--card-shadow), var(--glow);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-right: 15px;
+            box-shadow: 0 5px 15px rgba(106, 90, 249, 0.3);
+        }
+
+        .card-heading {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text);
+        }
+
+        /* Poll Section */
+        .poll-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .poll-option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .poll-option:hover {
+            transform: translateY(-3px);
+            background: rgba(106, 90, 249, 0.1);
+        }
+
+        .poll-option.selected {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .poll-result {
+            display: none;
+            margin-top: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .poll-bar {
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 5px;
+            width: 0%;
+            transition: width 1s ease;
+        }
+
+        .poll-percentage {
+            font-size: 0.8rem;
+            margin-left: 10px;
+            font-weight: 600;
+        }
+
+        /* Advice Drop */
+        .advice-input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+            transition: var(--transition);
+            margin-bottom: 15px;
+        }
+
+        .dark-mode .advice-input {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .advice-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(106, 90, 249, 0.2);
+        }
+
+        .advice-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .advice-item {
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Question of the Week */
+        .weekly-question {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: 0 10px 30px var(--card-shadow);
+        }
+
+        .weekly-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .weekly-prompt {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .weekly-input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 15px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 15px;
+            transition: var(--transition);
+        }
+
+        .weekly-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Popular Questions */
+        .popular-section {
+            margin: 60px 0 40px;
+        }
+
+        .popular-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .popular-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px var(--card-shadow);
+            transition: var(--transition);
+        }
+
+        .popular-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px var(--card-shadow);
+        }
+
+        .popular-rank {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .popular-text {
+            flex: 1;
+            font-size: 0.95rem;
+        }
+
+        /* Safety Note */
+        .safety-note {
+            text-align: center;
+            padding: 20px;
+            margin: 40px 0;
+            border-radius: 15px;
+            background: rgba(106, 90, 249, 0.05);
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Prayer Button */
+        .prayer-button {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.8rem;
+            box-shadow: 0 5px 20px rgba(106, 90, 249, 0.5);
+            cursor: pointer;
+            z-index: 100;
+            animation: pulse 2s infinite;
+            transition: var(--transition);
+        }
+
+        .prayer-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(106, 90, 249, 0.7);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--nav-bg);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            z-index: 100;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-light);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            transition: var(--transition);
+        }
+
+        .nav-item.active .nav-icon {
+            transform: translateY(-5px);
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .nav-indicator {
+            position: absolute;
+            top: -10px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .nav-item.active .nav-indicator {
+            opacity: 1;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--card-bg);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px var(--card-shadow);
+            cursor: pointer;
+            z-index: 100;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(30deg);
+        }
+
+        .theme-icon {
+            font-size: 1.3rem;
+            color: var(--text);
+        }
+
+        /* Success Modal */
+        .success-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .success-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .success-content {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: scale(0.8);
+            opacity: 0;
+            transition: var(--transition);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .success-modal.active .success-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: var(--success);
+            margin-bottom: 20px;
+        }
+
+        .success-message {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .ok-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .ok-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(106, 90, 249, 0.4);
+        }
+
+        /* Prayer Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .prayer-modal {
+            background: var(--card-bg);
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: translateY(50px) scale(0.9);
+            opacity: 0;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .modal-overlay.active .prayer-modal {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 10;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-close:hover {
+            background: white;
+            transform: rotate(90deg);
+        }
+
+        .modal-header {
+            padding: 30px 30px 0;
+        }
+
+        .modal-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .modal-subtitle {
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .modal-content {
+            padding: 0 30px 30px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .questions-grid, .categories-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .engagement-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .poll-options {
+                flex-direction: column;
+            }
+            
+            .modal-header {
+                padding: 20px 20px 0;
+            }
+            
+            .modal-content {
+                padding: 0 20px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Shapes for Background -->
+    <div class="floating-shapes">
+        <div class="shape" style="width: 80px; height: 80px; top: 10%; left: 10%; animation-delay: 0s;"></div>
+        <div class="shape" style="width: 120px; height: 120px; top: 60%; left: 80%; animation-delay: -5s;"></div>
+        <div class="shape" style="width: 60px; height: 60px; top: 80%; left: 20%; animation-delay: -10s;"></div>
+        <div class="shape" style="width: 100px; height: 100px; top: 30%; left: 70%; animation-delay: -2s;"></div>
+        <div class="shape" style="width: 70px; height: 70px; top: 70%; left: 60%; animation-delay: -7s;"></div>
+        <div class="shape" style="width: 90px; height: 90px; top: 40%; left: 30%; animation-delay: -12s;"></div>
+        
+        <div class="sparkle" style="top: 20%; left: 15%; animation-delay: 0s;">✨</div>
+        <div class="sparkle" style="top: 70%; left: 85%; animation-delay: -1s;">✨</div>
+        <div class="sparkle" style="top: 40%; left: 90%; animation-delay: -2s;">✨</div>
+        <div class="sparkle" style="top: 80%; left: 10%; animation-delay: -3s;">✨</div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon theme-icon"></i>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">Got a Question? Ask. No Judgment.</h1>
+            <p class="hero-subtitle">Life, faith, relationships, school, confusion — whatever it is, feel free to ask anonymously.</p>
+        </div>
+    </section>
+
+    <!-- Question Form -->
+    <section class="container">
+        <div class="question-form">
+            <div class="form-group">
+                <label class="form-label" for="questionText">What's on your mind?</label>
+                <textarea id="questionText" class="form-textarea" placeholder="Type your question here..."></textarea>
+            </div>
+            <div class="anonymous-toggle">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="anonymousToggle" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+                <span class="toggle-text">Your name will NOT show unless you turn this off.</span>
+            </div>
+            <button class="submit-btn" id="submitQuestion">
+                <i class="fas fa-paper-plane"></i> Submit Question
+            </button>
+        </div>
+    </section>
+
+    <!-- Featured Questions -->
+    <section class="container">
+        <h2 class="section-title">Recently Answered Questions</h2>
+        <div class="questions-grid" id="questionsGrid">
+            <!-- Questions will be loaded from Firebase -->
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="container">
+        <h2 class="section-title">Browse by Category</h2>
+        <div class="categories-grid">
+            <div class="category-card" style="--delay: 1">
+                <div class="category-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3 class="category-title">Life & School</h3>
+                <p class="category-desc">Stress, future plans, career, academic pressure</p>
+            </div>
+            <div class="category-card" style="--delay: 2">
+                <div class="category-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="category-title">Friendship & People</h3>
+                <p class="category-desc">Misunderstandings, boundaries, peer pressure</p>
+            </div>
+            <div class="category-card" style="--delay: 3">
+                <div class="category-icon">
+                    <i class="fas fa-pray"></i>
+                </div>
+                <h3 class="category-title">Faith & Spirituality</h3>
+                <p class="category-desc">Bible confusion, prayer questions, personal struggles</p>
+            </div>
+            <div class="category-card" style="--delay: 4">
+                <div class="category-icon">
+                    <i class="fas fa-seedling"></i>
+                </div>
+                <h3 class="category-title">Personal Growth</h3>
+                <p class="category-desc">Habits, confidence, self-discipline, motivation</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Engagement Features -->
+    <section class="container engagement-section">
+        <h2 class="section-title">Join the Conversation</h2>
+        <div class="engagement-cards">
+            <!-- Daily Poll -->
+            <div class="engagement-card" style="--delay: 1">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-poll"></i>
+                    </div>
+                    <h3 class="card-heading">This or That?</h3>
+                </div>
+                <p>Early Bird or Night Owl?</p>
+                <div class="poll-options">
+                    <div class="poll-option" data-option="early">
+                        <span>Early Bird 🌅</span>
+                        <span class="poll-percentage">0%</span>
+                        <div class="poll-result">
+                            <div class="poll-bar" data-option="early"></div>
+                        </div>
+                    </div>
+                    <div class="poll-option" data-option="night">
+                        <span>Night Owl 🌙</span>
+                        <span class="poll-percentage">0%</span>
+                        <div class="poll-result">
+                            <div class="poll-bar" data-option="night"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Anonymous Advice Drop -->
+            <div class="engagement-card" style="--delay: 2">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3 class="card-heading">Anonymous Advice Drop</h3>
+                </div>
+                <p>Drop one piece of advice for another teen today.</p>
+                <input type="text" class="advice-input" id="adviceInput" placeholder="Share your wisdom...">
+                <button class="submit-btn" id="submitAdvice">
+                    <i class="fas fa-share"></i> Share Advice
+                </button>
+                <div class="advice-list" id="adviceList">
+                    <!-- Advice items will be loaded from Firebase -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Question of the Week -->
+    <section class="container">
+        <div class="weekly-question">
+            <h3 class="weekly-title">Question of the Week</h3>
+            <p class="weekly-prompt">What is one valuable lesson you learned this week?</p>
+            <input type="text" class="weekly-input" id="weeklyAnswer" placeholder="Share your answer...">
+            <button class="submit-btn" id="submitWeekly">
+                <i class="fas fa-check"></i> Submit Answer
+            </button>
+        </div>
+    </section>
+
+    <!-- Popular Questions -->
+    <section class="container popular-section">
+        <h2 class="section-title">Most Asked This Month</h2>
+        <div class="popular-list">
+            <div class="popular-item">
+                <div class="popular-rank">1</div>
+                <div class="popular-text">How do I deal with academic pressure without burning out?</div>
+            </div>
+            <div class="popular-item">
+                <div class="popular-rank">2</div>
+                <div class="popular-text">What does it really mean to trust God with my future?</div>
+            </div>
+            <div class="popular-item">
+                <div class="popular-rank">3</div>
+                <div class="popular-text">How can I set healthy boundaries with friends?</div>
+            </div>
+            <div class="popular-item">
+                <div class="popular-rank">4</div>
+                <div class="popular-text">Is it normal to doubt my faith sometimes?</div>
+            </div>
+            <div class="popular-item">
+                <div class="popular-rank">5</div>
+                <div class="popular-text">How do I balance social life, school, and spiritual growth?</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Safety Note -->
+    <section class="container">
+        <div class="safety-note">
+            <p>Please don't include private personal details. If your question feels sensitive or emotional, our team will respond with care.</p>
+        </div>
+    </section>
+
+    <!-- Prayer Request Button -->
+    <div class="prayer-button" id="prayerButton">
+        <i class="fas fa-hands-praying"></i>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="success-modal" id="successModal">
+        <div class="success-content">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <p class="success-message" id="successMessage">Your question has been submitted!</p>
+            <button class="ok-btn" id="okBtn">OK</button>
+        </div>
+    </div>
+
+    <!-- Prayer Request Modal -->
+    <div class="modal-overlay" id="prayerModal">
+        <div class="prayer-modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Submit a Prayer Request</h3>
+                <button class="modal-close" id="prayerClose">&times;</button>
+            </div>
+            <div class="modal-content">
+                <form id="prayerForm">
+                    <div class="form-group">
+                        <label class="form-label" for="name">Your Name (Optional)</label>
+                        <input type="text" id="name" class="form-input" placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="request">Prayer Request</label>
+                        <textarea id="request" class="form-textarea" placeholder="Share your prayer request here..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <input type="checkbox" id="anonymous"> Share anonymously
+                        </label>
+                    </div>
+                    <button type="submit" class="submit-btn">Submit Prayer Request</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="devotionals.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-book-open nav-icon"></i>
+            <span class="nav-label">Devotionals</span>
+        </a>
+        <a href="plans.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-calendar-check nav-icon"></i>
+            <span class="nav-label">Plans</span>
+        </a>
+        <a href="testimonies.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-comment-dots nav-icon"></i>
+            <span class="nav-label">Testimonies</span>
+        </a>
+        <a href="ask.html" class="nav-item active">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-question-circle nav-icon"></i>
+            <span class="nav-label">Ask Anything</span>
+        </a>
+    </nav>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "your-api-key",
+            authDomain: "your-auth-domain",
+            projectId: "your-project-id",
+            storageBucket: "your-storage-bucket",
+            messagingSenderId: "your-sender-id",
+            appId: "your-app-id"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Sample questions data (in a real app, this would come from Firebase)
+        const sampleQuestions = [
+            {
+                id: 1,
+                question: "How do I know if I'm making the right decision about college?",
+                answer: "Pray for guidance, seek wise counsel from people you trust, and remember that God can work through any path you choose. Sometimes there isn't one 'right' decision, but multiple good options.",
+                reactions: { helpful: 12, love: 8, fire: 5 },
+                category: "Life & School",
+                isAnonymous: true
+            },
+            {
+                id: 2,
+                question: "What should I do when I feel distant from God?",
+                answer: "It's normal to go through seasons where God feels distant. Continue praying and reading the Bible even when it feels dry. Sometimes serving others can also help reconnect us with God's presence.",
+                reactions: { helpful: 18, love: 15, fire: 10 },
+                category: "Faith & Spirituality",
+                isAnonymous: true
+            },
+            {
+                id: 3,
+                question: "How can I set boundaries with friends who drain my energy?",
+                answer: "It's healthy to set limits. You can kindly express your needs, like 'I need some alone time to recharge' or 'I can only hang out for a couple hours.' True friends will respect your boundaries.",
+                reactions: { helpful: 22, love: 18, fire: 12 },
+                category: "Friendship & People",
+                isAnonymous: false,
+                name: "Alex"
+            },
+            {
+                id: 4,
+                question: "Is it okay to have doubts about my faith?",
+                answer: "Absolutely. Doubt is a normal part of faith development. It shows you're thinking deeply. Bring your doubts to God and trusted mentors - questioning can actually strengthen your faith in the long run.",
+                reactions: { helpful: 25, love: 20, fire: 15 },
+                category: "Faith & Spirituality",
+                isAnonymous: true
+            }
+        ];
+
+        // Sample advice data
+        const sampleAdvice = [
+            "Don't compare your behind-the-scenes with everyone else's highlight reel.",
+            "Your worth isn't determined by your productivity.",
+            "It's okay to not be okay. Give yourself grace.",
+            "Small, consistent steps lead to big changes over time.",
+            "Your current situation is not your final destination."
+        ];
+
+        // DOM Elements
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('.theme-icon');
+        const questionText = document.getElementById('questionText');
+        const anonymousToggle = document.getElementById('anonymousToggle');
+        const submitQuestionBtn = document.getElementById('submitQuestion');
+        const questionsGrid = document.getElementById('questionsGrid');
+        const pollOptions = document.querySelectorAll('.poll-option');
+        const adviceInput = document.getElementById('adviceInput');
+        const submitAdviceBtn = document.getElementById('submitAdvice');
+        const adviceList = document.getElementById('adviceList');
+        const weeklyAnswer = document.getElementById('weeklyAnswer');
+        const submitWeeklyBtn = document.getElementById('submitWeekly');
+        const prayerButton = document.getElementById('prayerButton');
+        const prayerModal = document.getElementById('prayerModal');
+        const prayerClose = document.getElementById('prayerClose');
+        const prayerForm = document.getElementById('prayerForm');
+        const successModal = document.getElementById('successModal');
+        const successMessage = document.getElementById('successMessage');
+        const okBtn = document.getElementById('okBtn');
+
+        // Initialize the page
+        function initPage() {
+            setupEventListeners();
+            loadQuestions();
+            loadAdvice();
+            setupPoll();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Theme toggle
+            themeToggle.addEventListener('click', toggleTheme);
+            
+            // Submit question
+            submitQuestionBtn.addEventListener('click', submitQuestion);
+            
+            // Submit advice
+            submitAdviceBtn.addEventListener('click', submitAdvice);
+            
+            // Submit weekly answer
+            submitWeeklyBtn.addEventListener('click', submitWeeklyAnswer);
+            
+            // Prayer modal
+            prayerButton.addEventListener('click', () => {
+                prayerModal.classList.add('active');
+            });
+            
+            prayerClose.addEventListener('click', () => {
+                prayerModal.classList.remove('active');
+            });
+            
+            prayerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // In a real implementation, this would send to EmailJS
+                prayerModal.classList.remove('active');
+                setTimeout(() => {
+                    successMessage.textContent = "Your prayer request has been received. The NEBC Teens team will pray with you.";
+                    successModal.classList.add('active');
+                }, 300);
+                prayerForm.reset();
+            });
+            
+            // Success modal
+            okBtn.addEventListener('click', () => {
+                successModal.classList.remove('active');
+            });
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        }
+
+        // Load questions from Firebase (using sample data for demo)
+        function loadQuestions() {
+            // In a real implementation, this would fetch from Firebase
+            questionsGrid.innerHTML = '';
+            
+            sampleQuestions.forEach((question, index) => {
+                const questionElement = document.createElement('div');
+                questionElement.className = 'question-card';
+                questionElement.style.setProperty('--delay', index + 1);
+                
+                questionElement.innerHTML = `
+                    <div class="question-text">${question.question}</div>
+                    <div class="answer-text">
+                        <strong>Answer from NEBC Teens:</strong><br>
+                        ${question.answer}
+                    </div>
+                    <div class="question-reactions">
+                        <div class="reaction" data-type="helpful">
+                            <span>👍</span>
+                            <span>${question.reactions.helpful}</span>
+                        </div>
+                        <div class="reaction" data-type="love">
+                            <span>❤️</span>
+                            <span>${question.reactions.love}</span>
+                        </div>
+                        <div class="reaction" data-type="fire">
+                            <span>🔥</span>
+                            <span>${question.reactions.fire}</span>
+                        </div>
+                    </div>
+                `;
+                
+                questionsGrid.appendChild(questionElement);
+                
+                // Add event listeners to reactions
+                const reactions = questionElement.querySelectorAll('.reaction');
+                reactions.forEach(reaction => {
+                    reaction.addEventListener('click', () => {
+                        const type = reaction.dataset.type;
+                        const countElement = reaction.querySelector('span:last-child');
+                        let count = parseInt(countElement.textContent);
+                        countElement.textContent = count + 1;
+                        
+                        // Add visual feedback
+                        reaction.style.transform = 'scale(1.2)';
+                        setTimeout(() => {
+                            reaction.style.transform = 'scale(1)';
+                        }, 200);
+                    });
+                });
+            });
+        }
+
+        // Load advice from Firebase (using sample data for demo)
+        function loadAdvice() {
+            // In a real implementation, this would fetch from Firebase
+            adviceList.innerHTML = '';
+            
+            sampleAdvice.forEach(advice => {
+                const adviceElement = document.createElement('div');
+                adviceElement.className = 'advice-item';
+                adviceElement.textContent = advice;
+                adviceList.appendChild(adviceElement);
+            });
+        }
+
+        // Setup poll functionality
+        function setupPoll() {
+            let pollData = {
+                early: 0,
+                night: 0
+            };
+            
+            // Load existing poll data (in a real app, from Firebase)
+            // For demo, we'll use some initial values
+            pollData.early = 42;
+            pollData.night = 58;
+            updatePollDisplay(pollData);
+            
+            pollOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    const selectedOption = option.dataset.option;
+                    
+                    // Remove selected class from all options
+                    pollOptions.forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Add selected class to clicked option
+                    option.classList.add('selected');
+                    
+                    // Update poll data
+                    pollData[selectedOption]++;
+                    
+                    // Update display
+                    updatePollDisplay(pollData);
+                    
+                    // Show results
+                    document.querySelectorAll('.poll-result').forEach(result => {
+                        result.style.display = 'block';
+                    });
+                    
+                    // Animate the bars
+                    setTimeout(() => {
+                        document.querySelectorAll('.poll-bar').forEach(bar => {
+                            const optionType = bar.dataset.option;
+                            const percentage = calculatePercentage(pollData, optionType);
+                            bar.style.width = `${percentage}%`;
+                        });
+                    }, 100);
+                });
+            });
+        }
+
+        // Update poll display with current data
+        function updatePollDisplay(pollData) {
+            const total = pollData.early + pollData.night;
+            
+            pollOptions.forEach(option => {
+                const optionType = option.dataset.option;
+                const percentage = total > 0 ? Math.round((pollData[optionType] / total) * 100) : 0;
+                
+                const percentageElement = option.querySelector('.poll-percentage');
+                percentageElement.textContent = `${percentage}%`;
+            });
+        }
+
+        // Calculate percentage for poll option
+        function calculatePercentage(pollData, option) {
+            const total = pollData.early + pollData.night;
+            return total > 0 ? (pollData[option] / total) * 100 : 0;
+        }
+
+        // Submit question to Firebase
+        function submitQuestion() {
+            const question = questionText.value.trim();
+            if (!question) {
+                alert('Please enter a question');
+                return;
+            }
+            
+            const isAnonymous = anonymousToggle.checked;
+            
+            // In a real implementation, this would save to Firebase
+            console.log('Submitting question:', { question, isAnonymous });
+            
+            // For demo, we'll just show success message
+            questionText.value = '';
+            successMessage.textContent = "Your question has been submitted! Our team will review it and may post an answer soon.";
+            successModal.classList.add('active');
+            
+            // Show confetti celebration
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
+
+        // Submit advice to Firebase
+        function submitAdvice() {
+            const advice = adviceInput.value.trim();
+            if (!advice) {
+                alert('Please enter some advice');
+                return;
+            }
+            
+            // In a real implementation, this would save to Firebase
+            console.log('Submitting advice:', advice);
+            
+            // For demo, add to the list
+            const adviceElement = document.createElement('div');
+            adviceElement.className = 'advice-item';
+            adviceElement.textContent = advice;
+            adviceList.prepend(adviceElement);
+            
+            adviceInput.value = '';
+            
+            // Show success message
+            successMessage.textContent = "Your advice has been shared!";
+            successModal.classList.add('active');
+        }
+
+        // Submit weekly answer to Firebase
+        function submitWeeklyAnswer() {
+            const answer = weeklyAnswer.value.trim();
+            if (!answer) {
+                alert('Please enter your answer');
+                return;
+            }
+            
+            // In a real implementation, this would save to Firebase
+            console.log('Submitting weekly answer:', answer);
+            
+            weeklyAnswer.value = '';
+            
+            // Show success message
+            successMessage.textContent = "Thanks for sharing! Your answer has been submitted.";
+            successModal.classList.add('active');
+        }
+
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>

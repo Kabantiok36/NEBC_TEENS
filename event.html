@@ -1,0 +1,2231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events | NEBC Teens</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <style>
+        :root {
+            --primary: #6a5af9;
+            --secondary: #d66efd;
+            --accent: #ff6b8b;
+            --success: #4cd964;
+            --warning: #ffcc00;
+            --text: #333333;
+            --text-light: #6c757d;
+            --bg: #f8f9fa;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --card-shadow: rgba(0, 0, 0, 0.1);
+            --nav-bg: rgba(255, 255, 255, 0.95);
+            --glow: 0 0 20px rgba(106, 90, 249, 0.3);
+            --transition: all 0.3s ease;
+        }
+
+        .dark-mode {
+            --primary: #8b7eff;
+            --secondary: #e58eff;
+            --accent: #ff8ba7;
+            --text: #f8f9fa;
+            --text-light: #adb5bd;
+            --bg: #121212;
+            --card-bg: rgba(30, 30, 30, 0.8);
+            --card-shadow: rgba(0, 0, 0, 0.3);
+            --nav-bg: rgba(30, 30, 30, 0.95);
+            --glow: 0 0 20px rgba(139, 126, 255, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: var(--transition);
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 40px;
+        }
+
+        .hero-slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+        }
+
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .hero-slide.active {
+            opacity: 1;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(106, 90, 249, 0.7), rgba(214, 110, 253, 0.7), rgba(255, 107, 139, 0.7));
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .hero-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 4rem;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating Elements */
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            animation: float 15s infinite linear;
+        }
+
+        .sparkle {
+            position: absolute;
+            color: white;
+            font-size: 1.5rem;
+            opacity: 0.7;
+            animation: sparkle 3s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, 50px) rotate(90deg); }
+            50% { transform: translate(0, 100px) rotate(180deg); }
+            75% { transform: translate(-20px, 50px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 2rem;
+            margin: 40px 0 20px;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50%;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        /* Upcoming Events */
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .event-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: calc(var(--delay) * 0.1s);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .event-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px var(--card-shadow), var(--glow);
+        }
+
+        .event-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .event-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .event-date {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .event-location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .event-description {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .countdown {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(106, 90, 249, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+            min-width: 50px;
+        }
+
+        .countdown-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .countdown-label {
+            font-size: 0.7rem;
+            color: var(--text-light);
+        }
+
+        .event-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .calendar-btn, .details-btn {
+            flex: 1;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .calendar-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+        }
+
+        .calendar-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(106, 90, 249, 0.4);
+        }
+
+        .details-btn {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .details-btn:hover {
+            background: rgba(106, 90, 249, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* Event Details Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .event-modal {
+            background: var(--card-bg);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: translateY(50px) scale(0.9);
+            opacity: 0;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .modal-overlay.active .event-modal {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 10;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-close:hover {
+            background: white;
+            transform: rotate(90deg);
+        }
+
+        .modal-header {
+            padding: 30px 30px 0;
+        }
+
+        .modal-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .modal-subtitle {
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .modal-content {
+            padding: 0 30px 30px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .modal-section {
+            margin-bottom: 25px;
+        }
+
+        .section-heading {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .agenda-list, .bring-list {
+            list-style-type: none;
+        }
+
+        .agenda-item, .bring-item {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dark-mode .agenda-item, .dark-mode .bring-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .agenda-time {
+            font-weight: 600;
+            color: var(--primary);
+            min-width: 80px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .gallery-item {
+            height: 80px;
+            border-radius: 10px;
+            background-size: cover;
+            background-position: center;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+
+        .interested-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .interested-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(106, 90, 249, 0.4);
+        }
+
+        /* Past Events Gallery */
+        .masonry-grid {
+            columns: 3;
+            column-gap: 15px;
+            margin: 30px 0;
+        }
+
+        @media (max-width: 768px) {
+            .masonry-grid {
+                columns: 2;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .masonry-grid {
+                columns: 1;
+            }
+        }
+
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 15px;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .masonry-item:hover {
+            transform: scale(1.03);
+        }
+
+        .masonry-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: var(--transition);
+        }
+
+        .masonry-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+            color: white;
+            padding: 15px;
+            transform: translateY(100%);
+            transition: var(--transition);
+        }
+
+        .masonry-item:hover .masonry-caption {
+            transform: translateY(0);
+        }
+
+        /* Event Reels */
+        .reels-container {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+            border-radius: 20px;
+            margin: 30px 0;
+            background: var(--card-bg);
+            box-shadow: 0 10px 30px var(--card-shadow);
+        }
+
+        .reel-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 30px;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .reel-slide.active {
+            opacity: 1;
+        }
+
+        .reel-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+            z-index: 1;
+        }
+
+        .reel-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+        }
+
+        .reel-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .reel-text {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .reel-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .reel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .reel-dot.active {
+            background: white;
+            transform: scale(1.2);
+        }
+
+        /* Monthly Calendar */
+        .calendar-container {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin: 30px 0;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .calendar-nav-btn {
+            background: rgba(106, 90, 249, 0.1);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--primary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .calendar-nav-btn:hover {
+            background: rgba(106, 90, 249, 0.2);
+            transform: scale(1.1);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+
+        .calendar-day {
+            text-align: center;
+            font-weight: 600;
+            color: var(--text-light);
+            padding: 10px 0;
+        }
+
+        .calendar-date {
+            text-align: center;
+            padding: 15px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .calendar-date:hover {
+            background: rgba(106, 90, 249, 0.1);
+        }
+
+        .calendar-date.event {
+            background: rgba(106, 90, 249, 0.1);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .calendar-date.event::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--primary);
+        }
+
+        .calendar-date.selected {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .calendar-event-info {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(106, 90, 249, 0.05);
+            border-radius: 15px;
+            display: none;
+        }
+
+        .calendar-event-info.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Who's Coming Section */
+        .whos-coming {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .coming-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .coming-count {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .avatars-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            animation: bounce 2s infinite;
+            animation-delay: calc(var(--delay) * 0.2s);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Engagement Section */
+        .engagement-section {
+            margin: 60px 0 40px;
+        }
+
+        .engagement-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .engagement-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: calc(var(--delay) * 0.1s);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .engagement-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px var(--card-shadow), var(--glow);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-right: 15px;
+            box-shadow: 0 5px 15px rgba(106, 90, 249, 0.3);
+        }
+
+        .card-heading {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text);
+        }
+
+        /* Trivia */
+        .trivia-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .trivia-option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: left;
+        }
+
+        .trivia-option:hover {
+            transform: translateY(-3px);
+            background: rgba(106, 90, 249, 0.1);
+        }
+
+        .trivia-option.selected {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        /* Event Wheel */
+        .wheel-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                #6a5af9 0deg 60deg,
+                #d66efd 60deg 120deg,
+                #ff6b8b 120deg 180deg,
+                #4cd964 180deg 240deg,
+                #ffcc00 240deg 300deg,
+                #8b7eff 300deg 360deg
+            );
+            position: relative;
+            transition: transform 3s cubic-bezier(0.2, 0.8, 0.3, 1);
+            box-shadow: 0 0 20px rgba(106, 90, 249, 0.3);
+            cursor: pointer;
+        }
+
+        .wheel-pointer {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            clip-path: polygon(50% 100%, 0 0, 100% 0);
+            z-index: 10;
+        }
+
+        .wheel-result {
+            display: none;
+            text-align: center;
+            padding: 15px;
+            background: rgba(106, 90, 249, 0.1);
+            border-radius: 10px;
+            margin-top: 15px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .wheel-result.active {
+            display: block;
+        }
+
+        /* Event Rating */
+        .rating-options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .rating-option {
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            transform: scale(1);
+        }
+
+        .rating-option:hover {
+            transform: scale(1.2);
+        }
+
+        .rating-option.selected {
+            transform: scale(1.3);
+            animation: pulse 1s infinite;
+        }
+
+        /* Suggest Event */
+        .suggest-section {
+            margin: 60px 0 40px;
+        }
+
+        .suggest-form {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin: 30px 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+            transition: var(--transition);
+        }
+
+        .dark-mode .form-input, .dark-mode .form-textarea {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(106, 90, 249, 0.2);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .anonymous-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        .toggle-text {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(106, 90, 249, 0.4);
+        }
+
+        /* Success Modal */
+        .success-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .success-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .success-content {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: scale(0.8);
+            opacity: 0;
+            transition: var(--transition);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .success-modal.active .success-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: var(--success);
+            margin-bottom: 20px;
+        }
+
+        .success-message {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .ok-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .ok-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(106, 90, 249, 0.4);
+        }
+
+        /* Prayer Button */
+        .prayer-button {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.8rem;
+            box-shadow: 0 5px 20px rgba(106, 90, 249, 0.5);
+            cursor: pointer;
+            z-index: 100;
+            animation: pulse 2s infinite;
+            transition: var(--transition);
+        }
+
+        .prayer-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(106, 90, 249, 0.7);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--nav-bg);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            z-index: 100;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-light);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            transition: var(--transition);
+        }
+
+        .nav-item.active .nav-icon {
+            transform: translateY(-5px);
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .nav-indicator {
+            position: absolute;
+            top: -10px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .nav-item.active .nav-indicator {
+            opacity: 1;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--card-bg);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px var(--card-shadow);
+            cursor: pointer;
+            z-index: 100;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(30deg);
+        }
+
+        .theme-icon {
+            font-size: 1.3rem;
+            color: var(--text);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .events-grid, .engagement-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .modal-header {
+                padding: 20px 20px 0;
+            }
+            
+            .modal-content {
+                padding: 0 20px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Shapes for Background -->
+    <div class="floating-shapes">
+        <div class="shape" style="width: 80px; height: 80px; top: 10%; left: 10%; animation-delay: 0s;"></div>
+        <div class="shape" style="width: 120px; height: 120px; top: 60%; left: 80%; animation-delay: -5s;"></div>
+        <div class="shape" style="width: 60px; height: 60px; top: 80%; left: 20%; animation-delay: -10s;"></div>
+        <div class="shape" style="width: 100px; height: 100px; top: 30%; left: 70%; animation-delay: -2s;"></div>
+        <div class="shape" style="width: 70px; height: 70px; top: 70%; left: 60%; animation-delay: -7s;"></div>
+        <div class="shape" style="width: 90px; height: 90px; top: 40%; left: 30%; animation-delay: -12s;"></div>
+        
+        <div class="sparkle" style="top: 20%; left: 15%; animation-delay: 0s;">✨</div>
+        <div class="sparkle" style="top: 70%; left: 85%; animation-delay: -1s;">✨</div>
+        <div class="sparkle" style="top: 40%; left: 90%; animation-delay: -2s;">✨</div>
+        <div class="sparkle" style="top: 80%; left: 10%; animation-delay: -3s;">✨</div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon theme-icon"></i>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-slider">
+            <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1531058020387-3be344556be6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');"></div>
+            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1174&q=80');"></div>
+            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');"></div>
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">NEBC Teens Events</h1>
+            <p class="hero-subtitle">See what's coming, join the experience.</p>
+        </div>
+    </section>
+
+    <!-- Upcoming Events -->
+    <section class="container">
+        <h2 class="section-title">Upcoming Events</h2>
+        <div class="events-grid" id="eventsGrid">
+            <!-- Events will be loaded from Firebase -->
+        </div>
+    </section>
+
+    <!-- Past Events Gallery -->
+    <section class="container">
+        <h2 class="section-title">Moments We Won't Forget</h2>
+        <div class="masonry-grid">
+            <div class="masonry-item">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Youth Group" class="masonry-img">
+                <div class="masonry-caption">Summer Retreat 2023</div>
+            </div>
+            <div class="masonry-item">
+                <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Worship Night" class="masonry-img">
+                <div class="masonry-caption">Worship Night</div>
+            </div>
+            <div class="masonry-item">
+                <img src="https://images.unsplash.com/photo-1541532713592-79a0317b6b77?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80" alt="Game Night" class="masonry-img">
+                <div class="masonry-caption">Game Night Extravaganza</div>
+            </div>
+            <div class="masonry-item">
+                <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Beach Trip" class="masonry-img">
+                <div class="masonry-caption">Beach Day</div>
+            </div>
+            <div class="masonry-item">
+                <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Concert" class="masonry-img">
+                <div class="masonry-caption">Youth Concert</div>
+            </div>
+            <div class="masonry-item">
+                <img src="https://images.unsplash.com/photo-1532635241-17e820acc59f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1159&q=80" alt="Small Group" class="masonry-img">
+                <div class="masonry-caption">Small Group Discussions</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Event Reels -->
+    <section class="container">
+        <h2 class="section-title">Event Highlights</h2>
+        <div class="reels-container">
+            <div class="reel-slide active" style="background-image: url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');">
+                <div class="reel-overlay"></div>
+                <div class="reel-content">
+                    <h3 class="reel-title">Teen Worship Night</h3>
+                    <p class="reel-text">An unforgettable night of praise and connection</p>
+                </div>
+            </div>
+            <div class="reel-slide" style="background-image: url('https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');">
+                <div class="reel-overlay"></div>
+                <div class="reel-content">
+                    <h3 class="reel-title">Hangout Day</h3>
+                    <p class="reel-text">Fun, games, and making memories together</p>
+                </div>
+            </div>
+            <div class="reel-slide" style="background-image: url('https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');">
+                <div class="reel-overlay"></div>
+                <div class="reel-content">
+                    <h3 class="reel-title">Games Sunday</h3>
+                    <p class="reel-text">Competition, laughter, and team spirit</p>
+                </div>
+            </div>
+        </div>
+        <div class="reel-controls">
+            <div class="reel-dot active"></div>
+            <div class="reel-dot"></div>
+            <div class="reel-dot"></div>
+        </div>
+    </section>
+
+    <!-- Monthly Calendar -->
+    <section class="container">
+        <h2 class="section-title">Event Calendar</h2>
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <h3 class="calendar-title">November 2023</h3>
+                <div class="calendar-nav">
+                    <button class="calendar-nav-btn"><i class="fas fa-chevron-left"></i></button>
+                    <button class="calendar-nav-btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+            <div class="calendar-grid">
+                <div class="calendar-day">Sun</div>
+                <div class="calendar-day">Mon</div>
+                <div class="calendar-day">Tue</div>
+                <div class="calendar-day">Wed</div>
+                <div class="calendar-day">Thu</div>
+                <div class="calendar-day">Fri</div>
+                <div class="calendar-day">Sat</div>
+                
+                <!-- Calendar dates will be generated by JavaScript -->
+            </div>
+            <div class="calendar-event-info" id="calendarEventInfo">
+                <!-- Event info will be displayed here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Who's Coming Section -->
+    <section class="container">
+        <div class="whos-coming">
+            <h3 class="coming-title">Who's Coming?</h3>
+            <div class="coming-count">45</div>
+            <p>Teens Have Indicated Interest!</p>
+            <div class="avatars-grid">
+                <div class="avatar" style="--delay: 1">👤</div>
+                <div class="avatar" style="--delay: 2">👤</div>
+                <div class="avatar" style="--delay: 3">👤</div>
+                <div class="avatar" style="--delay: 4">👤</div>
+                <div class="avatar" style="--delay: 5">👤</div>
+                <div class="avatar" style="--delay: 6">👤</div>
+                <div class="avatar" style="--delay: 7">👤</div>
+                <div class="avatar" style="--delay: 8">👤</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Engagement Section -->
+    <section class="container engagement-section">
+        <h2 class="section-title">Join the Fun</h2>
+        <div class="engagement-cards">
+            <!-- Event Trivia -->
+            <div class="engagement-card" style="--delay: 1">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <h3 class="card-heading">Event Trivia of the Day</h3>
+                </div>
+                <p>Which NEBC Teens event had the largest attendance last year?</p>
+                <div class="trivia-options">
+                    <div class="trivia-option">Summer Retreat</div>
+                    <div class="trivia-option">Worship Night</div>
+                    <div class="trivia-option">Game Night Extravaganza</div>
+                    <div class="trivia-option">Beach Day</div>
+                </div>
+            </div>
+
+            <!-- Event Wheel -->
+            <div class="engagement-card" style="--delay: 2">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <h3 class="card-heading">Spin to Pick Your Next Event</h3>
+                </div>
+                <div class="wheel-container">
+                    <div class="wheel-pointer"></div>
+                    <div class="wheel" id="eventWheel"></div>
+                </div>
+                <button class="submit-btn" id="spinWheel">
+                    <i class="fas fa-redo"></i> Spin the Wheel
+                </button>
+                <div class="wheel-result" id="wheelResult">
+                    <p>Your next event should be: <strong>Worship Night</strong>! 🙌</p>
+                </div>
+            </div>
+
+            <!-- Event Rating -->
+            <div class="engagement-card" style="--delay: 3">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3 class="card-heading">Rate the Last Event</h3>
+                </div>
+                <p>How was our last gathering?</p>
+                <div class="rating-options">
+                    <div class="rating-option">🔥</div>
+                    <div class="rating-option">😎</div>
+                    <div class="rating-option">💯</div>
+                    <div class="rating-option">🙏</div>
+                    <div class="rating-option">🎉</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Suggest Event -->
+    <section class="container suggest-section">
+        <h2 class="section-title">Suggest an Event</h2>
+        <div class="suggest-form">
+            <form id="suggestForm">
+                <div class="form-group">
+                    <label class="form-label" for="eventTitle">Event Idea Title</label>
+                    <input type="text" id="eventTitle" class="form-input" placeholder="Give your event idea a name" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="eventDescription">Short Explanation</label>
+                    <textarea id="eventDescription" class="form-textarea" placeholder="Tell us about your event idea..." required></textarea>
+                </div>
+                <div class="anonymous-toggle">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="suggestAnonymous" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toggle-text">Submit anonymously</span>
+                </div>
+                <button type="submit" class="submit-btn">Submit Suggestion</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Event Details Modal -->
+    <div class="modal-overlay" id="eventModal">
+        <div class="event-modal">
+            <button class="modal-close" id="eventClose">&times;</button>
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalEventTitle">Teen Worship Night</h3>
+                <p class="modal-subtitle" id="modalEventDate">Friday, November 17 • 7:00 PM</p>
+            </div>
+            <div class="modal-content">
+                <div class="modal-section">
+                    <h4 class="section-heading">Event Description</h4>
+                    <p id="modalEventDescription">Join us for an incredible night of worship, connection, and spiritual growth. This is a space where you can be yourself, connect with God, and build meaningful relationships with other teens.</p>
+                </div>
+                <div class="modal-section">
+                    <h4 class="section-heading">Agenda</h4>
+                    <ul class="agenda-list" id="modalEventAgenda">
+                        <!-- Agenda items will be added by JavaScript -->
+                    </ul>
+                </div>
+                <div class="modal-section">
+                    <h4 class="section-heading">Dress Code</h4>
+                    <p id="modalEventDressCode">Casual and comfortable. Come as you are!</p>
+                </div>
+                <div class="modal-section">
+                    <h4 class="section-heading">What to Bring</h4>
+                    <ul class="bring-list" id="modalEventBring">
+                        <!-- Bring items will be added by JavaScript -->
+                    </ul>
+                </div>
+                <div class="modal-section">
+                    <h4 class="section-heading">Past Event Photos</h4>
+                    <div class="gallery-grid" id="modalEventGallery">
+                        <!-- Gallery items will be added by JavaScript -->
+                    </div>
+                </div>
+                <button class="interested-btn" id="interestedBtn">
+                    <i class="fas fa-heart"></i> I'm Interested!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="success-modal" id="successModal">
+        <div class="success-content">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <p class="success-message" id="successMessage">Your event suggestion has been submitted!</p>
+            <button class="ok-btn" id="okBtn">OK</button>
+        </div>
+    </div>
+
+    <!-- Prayer Request Button -->
+    <div class="prayer-button" id="prayerButton">
+        <i class="fas fa-hands-praying"></i>
+    </div>
+
+    <!-- Prayer Request Modal -->
+    <div class="modal-overlay" id="prayerModal">
+        <div class="event-modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Submit a Prayer Request</h3>
+                <button class="modal-close" id="prayerClose">&times;</button>
+            </div>
+            <div class="modal-content">
+                <form id="prayerForm">
+                    <div class="form-group">
+                        <label class="form-label" for="name">Your Name (Optional)</label>
+                        <input type="text" id="name" class="form-input" placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="request">Prayer Request</label>
+                        <textarea id="request" class="form-textarea" placeholder="Share your prayer request here..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <input type="checkbox" id="anonymous"> Share anonymously
+                        </label>
+                    </div>
+                    <button type="submit" class="submit-btn">Submit Prayer Request</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="devotionals.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-book-open nav-icon"></i>
+            <span class="nav-label">Devotionals</span>
+        </a>
+        <a href="plans.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-calendar-check nav-icon"></i>
+            <span class="nav-label">Plans</span>
+        </a>
+        <a href="testimonies.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-comment-dots nav-icon"></i>
+            <span class="nav-label">Testimonies</span>
+        </a>
+        <a href="events.html" class="nav-item active">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-calendar-alt nav-icon"></i>
+            <span class="nav-label">Events</span>
+        </a>
+    </nav>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "your-api-key",
+            authDomain: "your-auth-domain",
+            projectId: "your-project-id",
+            storageBucket: "your-storage-bucket",
+            messagingSenderId: "your-sender-id",
+            appId: "your-app-id"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Sample events data (in a real app, this would come from Firebase)
+        const sampleEvents = [
+            {
+                id: 1,
+                title: "Teen Worship Night",
+                date: "2023-11-17",
+                time: "7:00 PM",
+                location: "NEBC Main Sanctuary",
+                description: "Join us for an incredible night of worship, connection, and spiritual growth. This is a space where you can be yourself, connect with God, and build meaningful relationships with other teens.",
+                fullDescription: "Join us for an incredible night of worship, connection, and spiritual growth. This is a space where you can be yourself, connect with God, and build meaningful relationships with other teens. We'll have live worship, a short message, and plenty of time to hang out and connect.",
+                agenda: [
+                    { time: "7:00 PM", activity: "Welcome & Icebreakers" },
+                    { time: "7:30 PM", activity: "Worship Session" },
+                    { time: "8:00 PM", activity: "Message: Finding Your Identity in Christ" },
+                    { time: "8:30 PM", activity: "Small Group Discussions" },
+                    { time: "9:00 PM", activity: "Snacks & Hangout" }
+                ],
+                dressCode: "Casual and comfortable. Come as you are!",
+                bringItems: ["Bible (if you have one)", "Open heart", "Friend(s)!"],
+                gallery: [
+                    "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+                    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80",
+                    "https://images.unsplash.com/photo-1511632765486-a01980e01a18?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+                ],
+                countdown: "2023-11-17T19:00:00"
+            },
+            {
+                id: 2,
+                title: "Game Night Extravaganza",
+                date: "2023-11-24",
+                time: "6:30 PM",
+                location: "NEBC Youth Room",
+                description: "Get ready for an epic night of games, competition, and laughter! We'll have everything from board games to video games and team challenges.",
+                fullDescription: "Get ready for an epic night of games, competition, and laughter! We'll have everything from board games to video games and team challenges. Whether you're a competitive gamer or just looking for fun, there's something for everyone. Pizza and snacks provided!",
+                agenda: [
+                    { time: "6:30 PM", activity: "Doors Open & Welcome" },
+                    { time: "7:00 PM", activity: "Team Game Challenges" },
+                    { time: "8:00 PM", activity: "Pizza Break" },
+                    { time: "8:30 PM", activity: "Board Game & Video Game Free Play" },
+                    { time: "9:30 PM", activity: "Prize Giveaway & Wrap-up" }
+                ],
+                dressCode: "Comfortable clothes you can move in",
+                bringItems: ["Your favorite board game (optional)", "Competitive spirit"],
+                gallery: [
+                    "https://images.unsplash.com/photo-1541532713592-79a0317b6b77?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80",
+                    "https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+                    "https://images.unsplash.com/photo-1578269174936-2709b6aeb913?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80"
+                ],
+                countdown: "2023-11-24T18:30:00"
+            },
+            {
+                id: 3,
+                title: "Beach Day & Bonfire",
+                date: "2023-12-02",
+                time: "2:00 PM",
+                location: "Santa Monica Beach",
+                description: "Join us for a day at the beach followed by an evening bonfire. We'll have games, swimming, worship, and s'mores!",
+                fullDescription: "Join us for a day at the beach followed by an evening bonfire. We'll have games, swimming, worship, and s'mores! This is always one of our most popular events, so don't miss out. Transportation provided from NEBC at 1:30 PM.",
+                agenda: [
+                    { time: "2:00 PM", activity: "Arrive at Beach & Games" },
+                    { time: "4:00 PM", activity: "Swimming & Free Time" },
+                    { time: "6:00 PM", activity: "Bonfire & Worship" },
+                    { time: "7:00 PM", activity: "Dinner & S'mores" },
+                    { time: "8:30 PM", activity: "Head Back to NEBC" }
+                ],
+                dressCode: "Beach attire & warm layers for evening",
+                bringItems: ["Swimsuit & towel", "Sunscreen", "Jacket for evening"],
+                gallery: [
+                    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1173&q=80",
+                    "https://images.unsplash.com/photo-1506953823976-52e1fdc0149a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+                    "https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1174&q=80"
+                ],
+                countdown: "2023-12-02T14:00:00"
+            }
+        ];
+
+        // Event categories for the wheel
+        const eventCategories = [
+            "Worship Night",
+            "Hangout",
+            "Game Night",
+            "Bible Study",
+            "Discussion Forum",
+            "Outreach",
+            "Concert",
+            "Retreat"
+        ];
+
+        // DOM Elements
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('.theme-icon');
+        const heroSlides = document.querySelectorAll('.hero-slide');
+        const eventsGrid = document.getElementById('eventsGrid');
+        const eventModal = document.getElementById('eventModal');
+        const eventClose = document.getElementById('eventClose');
+        const modalEventTitle = document.getElementById('modalEventTitle');
+        const modalEventDate = document.getElementById('modalEventDate');
+        const modalEventDescription = document.getElementById('modalEventDescription');
+        const modalEventAgenda = document.getElementById('modalEventAgenda');
+        const modalEventDressCode = document.getElementById('modalEventDressCode');
+        const modalEventBring = document.getElementById('modalEventBring');
+        const modalEventGallery = document.getElementById('modalEventGallery');
+        const interestedBtn = document.getElementById('interestedBtn');
+        const reelSlides = document.querySelectorAll('.reel-slide');
+        const reelDots = document.querySelectorAll('.reel-dot');
+        const calendarGrid = document.querySelector('.calendar-grid');
+        const calendarEventInfo = document.getElementById('calendarEventInfo');
+        const eventWheel = document.getElementById('eventWheel');
+        const spinWheelBtn = document.getElementById('spinWheel');
+        const wheelResult = document.getElementById('wheelResult');
+        const ratingOptions = document.querySelectorAll('.rating-option');
+        const suggestForm = document.getElementById('suggestForm');
+        const prayerButton = document.getElementById('prayerButton');
+        const prayerModal = document.getElementById('prayerModal');
+        const prayerClose = document.getElementById('prayerClose');
+        const prayerForm = document.getElementById('prayerForm');
+        const successModal = document.getElementById('successModal');
+        const successMessage = document.getElementById('successMessage');
+        const okBtn = document.getElementById('okBtn');
+
+        // Initialize the page
+        function initPage() {
+            setupEventListeners();
+            startHeroSlider();
+            startReelSlider();
+            loadEvents();
+            generateCalendar();
+            setupTrivia();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Theme toggle
+            themeToggle.addEventListener('click', toggleTheme);
+            
+            // Event modal
+            eventClose.addEventListener('click', () => {
+                eventModal.classList.remove('active');
+            });
+            
+            // Interested button
+            interestedBtn.addEventListener('click', () => {
+                interestedBtn.innerHTML = '<i class="fas fa-check"></i> You\'re Interested!';
+                interestedBtn.style.background = 'linear-gradient(135deg, var(--success), #2ecc71)';
+                interestedBtn.disabled = true;
+                
+                // Show confetti
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            });
+            
+            // Reel dots
+            reelDots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    showReelSlide(index);
+                });
+            });
+            
+            // Event wheel
+            spinWheelBtn.addEventListener('click', spinEventWheel);
+            
+            // Rating options
+            ratingOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    ratingOptions.forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                    
+                    // Show confetti for positive engagement
+                    confetti({
+                        particleCount: 50,
+                        spread: 70,
+                        origin: { y: 0.6 }
+                    });
+                });
+            });
+            
+            // Suggest form
+            suggestForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Get form data
+                const title = document.getElementById('eventTitle').value;
+                const description = document.getElementById('eventDescription').value;
+                const isAnonymous = document.getElementById('suggestAnonymous').checked;
+                
+                // In a real implementation, this would save to Firebase
+                console.log('Submitting event suggestion:', { title, description, isAnonymous });
+                
+                // Show success message
+                suggestForm.reset();
+                successMessage.textContent = "Your event suggestion has been submitted!";
+                successModal.classList.add('active');
+            });
+            
+            // Prayer modal
+            prayerButton.addEventListener('click', () => {
+                prayerModal.classList.add('active');
+            });
+            
+            prayerClose.addEventListener('click', () => {
+                prayerModal.classList.remove('active');
+            });
+            
+            prayerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // In a real implementation, this would send to EmailJS
+                prayerModal.classList.remove('active');
+                setTimeout(() => {
+                    successMessage.textContent = "Your prayer request has been received. The NEBC Teens team will pray with you.";
+                    successModal.classList.add('active');
+                }, 300);
+                prayerForm.reset();
+            });
+            
+            // Success modal
+            okBtn.addEventListener('click', () => {
+                successModal.classList.remove('active');
+            });
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        }
+
+        // Hero slider
+        let currentHeroSlide = 0;
+        
+        function startHeroSlider() {
+            setInterval(() => {
+                heroSlides.forEach(slide => slide.classList.remove('active'));
+                currentHeroSlide = (currentHeroSlide + 1) % heroSlides.length;
+                heroSlides[currentHeroSlide].classList.add('active');
+            }, 5000);
+        }
+
+        // Reel slider
+        let currentReelSlide = 0;
+        
+        function startReelSlider() {
+            setInterval(() => {
+                showReelSlide((currentReelSlide + 1) % reelSlides.length);
+            }, 6000);
+        }
+        
+        function showReelSlide(index) {
+            reelSlides.forEach(slide => slide.classList.remove('active'));
+            reelDots.forEach(dot => dot.classList.remove('active'));
+            
+            reelSlides[index].classList.add('active');
+            reelDots[index].classList.add('active');
+            currentReelSlide = index;
+        }
+
+        // Load events from Firebase (using sample data for demo)
+        function loadEvents() {
+            // In a real implementation, this would fetch from Firebase
+            eventsGrid.innerHTML = '';
+            
+            sampleEvents.forEach((event, index) => {
+                const eventElement = document.createElement('div');
+                eventElement.className = 'event-card';
+                eventElement.style.setProperty('--delay', index + 1);
+                
+                // Calculate countdown
+                const countdown = calculateCountdown(event.countdown);
+                
+                eventElement.innerHTML = `
+                    <div class="event-badge">Upcoming</div>
+                    <h3 class="event-title">${event.title}</h3>
+                    <div class="event-date">
+                        <i class="far fa-calendar"></i>
+                        <span>${formatDate(event.date)} • ${event.time}</span>
+                    </div>
+                    <div class="event-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>${event.location}</span>
+                    </div>
+                    <p class="event-description">${event.description}</p>
+                    <div class="countdown">
+                        <div class="countdown-item">
+                            <div class="countdown-value">${countdown.days}</div>
+                            <div class="countdown-label">Days</div>
+                        </div>
+                        <div class="countdown-item">
+                            <div class="countdown-value">${countdown.hours}</div>
+                            <div class="countdown-label">Hours</div>
+                        </div>
+                        <div class="countdown-item">
+                            <div class="countdown-value">${countdown.minutes}</div>
+                            <div class="countdown-label">Minutes</div>
+                        </div>
+                    </div>
+                    <div class="event-actions">
+                        <button class="calendar-btn" data-event="${event.id}">
+                            <i class="far fa-calendar-plus"></i> Add to Calendar
+                        </button>
+                        <button class="details-btn" data-event="${event.id}">
+                            <i class="fas fa-info-circle"></i> More Details
+                        </button>
+                    </div>
+                `;
+                
+                eventsGrid.appendChild(eventElement);
+                
+                // Add event listeners to buttons
+                const calendarBtn = eventElement.querySelector('.calendar-btn');
+                const detailsBtn = eventElement.querySelector('.details-btn');
+                
+                calendarBtn.addEventListener('click', () => {
+                    // In a real implementation, this would add to calendar
+                    calendarBtn.innerHTML = '<i class="fas fa-check"></i> Added!';
+                    calendarBtn.style.background = 'linear-gradient(135deg, var(--success), #2ecc71)';
+                    calendarBtn.disabled = true;
+                    
+                    // Show confetti
+                    confetti({
+                        particleCount: 50,
+                        spread: 70,
+                        origin: { y: 0.6 }
+                    });
+                });
+                
+                detailsBtn.addEventListener('click', () => {
+                    openEventModal(event);
+                });
+            });
+        }
+
+        // Calculate countdown to event
+        function calculateCountdown(eventDate) {
+            const now = new Date().getTime();
+            const eventTime = new Date(eventDate).getTime();
+            const distance = eventTime - now;
+            
+            if (distance < 0) {
+                return { days: 0, hours: 0, minutes: 0 };
+            }
+            
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            
+            return {
+                days: days.toString().padStart(2, '0'),
+                hours: hours.toString().padStart(2, '0'),
+                minutes: minutes.toString().padStart(2, '0')
+            };
+        }
+
+        // Format date for display
+        function formatDate(dateString) {
+            const options = { weekday: 'long', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+
+        // Open event modal with details
+        function openEventModal(event) {
+            modalEventTitle.textContent = event.title;
+            modalEventDate.textContent = `${formatDate(event.date)} • ${event.time} • ${event.location}`;
+            modalEventDescription.textContent = event.fullDescription;
+            modalEventDressCode.textContent = event.dressCode;
+            
+            // Clear previous content
+            modalEventAgenda.innerHTML = '';
+            modalEventBring.innerHTML = '';
+            modalEventGallery.innerHTML = '';
+            
+            // Add agenda items
+            event.agenda.forEach(item => {
+                const agendaItem = document.createElement('li');
+                agendaItem.className = 'agenda-item';
+                agendaItem.innerHTML = `
+                    <span class="agenda-time">${item.time}</span>
+                    <span>${item.activity}</span>
+                `;
+                modalEventAgenda.appendChild(agendaItem);
+            });
+            
+            // Add bring items
+            event.bringItems.forEach(item => {
+                const bringItem = document.createElement('li');
+                bringItem.className = 'bring-item';
+                bringItem.innerHTML = `<i class="fas fa-check"></i> ${item}`;
+                modalEventBring.appendChild(bringItem);
+            });
+            
+            // Add gallery items
+            event.gallery.forEach(imageUrl => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+                galleryItem.style.backgroundImage = `url(${imageUrl})`;
+                modalEventGallery.appendChild(galleryItem);
+            });
+            
+            // Reset interested button
+            interestedBtn.innerHTML = '<i class="fas fa-heart"></i> I\'m Interested!';
+            interestedBtn.style.background = 'linear-gradient(135deg, var(--primary), var(--secondary))';
+            interestedBtn.disabled = false;
+            
+            eventModal.classList.add('active');
+        }
+
+        // Generate calendar
+        function generateCalendar() {
+            // Clear previous dates
+            const existingDates = document.querySelectorAll('.calendar-date');
+            existingDates.forEach(date => date.remove());
+            
+            // Get current month and year
+            const currentDate = new Date();
+            const currentMonth = currentDate.getMonth();
+            const currentYear = currentDate.getFullYear();
+            
+            // Get first day of month and number of days
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            
+            // Add empty cells for days before the first day of the month
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'calendar-date';
+                calendarGrid.appendChild(emptyCell);
+            }
+            
+            // Add days of the month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateCell = document.createElement('div');
+                dateCell.className = 'calendar-date';
+                dateCell.textContent = day;
+                
+                // Check if this date has an event
+                const dateString = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+                const hasEvent = sampleEvents.some(event => event.date === dateString);
+                
+                if (hasEvent) {
+                    dateCell.classList.add('event');
+                    
+                    // Add click event to show event info
+                    dateCell.addEventListener('click', () => {
+                        // Remove selected class from all dates
+                        document.querySelectorAll('.calendar-date').forEach(d => {
+                            d.classList.remove('selected');
+                        });
+                        
+                        // Add selected class to clicked date
+                        dateCell.classList.add('selected');
+                        
+                        // Find and display event info
+                        const event = sampleEvents.find(e => e.date === dateString);
+                        if (event) {
+                            calendarEventInfo.innerHTML = `
+                                <h4>${event.title}</h4>
+                                <p><strong>Time:</strong> ${event.time}</p>
+                                <p><strong>Location:</strong> ${event.location}</p>
+                                <p>${event.description}</p>
+                                <button class="details-btn" data-event="${event.id}" style="margin-top: 10px;">
+                                    <i class="fas fa-info-circle"></i> More Details
+                                </button>
+                            `;
+                            calendarEventInfo.classList.add('active');
+                            
+                            // Add event listener to the details button
+                            const detailsBtn = calendarEventInfo.querySelector('.details-btn');
+                            detailsBtn.addEventListener('click', () => {
+                                openEventModal(event);
+                            });
+                        }
+                    });
+                }
+                
+                calendarGrid.appendChild(dateCell);
+            }
+        }
+
+        // Setup trivia
+        function setupTrivia() {
+            const triviaOptions = document.querySelectorAll('.trivia-option');
+            
+            triviaOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    // Remove selected class from all options
+                    triviaOptions.forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Add selected class to clicked option
+                    option.classList.add('selected');
+                    
+                    // Check if answer is correct (Summer Retreat is the correct answer)
+                    if (option.textContent === 'Summer Retreat') {
+                        option.style.background = 'linear-gradient(135deg, var(--success), #2ecc71)';
+                        
+                        // Show confetti for correct answer
+                        confetti({
+                            particleCount: 100,
+                            spread: 70,
+                            origin: { y: 0.6 }
+                        });
+                    } else {
+                        option.style.background = 'linear-gradient(135deg, var(--accent), #ff4757)';
+                    }
+                });
+            });
+        }
+
+        // Spin event wheel
+        function spinEventWheel() {
+            // Disable button during spin
+            spinWheelBtn.disabled = true;
+            
+            // Random rotation between 3 and 5 full rotations plus a random angle
+            const rotations = 3 + Math.floor(Math.random() * 3);
+            const randomAngle = Math.floor(Math.random() * 360);
+            const totalRotation = rotations * 360 + randomAngle;
+            
+            // Apply rotation
+            eventWheel.style.transform = `rotate(${totalRotation}deg)`;
+            
+            // Calculate which category it lands on
+            const categoryAngle = 360 / eventCategories.length;
+            const landingIndex = Math.floor((360 - (totalRotation % 360)) / categoryAngle);
+            const selectedCategory = eventCategories[landingIndex];
+            
+            // Show result after spin completes
+            setTimeout(() => {
+                wheelResult.querySelector('strong').textContent = selectedCategory;
+                wheelResult.classList.add('active');
+                
+                // Re-enable button
+                spinWheelBtn.disabled = false;
+                
+                // Show confetti celebration
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }, 3000);
+        }
+
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>

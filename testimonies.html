@@ -1,0 +1,1735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testimonies | NEBC Teens</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <style>
+        :root {
+            --primary: #6a5af9;
+            --secondary: #d66efd;
+            --accent: #ff6b8b;
+            --success: #4cd964;
+            --warning: #ffcc00;
+            --text: #333333;
+            --text-light: #6c757d;
+            --bg: #f8f9fa;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --card-shadow: rgba(0, 0, 0, 0.1);
+            --nav-bg: rgba(255, 255, 255, 0.95);
+            --glow: 0 0 20px rgba(106, 90, 249, 0.3);
+            --transition: all 0.3s ease;
+        }
+
+        .dark-mode {
+            --primary: #8b7eff;
+            --secondary: #e58eff;
+            --accent: #ff8ba7;
+            --text: #f8f9fa;
+            --text-light: #adb5bd;
+            --bg: #121212;
+            --card-bg: rgba(30, 30, 30, 0.8);
+            --card-shadow: rgba(0, 0, 0, 0.3);
+            --nav-bg: rgba(30, 30, 30, 0.95);
+            --glow: 0 0 20px rgba(139, 126, 255, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: var(--transition);
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+            border-radius: 0 0 30px 30px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            margin-bottom: 40px;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .hero-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating Elements */
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            animation: float 15s infinite linear;
+        }
+
+        .sparkle {
+            position: absolute;
+            color: white;
+            font-size: 1.5rem;
+            opacity: 0.7;
+            animation: sparkle 3s infinite ease-in-out;
+        }
+
+        .bible-icon {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 2rem;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, 50px) rotate(90deg); }
+            50% { transform: translate(0, 100px) rotate(180deg); }
+            75% { transform: translate(-20px, 50px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.8rem;
+            margin: 40px 0 20px;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50%;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        /* Featured Testimonies Slider */
+        .featured-slider {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+            border-radius: 20px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px var(--card-shadow);
+        }
+
+        .featured-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 30px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            opacity: 0;
+            transform: translateX(100%);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .featured-slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .featured-slide.prev {
+            transform: translateX(-100%);
+        }
+
+        .featured-name {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .featured-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .featured-text {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            color: var(--text-light);
+        }
+
+        .featured-date {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        .slider-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .slider-dot.active {
+            background: var(--primary);
+            transform: scale(1.2);
+        }
+
+        /* Testimonies Feed */
+        .testimonies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .testimony-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: calc(var(--delay) * 0.1s);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimony-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 35px var(--card-shadow), var(--glow);
+        }
+
+        .testimony-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .testimony-name {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.3rem;
+            color: var(--primary);
+        }
+
+        .testimony-date {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .testimony-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+
+        .testimony-text {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .testimony-full {
+            display: none;
+            color: var(--text-light);
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .testimony-full.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .read-more-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .read-more-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(106, 90, 249, 0.4);
+        }
+
+        .testimony-reactions {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .reaction {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .reaction:hover {
+            transform: scale(1.1);
+        }
+
+        /* Testimony Spotlight */
+        .spotlight-section {
+            margin: 60px 0 40px;
+        }
+
+        .spotlight-container {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 20px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+        }
+
+        .spotlight-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .spotlight-slide.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .spotlight-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .spotlight-text {
+            font-size: 1.1rem;
+            max-width: 80%;
+        }
+
+        /* Scripture Encouragement */
+        .scripture-section {
+            margin: 60px 0 40px;
+            text-align: center;
+            padding: 40px 20px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scripture-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .scripture-reference {
+            font-size: 1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Engagement Features */
+        .engagement-section {
+            margin: 60px 0 40px;
+        }
+
+        .engagement-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .engagement-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: calc(var(--delay) * 0.1s);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .engagement-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px var(--card-shadow), var(--glow);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-right: 15px;
+            box-shadow: 0 5px 15px rgba(106, 90, 249, 0.3);
+        }
+
+        .card-heading {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text);
+        }
+
+        /* Reaction Counter */
+        .reaction-counter {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+
+        .reaction-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .reaction-emoji {
+            font-size: 2rem;
+        }
+
+        .reaction-count {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .reaction-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* Faith Facts */
+        .faith-facts {
+            min-height: 150px;
+            position: relative;
+        }
+
+        .faith-fact {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .faith-fact.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fact-text {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .fact-reference {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        /* Emoji Wall */
+        .emoji-wall {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+            border-radius: 20px;
+            margin: 30px 0;
+            background: rgba(106, 90, 249, 0.05);
+        }
+
+        .emoji {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.7;
+            animation: floatUp 15s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100%) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100%) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Share Testimony Section */
+        .share-section {
+            margin: 60px 0 40px;
+            text-align: center;
+            padding: 40px 20px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .share-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .share-subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+
+        .share-btn {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .share-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Motivation Footer */
+        .motivation-footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin: 40px 0;
+            border-radius: 20px;
+            background: var(--card-bg);
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .motivation-text {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .motivation-subtext {
+            font-size: 1.1rem;
+            color: var(--text-light);
+        }
+
+        /* Modals */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .testimony-modal, .prayer-modal {
+            background: var(--card-bg);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: translateY(50px) scale(0.9);
+            opacity: 0;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .modal-overlay.active .testimony-modal,
+        .modal-overlay.active .prayer-modal {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 10;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-close:hover {
+            background: white;
+            transform: rotate(90deg);
+        }
+
+        .modal-header {
+            padding: 30px 30px 0;
+        }
+
+        .modal-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .modal-subtitle {
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .modal-content {
+            padding: 0 30px 30px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+            transition: var(--transition);
+        }
+
+        .dark-mode .form-input, .dark-mode .form-textarea {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(106, 90, 249, 0.2);
+        }
+
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(106, 90, 249, 0.4);
+        }
+
+        /* Success Modal */
+        .success-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .success-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .success-content {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: scale(0.8);
+            opacity: 0;
+            transition: var(--transition);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .success-modal.active .success-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: var(--success);
+            margin-bottom: 20px;
+        }
+
+        .success-message {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .ok-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .ok-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(106, 90, 249, 0.4);
+        }
+
+        /* Prayer Button */
+        .prayer-button {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.8rem;
+            box-shadow: 0 5px 20px rgba(106, 90, 249, 0.5);
+            cursor: pointer;
+            z-index: 100;
+            animation: pulse 2s infinite;
+            transition: var(--transition);
+        }
+
+        .prayer-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(106, 90, 249, 0.7);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--nav-bg);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            z-index: 100;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-light);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            transition: var(--transition);
+        }
+
+        .nav-item.active .nav-icon {
+            transform: translateY(-5px);
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .nav-indicator {
+            position: absolute;
+            top: -10px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .nav-item.active .nav-indicator {
+            opacity: 1;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--card-bg);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px var(--card-shadow);
+            cursor: pointer;
+            z-index: 100;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(30deg);
+        }
+
+        .theme-icon {
+            font-size: 1.3rem;
+            color: var(--text);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .testimonies-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .engagement-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .featured-slider {
+                height: 350px;
+            }
+            
+            .modal-header {
+                padding: 20px 20px 0;
+            }
+            
+            .modal-content {
+                padding: 0 20px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Shapes for Background -->
+    <div class="floating-shapes">
+        <div class="shape" style="width: 80px; height: 80px; top: 10%; left: 10%; animation-delay: 0s;"></div>
+        <div class="shape" style="width: 120px; height: 120px; top: 60%; left: 80%; animation-delay: -5s;"></div>
+        <div class="shape" style="width: 60px; height: 60px; top: 80%; left: 20%; animation-delay: -10s;"></div>
+        <div class="shape" style="width: 100px; height: 100px; top: 30%; left: 70%; animation-delay: -2s;"></div>
+        <div class="shape" style="width: 70px; height: 70px; top: 70%; left: 60%; animation-delay: -7s;"></div>
+        <div class="shape" style="width: 90px; height: 90px; top: 40%; left: 30%; animation-delay: -12s;"></div>
+        <div class="shape" style="width: 50px; height: 50px; top: 20%; left: 50%; animation-delay: -4s;"></div>
+        <div class="shape" style="width: 110px; height: 110px; top: 50%; left: 10%; animation-delay: -9s;"></div>
+        
+        <div class="sparkle" style="top: 20%; left: 15%; animation-delay: 0s;">✨</div>
+        <div class="sparkle" style="top: 70%; left: 85%; animation-delay: -1s;">✨</div>
+        <div class="sparkle" style="top: 40%; left: 90%; animation-delay: -2s;">✨</div>
+        <div class="sparkle" style="top: 80%; left: 10%; animation-delay: -3s;">✨</div>
+        <div class="sparkle" style="top: 30%; left: 80%; animation-delay: -4s;">✨</div>
+        
+        <div class="bible-icon" style="top: 15%; left: 80%; animation-delay: 0s;">📖</div>
+        <div class="bible-icon" style="top: 75%; left: 15%; animation-delay: -5s;">✝️</div>
+        <div class="bible-icon" style="top: 50%; left: 90%; animation-delay: -10s;">🙏</div>
+        <div class="bible-icon" style="top: 85%; left: 70%; animation-delay: -7s;">❤️</div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon theme-icon"></i>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">NEBC Teens Testimonies</h1>
+            <p class="hero-subtitle">Real Stories. Real Faith. Real Teens.</p>
+            <p class="hero-subtitle">See what God is doing in the lives of our teens.</p>
+        </div>
+    </section>
+
+    <!-- Featured Testimonies Slider -->
+    <section class="container">
+        <h2 class="section-title">Featured Stories</h2>
+        <div class="featured-slider">
+            <div class="featured-slide active">
+                <div class="featured-name">Sarah M.</div>
+                <div class="featured-title">God's Peace During Finals</div>
+                <div class="featured-text">I was so stressed about my exams, but when I prayed and trusted God, He gave me a peace that surpassed all understanding. I ended up doing better than I expected!</div>
+                <div class="featured-date">Shared on May 15, 2023</div>
+            </div>
+            <div class="featured-slide">
+                <div class="featured-name">Michael T.</div>
+                <div class="featured-title">Healing After Injury</div>
+                <div class="featured-text">When I injured my knee during soccer season, I thought my dreams were over. But through prayer and faith, God healed me completely and I'm back on the field!</div>
+                <div class="featured-date">Shared on April 22, 2023</div>
+            </div>
+            <div class="featured-slide">
+                <div class="featured-name">Anonymous</div>
+                <div class="featured-title">Finding Purpose</div>
+                <div class="featured-text">I felt so lost and directionless until I started reading my Bible daily. God showed me that He has an amazing plan for my life, and I'm excited to follow Him!</div>
+                <div class="featured-date">Shared on June 3, 2023</div>
+            </div>
+        </div>
+        <div class="slider-controls">
+            <div class="slider-dot active"></div>
+            <div class="slider-dot"></div>
+            <div class="slider-dot"></div>
+        </div>
+    </section>
+
+    <!-- Testimonies Feed -->
+    <section class="container">
+        <h2 class="section-title">Recent Testimonies</h2>
+        <div class="testimonies-grid" id="testimoniesGrid">
+            <!-- Testimonies will be loaded here from Firebase -->
+        </div>
+    </section>
+
+    <!-- Testimony Spotlight -->
+    <section class="container spotlight-section">
+        <h2 class="section-title">Testimony Spotlight</h2>
+        <div class="spotlight-container">
+            <div class="spotlight-slide active">
+                <div class="spotlight-title">Testimony of the Week</div>
+                <div class="spotlight-text">"God answered my prayer for my friend to come to youth group!" - Jessica L.</div>
+            </div>
+            <div class="spotlight-slide">
+                <div class="spotlight-title">Most Inspiring</div>
+                <div class="spotlight-text">"I found courage to share my faith at school after praying for boldness." - Mark R.</div>
+            </div>
+            <div class="spotlight-slide">
+                <div class="spotlight-title">Student Spotlight</div>
+                <div class="spotlight-text">"God helped me overcome anxiety through daily prayer and scripture." - Chloe B.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripture Encouragement -->
+    <section class="container">
+        <div class="scripture-section">
+            <p class="scripture-text">"They triumphed over him by the blood of the Lamb and by the word of their testimony."</p>
+            <p class="scripture-reference">Revelation 12:11</p>
+        </div>
+    </section>
+
+    <!-- Engagement Features -->
+    <section class="container engagement-section">
+        <h2 class="section-title">Fun & Interactive</h2>
+        <div class="engagement-cards">
+            <!-- Reaction Counter -->
+            <div class="engagement-card" style="--delay: 1">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3 class="card-heading">Reaction Counter</h3>
+                </div>
+                <div class="reaction-counter">
+                    <div class="reaction-item">
+                        <div class="reaction-emoji">⭐</div>
+                        <div class="reaction-count">120</div>
+                        <div class="reaction-label">blessed</div>
+                    </div>
+                    <div class="reaction-item">
+                        <div class="reaction-emoji">🙌</div>
+                        <div class="reaction-count">96</div>
+                        <div class="reaction-label">uplifted</div>
+                    </div>
+                    <div class="reaction-item">
+                        <div class="reaction-emoji">🔥</div>
+                        <div class="reaction-count">70</div>
+                        <div class="reaction-label">inspired</div>
+                    </div>
+                </div>
+                <p>Your story matters. Share how these testimonies impacted you!</p>
+            </div>
+
+            <!-- Faith Facts -->
+            <div class="engagement-card" style="--delay: 2">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3 class="card-heading">Did You Know?</h3>
+                </div>
+                <div class="faith-facts">
+                    <div class="faith-fact active">
+                        <div class="fact-text">God used teenagers in the Bible—David, Samuel, Jeremiah.</div>
+                        <div class="fact-reference">1 Samuel 17:33-37</div>
+                    </div>
+                    <div class="faith-fact">
+                        <div class="fact-text">Jesus did most miracles for young people and children.</div>
+                        <div class="fact-reference">Mark 10:13-16</div>
+                    </div>
+                    <div class="faith-fact">
+                        <div class="fact-text">Your testimony has power to overcome the enemy.</div>
+                        <div class="fact-reference">Revelation 12:11</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emoji Wall -->
+            <div class="engagement-card" style="--delay: 3">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-smile"></i>
+                    </div>
+                    <h3 class="card-heading">Praise Wall</h3>
+                </div>
+                <div class="emoji-wall" id="emojiWall">
+                    <!-- Emojis will be generated by JavaScript -->
+                </div>
+                <p>Celebrating breakthroughs, healing, and God's faithfulness!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Share Testimony Section -->
+    <section class="container">
+        <div class="share-section">
+            <h2 class="share-title">Your Story Matters</h2>
+            <p class="share-subtitle">Your testimony can inspire someone. Don't keep it to yourself.</p>
+            <button class="share-btn" id="shareTestimonyBtn">
+                <i class="fas fa-plus-circle"></i> Share My Testimony
+            </button>
+        </div>
+    </section>
+
+    <!-- Motivation Footer -->
+    <section class="container">
+        <div class="motivation-footer">
+            <p class="motivation-text">God is writing your story.</p>
+            <p class="motivation-subtext">Your testimony is next.</p>
+        </div>
+    </section>
+
+    <!-- Prayer Request Button -->
+    <div class="prayer-button" id="prayerButton">
+        <i class="fas fa-hands-praying"></i>
+    </div>
+
+    <!-- Testimony Submission Modal -->
+    <div class="modal-overlay" id="testimonyModal">
+        <div class="testimony-modal">
+            <button class="modal-close" id="testimonyClose">&times;</button>
+            <div class="modal-header">
+                <h3 class="modal-title">Share Your Testimony</h3>
+                <p class="modal-subtitle">Tell us what God did 🙌</p>
+            </div>
+            <div class="modal-content">
+                <form id="testimonyForm">
+                    <div class="form-group">
+                        <label class="form-label" for="testifierName">Your Name (Optional)</label>
+                        <input type="text" id="testifierName" class="form-input" placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="testimonyTitle">Testimony Title</label>
+                        <input type="text" id="testimonyTitle" class="form-input" placeholder="Give your testimony a title" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="testimonyText">Your Story</label>
+                        <textarea id="testimonyText" class="form-textarea" placeholder="Share what God has done in your life..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <input type="checkbox" id="anonymous"> Share anonymously
+                        </label>
+                    </div>
+                    <button type="submit" class="submit-btn">Share My Testimony</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Prayer Request Modal -->
+    <div class="modal-overlay" id="prayerModal">
+        <div class="prayer-modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Submit a Prayer Request</h3>
+                <button class="modal-close" id="prayerClose">&times;</button>
+            </div>
+            <form id="prayerForm">
+                <div class="form-group">
+                    <label class="form-label" for="name">Your Name (Optional)</label>
+                    <input type="text" id="name" class="form-input" placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="request">Prayer Request</label>
+                    <textarea id="request" class="form-textarea" placeholder="Share your prayer request here..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <input type="checkbox" id="anonymous"> Share anonymously
+                    </label>
+                </div>
+                <button type="submit" class="submit-btn">Submit Prayer Request</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="success-modal" id="successModal">
+        <div class="success-content">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <p class="success-message" id="successMessage">Your testimony has been shared! 🎉</p>
+            <button class="ok-btn" id="okBtn">OK</button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="devotionals.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-book-open nav-icon"></i>
+            <span class="nav-label">Devotionals</span>
+        </a>
+        <a href="plans.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-calendar-check nav-icon"></i>
+            <span class="nav-label">Plans</span>
+        </a>
+        <a href="testimonies.html" class="nav-item active">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-comment-dots nav-icon"></i>
+            <span class="nav-label">Testimonies</span>
+        </a>
+        <a href="more.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-ellipsis-h nav-icon"></i>
+            <span class="nav-label">More</span>
+        </a>
+    </nav>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "your-api-key",
+            authDomain: "your-auth-domain",
+            projectId: "your-project-id",
+            storageBucket: "your-storage-bucket",
+            messagingSenderId: "your-sender-id",
+            appId: "your-app-id"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Initialize EmailJS (you would replace with your actual EmailJS credentials)
+        emailjs.init("user_your_user_id_here");
+
+        // Sample testimonies data (in a real app, this would come from Firebase)
+        const sampleTestimonies = [
+            {
+                id: 1,
+                name: "Jessica L.",
+                title: "Answered Prayer for Friendship",
+                summary: "I prayed for a Christian friend at school, and God brought Sarah into my life. We've been encouraging each other in faith ever since!",
+                fullText: "I was feeling really lonely at school and prayed that God would bring me a Christian friend who could understand my faith journey. A week later, I met Sarah in my math class. We started talking and discovered we both love Jesus! Now we meet every Friday to pray and study the Bible together. God truly answers prayers!",
+                date: "June 10, 2023",
+                reactions: { heart: 12, fire: 8, star: 15 }
+            },
+            {
+                id: 2,
+                name: "Mark R.",
+                title: "Finding Courage to Share Faith",
+                summary: "God gave me the boldness to talk about Jesus with my teammates, and one of them started coming to youth group!",
+                fullText: "I've always been nervous about sharing my faith with my soccer teammates. Last month, I prayed for courage, and God gave me the perfect opportunity when one of them asked why I was always so positive. I explained it was because of my relationship with Jesus. To my surprise, he was really interested and asked if he could come to youth group with me! He's been coming ever since.",
+                date: "May 28, 2023",
+                reactions: { heart: 18, fire: 12, star: 10 }
+            },
+            {
+                id: 3,
+                name: "Anonymous",
+                title: "Peace in Family Struggles",
+                summary: "When my parents were arguing a lot, God gave me peace and wisdom to be a peacemaker in our home.",
+                fullText: "My home situation was really tense with my parents arguing constantly. I felt helpless and scared. I started praying every day for peace in our home and for wisdom to know how to help. God slowly changed my heart and gave me the right words to say to both my parents. Things aren't perfect, but there's definitely more peace now, and I know God is with us through it all.",
+                date: "June 5, 2023",
+                reactions: { heart: 22, fire: 5, star: 8 }
+            },
+            {
+                id: 4,
+                name: "Chloe B.",
+                title: "Overcoming Anxiety",
+                summary: "Through prayer and scripture, God helped me overcome the anxiety that was controlling my life.",
+                fullText: "I struggled with anxiety for years, especially about school and friendships. It got so bad that I would feel sick every morning before school. I started memorizing Bible verses about peace and trusting God. Philippians 4:6-7 became my anchor. Slowly but surely, God replaced my anxiety with His peace. I still have moments, but now I know where to turn for help.",
+                date: "May 15, 2023",
+                reactions: { heart: 25, fire: 15, star: 20 }
+            },
+            {
+                id: 5,
+                name: "Daniel K.",
+                title: "Healing from Sickness",
+                summary: "When I was sick with flu before my important exams, my youth group prayed for me and I recovered miraculously fast!",
+                fullText: "I came down with a bad flu right before my final exams. I was so worried I wouldn't be able to study or perform well. My youth group heard about it and gathered to pray for me over video call. The next morning, my fever was gone and I felt completely better! I was able to study and do well on my exams. God is our healer!",
+                date: "June 2, 2023",
+                reactions: { heart: 15, fire: 18, star: 12 }
+            },
+            {
+                id: 6,
+                name: "Sophia T.",
+                title: "Direction for College",
+                summary: "I was confused about which college to choose, but God gave me clear direction through prayer and wise counsel.",
+                fullText: "I had been accepted to three different colleges and couldn't decide which one to attend. I felt so much pressure to make the right choice. I spent time in prayer asking God for guidance and also talked to my youth pastor and parents. Through a series of confirmations, God made it clear which school I should choose. I'm so excited to see what He has in store for me there!",
+                date: "April 30, 2023",
+                reactions: { heart: 10, fire: 8, star: 15 }
+            }
+        ];
+
+        // DOM Elements
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('.theme-icon');
+        const featuredSlides = document.querySelectorAll('.featured-slide');
+        const sliderDots = document.querySelectorAll('.slider-dot');
+        const testimoniesGrid = document.getElementById('testimoniesGrid');
+        const spotlightSlides = document.querySelectorAll('.spotlight-slide');
+        const faithFacts = document.querySelectorAll('.faith-fact');
+        const emojiWall = document.getElementById('emojiWall');
+        const shareTestimonyBtn = document.getElementById('shareTestimonyBtn');
+        const testimonyModal = document.getElementById('testimonyModal');
+        const testimonyClose = document.getElementById('testimonyClose');
+        const testimonyForm = document.getElementById('testimonyForm');
+        const prayerButton = document.getElementById('prayerButton');
+        const prayerModal = document.getElementById('prayerModal');
+        const prayerClose = document.getElementById('prayerClose');
+        const prayerForm = document.getElementById('prayerForm');
+        const successModal = document.getElementById('successModal');
+        const successMessage = document.getElementById('successMessage');
+        const okBtn = document.getElementById('okBtn');
+
+        // Initialize the page
+        function initPage() {
+            setupEventListeners();
+            startFeaturedSlider();
+            startSpotlightRotation();
+            startFaithFactsRotation();
+            createEmojiWall();
+            loadTestimonies();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Theme toggle
+            themeToggle.addEventListener('click', toggleTheme);
+            
+            // Testimony modal
+            shareTestimonyBtn.addEventListener('click', () => {
+                testimonyModal.classList.add('active');
+            });
+            
+            testimonyClose.addEventListener('click', () => {
+                testimonyModal.classList.remove('active');
+            });
+            
+            testimonyForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Get form data
+                const name = document.getElementById('testifierName').value || 'Anonymous';
+                const title = document.getElementById('testimonyTitle').value;
+                const text = document.getElementById('testimonyText').value;
+                const isAnonymous = document.getElementById('anonymous').checked;
+                
+                // In a real implementation, this would save to Firebase
+                // For demo, we'll just show success message
+                saveTestimonyToFirebase({
+                    name: isAnonymous ? 'Anonymous' : name,
+                    title: title,
+                    text: text,
+                    date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+                });
+                
+                testimonyModal.classList.remove('active');
+                setTimeout(() => {
+                    successMessage.textContent = "Your testimony has been shared! 🎉";
+                    successModal.classList.add('active');
+                }, 300);
+                testimonyForm.reset();
+            });
+            
+            // Prayer modal
+            prayerButton.addEventListener('click', () => {
+                prayerModal.classList.add('active');
+            });
+            
+            prayerClose.addEventListener('click', () => {
+                prayerModal.classList.remove('active');
+            });
+            
+            prayerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Send email via EmailJS
+                emailjs.sendForm('service_id', 'template_id', e.target)
+                    .then(() => {
+                        prayerModal.classList.remove('active');
+                        setTimeout(() => {
+                            successMessage.textContent = "Your prayer request has been received. The NEBC Teens team will pray with you.";
+                            successModal.classList.add('active');
+                        }, 300);
+                        prayerForm.reset();
+                    }, (error) => {
+                        console.log('FAILED...', error);
+                        // Fallback - still show success for demo purposes
+                        prayerModal.classList.remove('active');
+                        setTimeout(() => {
+                            successMessage.textContent = "Your prayer request has been received. The NEBC Teens team will pray with you.";
+                            successModal.classList.add('active');
+                        }, 300);
+                        prayerForm.reset();
+                    });
+            });
+            
+            // Success modal
+            okBtn.addEventListener('click', () => {
+                successModal.classList.remove('active');
+            });
+            
+            // Slider dots
+            sliderDots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    showFeaturedSlide(index);
+                });
+            });
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        }
+
+        // Featured testimonies slider
+        let currentFeaturedSlide = 0;
+        
+        function startFeaturedSlider() {
+            setInterval(() => {
+                currentFeaturedSlide = (currentFeaturedSlide + 1) % featuredSlides.length;
+                showFeaturedSlide(currentFeaturedSlide);
+            }, 5000);
+        }
+        
+        function showFeaturedSlide(index) {
+            featuredSlides.forEach(slide => {
+                slide.classList.remove('active', 'prev');
+            });
+            
+            sliderDots.forEach(dot => {
+                dot.classList.remove('active');
+            });
+            
+            featuredSlides[index].classList.add('active');
+            sliderDots[index].classList.add('active');
+            currentFeaturedSlide = index;
+        }
+
+        // Testimony spotlight rotation
+        let currentSpotlightSlide = 0;
+        
+        function startSpotlightRotation() {
+            setInterval(() => {
+                spotlightSlides.forEach(slide => slide.classList.remove('active'));
+                currentSpotlightSlide = (currentSpotlightSlide + 1) % spotlightSlides.length;
+                spotlightSlides[currentSpotlightSlide].classList.add('active');
+            }, 6000);
+        }
+
+        // Faith facts rotation
+        let currentFaithFact = 0;
+        
+        function startFaithFactsRotation() {
+            setInterval(() => {
+                faithFacts.forEach(fact => fact.classList.remove('active'));
+                currentFaithFact = (currentFaithFact + 1) % faithFacts.length;
+                faithFacts[currentFaithFact].classList.add('active');
+            }, 7000);
+        }
+
+        // Create emoji wall
+        function createEmojiWall() {
+            const emojis = ['🙏', '❤️', '🙌', '🔥', '🌟', '✨', '💫', '⭐', '😊', '🥰'];
+            const praiseWords = ['Breakthrough', 'Healing', 'Peace', 'Joy', 'Academic Success', 'Restoration', 'Hope', 'Faith', 'Love', 'Grace'];
+            
+            // Create emojis
+            for (let i = 0; i < 20; i++) {
+                const emoji = document.createElement('div');
+                emoji.className = 'emoji';
+                emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                emoji.style.left = `${Math.random() * 100}%`;
+                emoji.style.animationDelay = `${Math.random() * 15}s`;
+                emoji.style.fontSize = `${Math.random() * 1 + 1.5}rem`;
+                emojiWall.appendChild(emoji);
+            }
+            
+            // Create floating words
+            for (let i = 0; i < 10; i++) {
+                const word = document.createElement('div');
+                word.className = 'emoji';
+                word.textContent = praiseWords[Math.floor(Math.random() * praiseWords.length)];
+                word.style.left = `${Math.random() * 100}%`;
+                word.style.animationDelay = `${Math.random() * 15}s`;
+                word.style.fontSize = '1rem';
+                word.style.color = 'var(--primary)';
+                word.style.fontWeight = '600';
+                emojiWall.appendChild(word);
+            }
+        }
+
+        // Load testimonies from Firebase (using sample data for demo)
+        function loadTestimonies() {
+            // In a real implementation, this would fetch from Firebase
+            // For demo, we're using sample data
+            testimoniesGrid.innerHTML = '';
+            
+            sampleTestimonies.forEach((testimony, index) => {
+                const testimonyElement = document.createElement('div');
+                testimonyElement.className = 'testimony-card';
+                testimonyElement.style.setProperty('--delay', index + 1);
+                
+                testimonyElement.innerHTML = `
+                    <div class="testimony-header">
+                        <div class="testimony-name">${testimony.name}</div>
+                        <div class="testimony-date">${testimony.date}</div>
+                    </div>
+                    <div class="testimony-title">${testimony.title}</div>
+                    <div class="testimony-text">${testimony.summary}</div>
+                    <div class="testimony-full">${testimony.fullText}</div>
+                    <button class="read-more-btn">
+                        <i class="fas fa-chevron-down"></i> Read Full Testimony
+                    </button>
+                    <div class="testimony-reactions">
+                        <div class="reaction">
+                            <span>❤️</span>
+                            <span>${testimony.reactions.heart}</span>
+                        </div>
+                        <div class="reaction">
+                            <span>🔥</span>
+                            <span>${testimony.reactions.fire}</span>
+                        </div>
+                        <div class="reaction">
+                            <span>⭐</span>
+                            <span>${testimony.reactions.star}</span>
+                        </div>
+                    </div>
+                `;
+                
+                testimoniesGrid.appendChild(testimonyElement);
+                
+                // Add event listener to read more button
+                const readMoreBtn = testimonyElement.querySelector('.read-more-btn');
+                const fullText = testimonyElement.querySelector('.testimony-full');
+                
+                readMoreBtn.addEventListener('click', () => {
+                    if (fullText.classList.contains('active')) {
+                        fullText.classList.remove('active');
+                        readMoreBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Read Full Testimony';
+                    } else {
+                        fullText.classList.add('active');
+                        readMoreBtn.innerHTML = '<i class="fas fa-chevron-up"></i> Show Less';
+                    }
+                });
+            });
+        }
+
+        // Save testimony to Firebase (demo implementation)
+        function saveTestimonyToFirebase(testimony) {
+            // In a real implementation, this would save to Firestore
+            console.log('Saving testimony to Firebase:', testimony);
+            
+            // For demo purposes, we'll just add it to our sample data and reload
+            sampleTestimonies.unshift({
+                id: sampleTestimonies.length + 1,
+                name: testimony.name,
+                title: testimony.title,
+                summary: testimony.text.length > 150 ? testimony.text.substring(0, 150) + '...' : testimony.text,
+                fullText: testimony.text,
+                date: testimony.date,
+                reactions: { heart: 0, fire: 0, star: 0 }
+            });
+            
+            // Reload testimonies to show the new one
+            loadTestimonies();
+            
+            // Show confetti celebration
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
+
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>

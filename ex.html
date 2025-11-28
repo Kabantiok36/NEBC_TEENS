@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teens Church | Growing Faith. Growing Purpose.</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #8A2BE2;
+            --secondary: #00CED1;
+            --accent: #FF1493;
+            --background: #0F0F1E;
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --text: #FFFFFF;
+            --text-secondary: #B0B0D0;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 80px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 100%;
+            padding: 0 16px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 40px 20px;
+            border-radius: 0 0 30px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Carousel */
+        .carousel-container {
+            margin: 20px 0;
+            position: relative;
+            animation: slideUp 0.8s ease-out 0.2s both;
+        }
+
+        .carousel {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 16px;
+            padding: 0 16px 16px;
+            scrollbar-width: none;
+        }
+
+        .carousel::-webkit-scrollbar {
+            display: none;
+        }
+
+        .carousel-card {
+            flex: 0 0 85%;
+            scroll-snap-align: start;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+        }
+
+        .carousel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .carousel-card i {
+            font-size: 2rem;
+            margin-bottom: 12px;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .carousel-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+
+        .carousel-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .carousel-card .date {
+            font-size: 0.8rem;
+            color: var(--secondary);
+            margin-top: auto;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin: 24px 0;
+            animation: slideUp 0.8s ease-out 0.4s both;
+        }
+
+        .action-card {
+            background: var(--glass-bg);
+            border-radius: 18px;
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .action-card i {
+            font-size: 2rem;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .action-card span {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Featured Section */
+        .featured {
+            margin: 30px 0;
+            animation: slideUp 0.8s ease-out 0.6s both;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            padding-left: 8px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .featured-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-card::before {
+            content: '✨';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            opacity: 0.7;
+        }
+
+        .featured-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+        }
+
+        .featured-card p {
+            margin-bottom: 16px;
+            opacity: 0.9;
+        }
+
+        .verse {
+            font-style: italic;
+            font-size: 1rem;
+            margin-top: 16px;
+            opacity: 0.9;
+            position: relative;
+            padding-left: 16px;
+            border-left: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+
+        .nav-item.active {
+            color: var(--secondary);
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+
+        .prayer-button {
+            position: fixed;
+            bottom: 70px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(255, 20, 147, 0.4);
+            z-index: 101;
+            animation: pulse 2s infinite;
+            cursor: pointer;
+        }
+
+        .prayer-button i {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 20, 147, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 20, 147, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 20, 147, 0); }
+        }
+
+        /* Responsive adjustments */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 500px;
+                margin: 0 auto;
+            }
+            
+            .quick-actions {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Welcome to NEBC Teens Church</h1>
+            <p>Growing Faith. Growing Purpose.</p>
+        </section>
+
+        <!-- Carousel -->
+        <section class="carousel-container">
+            <div class="carousel">
+                <div class="carousel-card">
+                    <i class="fas fa-fire"></i>
+                    <h3>Weekly Motivation</h3>
+                    <p>Find strength in God's promises and walk confidently in your purpose this week.</p>
+                    <div class="date">May 15 - May 21</div>
+                </div>
+                <div class="carousel-card">
+                    <i class="fas fa-book-bible"></i>
+                    <h3>Daily Devotional</h3>
+                    <p>Start your day with God's word and let it guide your steps.</p>
+                    <div class="date">Updated Daily</div>
+                </div>
+                <div class="carousel-card">
+                    <i class="fas fa-calendar-star"></i>
+                    <h3>Upcoming Event</h3>
+                    <p>Youth Night: Games, Worship & Message this Friday at 7 PM.</p>
+                    <div class="date">May 19, 7:00 PM</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="quick-actions">
+            <div class="action-card">
+                <i class="fas fa-book-bible"></i>
+                <span>Devotional</span>
+            </div>
+            <div class="action-card">
+                <i class="fas fa-fire"></i>
+                <span>Quotes</span>
+            </div>
+            <div class="action-card">
+                <i class="fas fa-calendar"></i>
+                <span>Events</span>
+            </div>
+            <div class="action-card">
+                <i class="fas fa-pray"></i>
+                <span>Prayer Request</span>
+            </div>
+        </section>
+
+        <!-- Featured Section -->
+        <section class="featured">
+            <h2 class="section-title">This Week at Teens Church</h2>
+            <div class="featured-card">
+                <h3>Sunday Topic: Identity in Christ</h3>
+                <p>Discover who you are in God's eyes and how to walk in your true identity as a child of God.</p>
+                <div class="verse">"So God created mankind in his own image, in the image of God he created them; male and female he created them." - Genesis 1:27</div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <div class="nav-item active">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-book-bible"></i>
+            <span>Devotional</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-calendar-star"></i>
+            <span>Events</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-users"></i>
+            <span>Teens Corner</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </div>
+    </nav>
+
+    <!-- Floating Prayer Button -->
+    <div class="prayer-button">
+        <i class="fas fa-pray"></i>
+    </div>
+
+    <script>
+        // Simple carousel auto-scroll functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const carousel = document.querySelector('.carousel');
+            let scrollAmount = 0;
+            const scrollStep = carousel.querySelector('.carousel-card').offsetWidth + 16; // card width + gap
+            
+            function autoScroll() {
+                scrollAmount += scrollStep;
+                
+                // If we've scrolled past all cards, reset to start
+                if (scrollAmount >= carousel.scrollWidth - carousel.offsetWidth) {
+                    scrollAmount = 0;
+                }
+                
+                carousel.scrollTo({
+                    left: scrollAmount,
+                    behavior: 'smooth'
+                });
+            }
+            
+            // Auto scroll every 5 seconds
+            setInterval(autoScroll, 5000);
+            
+            // Add click events to action cards
+            const actionCards = document.querySelectorAll('.action-card');
+            actionCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
+                });
+            });
+            
+            // Prayer button animation
+            const prayerBtn = document.querySelector('.prayer-button');
+            prayerBtn.addEventListener('click', function() {
+                this.style.transform = 'scale(0.9)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 200);
+                alert('Prayer request opened! 🙏');
+            });
+        });
+    </script>
+</body>
+</html>

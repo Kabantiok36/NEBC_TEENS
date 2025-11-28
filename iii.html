@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teens Church</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles & Variables */
+        :root {
+            --primary: #8A2BE2;
+            --secondary: #00CED1;
+            --accent: #FF1493;
+            --light: #F8F9FA;
+            --dark: #212529;
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            color: var(--light);
+            overflow-x: hidden;
+            min-height: 100vh;
+            padding-bottom: 70px;
+        }
+
+        /* Header & Hero Section */
+        header {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            font-size: 24px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            filter: drop-shadow(0 0 10px rgba(138, 43, 226, 0.5));
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 18px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero {
+            position: relative;
+            height: 50vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            opacity: 0.8;
+            z-index: -1;
+        }
+
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1s ease-out, float 3s ease-in-out infinite;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 300px;
+            animation: fadeIn 1.5s ease-out, float 3s ease-in-out infinite 0.5s;
+        }
+
+        /* Image Carousel */
+        .carousel-container {
+            margin: 30px 0;
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .carousel {
+            display: flex;
+            width: 400%;
+            height: 100%;
+            transition: transform 0.8s ease;
+        }
+
+        .carousel-slide {
+            width: 25%;
+            height: 100%;
+            position: relative;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .carousel-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px;
+            text-align: center;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .carousel-indicators {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+        }
+
+        .indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .indicator.active {
+            background: var(--light);
+            transform: scale(1.2);
+        }
+
+        /* Quick Action Grid */
+        .section-title {
+            font-size: 1.5rem;
+            margin: 30px 20px 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 3px;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            padding: 0 20px;
+            margin-bottom: 30px;
+        }
+
+        .action-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 20px 10px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .action-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .action-card p {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Flip Cards Section */
+        .flip-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 0 20px;
+            margin-bottom: 30px;
+        }
+
+        .flip-card {
+            height: 150px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .flip-card-front {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+        }
+
+        .flip-card-back {
+            background: var(--gradient);
+            transform: rotateY(180deg);
+            text-align: center;
+        }
+
+        .flip-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .flip-card-back .flip-icon {
+            color: white;
+            background: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+        }
+
+        /* Featured Section */
+        .featured-section {
+            padding: 0 20px;
+            margin-bottom: 30px;
+        }
+
+        .featured-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .featured-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            animation: fadeUp 1s ease-out;
+        }
+
+        .featured-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .featured-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+
+        .featured-card p {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .scripture {
+            font-style: italic;
+            margin-top: 10px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Prayer Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .prayer-modal {
+            background: var(--gradient);
+            width: 90%;
+            max-width: 400px;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transform: scale(0.8);
+            transition: transform 0.4s ease;
+        }
+
+        .modal-overlay.active .prayer-modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: var(--dark);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .submit-btn:hover {
+            background: rgba(33, 37, 41, 0.9);
+            transform: translateY(-2px);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(22, 33, 62, 0.9);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 50;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: var(--transition);
+        }
+
+        .nav-item.active {
+            color: var(--secondary);
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .prayer-float {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            z-index: 40;
+            animation: bounce 2s infinite;
+        }
+
+        .prayer-float i {
+            font-size: 24px;
+            color: white;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        /* Responsive Adjustments */
+        @media (min-width: 768px) {
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.5rem;
+                max-width: 500px;
+            }
+            
+            .action-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+            }
+            
+            .flip-cards {
+                flex-direction: row;
+            }
+            
+            .flip-card {
+                flex: 1;
+            }
+            
+            .featured-cards {
+                flex-direction: row;
+            }
+            
+            .featured-card {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Hero Section -->
+    <header>
+        <div class="logo">
+            <div class="logo-icon">✝</div>
+            <div class="logo-text">Teens Church</div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <h1>Welcome to Teens Church</h1>
+        <p>Growing Faith. Growing Purpose.</p>
+    </section>
+
+    <!-- Image Carousel -->
+    <div class="carousel-container">
+        <div class="carousel">
+            <div class="carousel-slide">
+                <img src="https://images.unsplash.com/photo-1531058020387-3be344556be6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Youth worship">
+                <div class="carousel-caption">Worship Together</div>
+            </div>
+            <div class="carousel-slide">
+                <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Youth fellowship">
+                <div class="carousel-caption">Community & Fellowship</div>
+            </div>
+            <div class="carousel-slide">
+                <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Bible study">
+                <div class="carousel-caption">Bible Study</div>
+            </div>
+            <div class="carousel-slide">
+                <img src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Youth activities">
+                <div class="carousel-caption">Fun Activities</div>
+            </div>
+        </div>
+        <div class="carousel-indicators">
+            <div class="indicator active" data-slide="0"></div>
+            <div class="indicator" data-slide="1"></div>
+            <div class="indicator" data-slide="2"></div>
+            <div class="indicator" data-slide="3"></div>
+        </div>
+    </div>
+
+    <!-- Quick Action Grid -->
+    <h2 class="section-title">Quick Actions</h2>
+    <div class="action-grid">
+        <div class="action-card">
+            <div class="action-icon">📖</div>
+            <p>Devotional</p>
+        </div>
+        <div class="action-card">
+            <div class="action-icon">🔥</div>
+            <p>Weekly Motivation</p>
+        </div>
+        <div class="action-card">
+            <div class="action-icon">🎉</div>
+            <p>Events</p>
+        </div>
+        <div class="action-card">
+            <div class="action-icon">🙏</div>
+            <p>Prayer Request</p>
+        </div>
+        <div class="action-card">
+            <div class="action-icon">👥</div>
+            <p>Teens Corner</p>
+        </div>
+        <div class="action-card">
+            <div class="action-icon">💬</div>
+            <p>Connect</p>
+        </div>
+    </div>
+
+    <!-- Flip Cards Section -->
+    <h2 class="section-title">Explore More</h2>
+    <div class="flip-cards">
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <div class="flip-icon">📖</div>
+                    <h3>Daily Devotional</h3>
+                    <p>Tap to read today's message</p>
+                </div>
+                <div class="flip-card-back">
+                    <div class="flip-icon">📖</div>
+                    <h3>John 3:16</h3>
+                    <p>"For God so loved the world that he gave his one and only Son..."</p>
+                </div>
+            </div>
+        </div>
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <div class="flip-icon">🔥</div>
+                    <h3>Weekly Motivation</h3>
+                    <p>Tap for inspiration</p>
+                </div>
+                <div class="flip-card-back">
+                    <div class="flip-icon">🔥</div>
+                    <h3>Be Strong</h3>
+                    <p>"I can do all things through Christ who strengthens me." - Philippians 4:13</p>
+                </div>
+            </div>
+        </div>
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <div class="flip-icon">🎉</div>
+                    <h3>Featured Event</h3>
+                    <p>Tap for details</p>
+                </div>
+                <div class="flip-card-back">
+                    <div class="flip-icon">🎉</div>
+                    <h3>Youth Night</h3>
+                    <p>Friday, 7 PM @ Church Hall. Games, worship, and pizza!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Section -->
+    <h2 class="section-title">This Week at Teens Church</h2>
+    <section class="featured-section">
+        <div class="featured-cards">
+            <div class="featured-card">
+                <h3>Sunday Topic</h3>
+                <p>Finding Purpose in Christ</p>
+                <p class="scripture">"For I know the plans I have for you," declares the Lord, "plans to prosper you and not to harm you, plans to give you hope and a future." - Jeremiah 29:11</p>
+            </div>
+            <div class="featured-card">
+                <h3>Scripture of the Week</h3>
+                <p>Philippians 4:6-7</p>
+                <p class="scripture">"Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. And the peace of God, which transcends all understanding, will guard your hearts and your minds in Christ Jesus."</p>
+            </div>
+            <div class="featured-card">
+                <h3>Weekly Motivation</h3>
+                <p>You Are Not Alone</p>
+                <p class="scripture">Remember that God is always with you, even in your toughest moments. Reach out to your church family for support and encouragement.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prayer Modal -->
+    <div class="modal-overlay">
+        <div class="prayer-modal">
+            <div class="modal-header">
+                <h2>Prayer Request</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="prayer-form">
+                <div class="form-group">
+                    <input type="text" placeholder="Your Name (Optional)" id="prayer-name">
+                </div>
+                <div class="form-group">
+                    <textarea placeholder="Your Prayer Request..." id="prayer-message" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Send Prayer Request</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Floating Prayer Button -->
+    <div class="prayer-float">
+        <i class="fas fa-hands-praying"></i>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active">
+            <i class="fas fa-home nav-icon"></i>
+            <span>Home</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fas fa-book-open nav-icon"></i>
+            <span>Devotional</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fas fa-calendar-alt nav-icon"></i>
+            <span>Events</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fas fa-users nav-icon"></i>
+            <span>Teens Corner</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fas fa-user nav-icon"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <script>
+        // Carousel functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const carousel = document.querySelector('.carousel');
+            const indicators = document.querySelectorAll('.indicator');
+            let currentSlide = 0;
+            const totalSlides = 4;
+            
+            // Auto slide
+            setInterval(() => {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                updateCarousel();
+            }, 5000);
+            
+            // Indicator click
+            indicators.forEach(indicator => {
+                indicator.addEventListener('click', function() {
+                    currentSlide = parseInt(this.getAttribute('data-slide'));
+                    updateCarousel();
+                });
+            });
+            
+            function updateCarousel() {
+                carousel.style.transform = `translateX(-${currentSlide * 25}%)`;
+                
+                indicators.forEach((indicator, index) => {
+                    if (index === currentSlide) {
+                        indicator.classList.add('active');
+                    } else {
+                        indicator.classList.remove('active');
+                    }
+                });
+            }
+            
+            // Flip cards functionality
+            const flipCards = document.querySelectorAll('.flip-card');
+            flipCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('flipped');
+                });
+            });
+            
+            // Prayer modal functionality
+            const prayerModal = document.querySelector('.modal-overlay');
+            const prayerFloat = document.querySelector('.prayer-float');
+            const prayerCards = document.querySelectorAll('.action-card');
+            const closeModal = document.querySelector('.close-modal');
+            const prayerForm = document.getElementById('prayer-form');
+            
+            // Open modal
+            function openPrayerModal() {
+                prayerModal.classList.add('active');
+            }
+            
+            // Close modal
+            function closePrayerModal() {
+                prayerModal.classList.remove('active');
+            }
+            
+            prayerFloat.addEventListener('click', openPrayerModal);
+            
+            prayerCards[3].addEventListener('click', openPrayerModal);
+            
+            closeModal.addEventListener('click', closePrayerModal);
+            
+            prayerModal.addEventListener('click', function(e) {
+                if (e.target === prayerModal) {
+                    closePrayerModal();
+                }
+            });
+            
+            // Form submission
+            prayerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('prayer-name').value || 'Anonymous';
+                const message = document.getElementById('prayer-message').value;
+                
+                // In a real app, you would send this data to a server
+                alert(`Thank you, ${name}! Your prayer request has been received.`);
+                prayerForm.reset();
+                closePrayerModal();
+            });
+            
+            // Bottom nav active state
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Action grid hover effects
+            const actionCards = document.querySelectorAll('.action-card');
+            actionCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // In a real app, this would navigate to the appropriate page
+                    const text = this.querySelector('p').textContent;
+                    alert(`Navigating to ${text} page...`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
