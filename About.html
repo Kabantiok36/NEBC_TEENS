@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | NEBC Teens</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --torch-red: #ff1e1e;
+            --fair-pink: #ffe8e8;
+            --bittersweet: #ff7575;
+            --cornflower-lilac: #ffacac;
+            --coral-red: #ff3e3e;
+            --mona-lisa: #ff8f8f;
+            --persimmon: #ff5d5c;
+            --your-pink: #ffc9c9;
+            
+            --primary: #ff5d5c;
+            --secondary: #ff8f8f;
+            --accent: #ff3e3e;
+            --success: #4cd964;
+            --warning: #ffcc00;
+            --text: #f8f9fa;
+            --text-light: #adb5bd;
+            --bg: #121212;
+            --card-bg: rgba(30, 30, 30, 0.8);
+            --card-shadow: rgba(0, 0, 0, 0.3);
+            --nav-bg: rgba(30, 30, 30, 0.95);
+            --glow: 0 0 20px rgba(255, 93, 92, 0.5);
+            --transition: all 0.3s ease;
+        }
+
+        .light-mode {
+            --primary: #ff1e1e;
+            --secondary: #ff7575;
+            --accent: #ff3e3e;
+            --text: #333333;
+            --text-light: #6c757d;
+            --bg: #f8f9fa;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --card-shadow: rgba(0, 0, 0, 0.1);
+            --nav-bg: rgba(255, 255, 255, 0.95);
+            --glow: 0 0 20px rgba(255, 30, 30, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: var(--transition);
+            padding-bottom: 80px;
+        }
+
+        /* Ensure no horizontal scroll on small devices */
+        html, body {
+            overflow-x: hidden;
+        }
+
+        /* Prevent decorative shapes from causing overflow */
+        .floating-shapes {
+            overflow: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto !important;
+            padding: 0 20px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 40px;
+        }
+        /* Logo Section */
+        
+        .logo-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: #121212;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-text {
+            margin-left: 10px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+
+        .hero-slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+        }
+
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .hero-slide.active {
+            opacity: 1;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 93, 92, 0.7), rgba(255, 143, 143, 0.7), rgba(255, 62, 62, 0.7));
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+            max-width: 800px;
+            padding: 0 20px;
+            margin-top: 70px;
+        }
+
+        .hero-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 4rem;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating Elements */
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            animation: float 15s infinite linear;
+        }
+
+        .sparkle {
+            position: absolute;
+            color: white;
+            font-size: 1.5rem;
+            opacity: 0.7;
+            animation: sparkle 3s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, 50px) rotate(90deg); }
+            50% { transform: translate(0, 100px) rotate(180deg); }
+            75% { transform: translate(-20px, 50px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 2.5rem;
+            margin: 60px 0 30px;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        /* Mission & Vision */
+        .mission-vision {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .mission-card, .vision-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .mission-card.visible, .vision-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .mission-card:hover, .vision-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px var(--card-shadow), var(--glow);
+        }
+
+        .card-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 2.5rem;
+            margin: 0 auto 25px;
+            box-shadow: 0 5px 15px rgba(255, 93, 92, 0.3);
+        }
+
+        .card-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .card-text {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        /* Core Values */
+        .values-section {
+            margin: 60px 0;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .value-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px) scale(0.9);
+        }
+
+        .value-card.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .value-card:hover {
+            transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+            box-shadow: 0 15px 35px var(--card-shadow), var(--glow);
+        }
+
+        .value-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 2rem;
+            margin: 0 auto 20px;
+            box-shadow: 0 5px 15px rgba(255, 93, 92, 0.3);
+            transition: var(--transition);
+        }
+
+        .value-card:hover .value-icon {
+            transform: scale(1.1);
+        }
+
+        .value-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+
+        .value-desc {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Meet the Leaders */
+        .leaders-section {
+            margin: 60px 0;
+        }
+
+        .leaders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .leader-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .leader-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .leader-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px var(--card-shadow), var(--glow);
+        }
+
+        .leader-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 20px;
+            border: 3px solid var(--primary);
+            box-shadow: 0 5px 15px rgba(255, 93, 92, 0.3);
+            transition: var(--transition);
+        }
+
+        .leader-card:hover .leader-img {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 93, 92, 0.5);
+        }
+
+        .leader-name {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            color: var(--text);
+        }
+
+        .leader-role {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        .leader-bio {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* What Makes Us Different */
+        .difference-section {
+            margin: 60px 0;
+        }
+
+        .difference-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .difference-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+
+        .difference-card.visible {
+            opacity: 1;
+            transform: translateX(0);
+            animation: slideInRight 0.8s ease forwards;
+        }
+
+        .difference-card:nth-child(even) {
+            transform: translateX(50px);
+        }
+
+        .difference-card:nth-child(even).visible {
+            transform: translateX(0);
+            animation: slideInLeft 0.8s ease forwards;
+        }
+
+        .difference-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px var(--card-shadow), var(--glow);
+        }
+
+        .difference-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .difference-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .difference-desc {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Timeline */
+        .timeline-section {
+            margin: 60px 0;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 40px auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            right: -10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: 4px solid var(--bg);
+            top: 20px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .timeline-item:nth-child(even)::after {
+            left: -10px;
+        }
+
+        .timeline-content {
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px var(--card-shadow), var(--glow);
+        }
+
+        .timeline-year {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .timeline-event {
+            color: var(--text);
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .timeline-desc {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Join Us Section */
+        .join-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 20px;
+            padding: 50px;
+            margin: 60px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .join-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .join-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .join-details {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .detail-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .detail-text {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .join-btn {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .join-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Prayer Button */
+        .prayer-button {
+            position: fixed;
+            bottom: 100px;
+            right: calc(20px + env(safe-area-inset-right));
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.8rem;
+            box-shadow: 0 5px 20px rgba(255, 93, 92, 0.5);
+            cursor: pointer;
+            z-index: 100;
+            animation: pulse 2s infinite;
+            transition: var(--transition);
+        }
+
+        .prayer-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(255, 93, 92, 0.7);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Prayer Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .prayer-modal {
+            background: var(--card-bg);
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: translateY(50px) scale(0.9);
+            opacity: 0;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .modal-overlay.active .prayer-modal {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 10;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-close:hover {
+            background: white;
+            transform: rotate(90deg);
+        }
+
+        .modal-header {
+            padding: 30px 30px 0;
+        }
+
+        .modal-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .modal-subtitle {
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .modal-content {
+            padding: 0 30px 30px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+            transition: var(--transition);
+        }
+
+        .light-mode .form-input, .light-mode .form-textarea {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 93, 92, 0.2);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 93, 92, 0.4);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--nav-bg);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            z-index: 100;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-light);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            transition: var(--transition);
+        }
+
+        .nav-item.active .nav-icon {
+            transform: translateY(-5px);
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .nav-indicator {
+            position: absolute;
+            top: -10px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .nav-item.active .nav-indicator {
+            opacity: 1;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: calc(20px + env(safe-area-inset-top));
+            right: calc(20px + env(safe-area-inset-right));
+            width: 50px;
+            height: 50px;
+            background: var(--card-bg);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px var(--card-shadow);
+            cursor: pointer;
+            z-index: 100;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(30deg);
+        }
+
+        .theme-icon {
+            font-size: 1.3rem;
+            color: var(--text);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .mission-vision, .values-grid, .leaders-grid, .difference-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+            
+            .timeline-item::after {
+                left: 21px;
+            }
+            
+            .timeline-item:nth-child(even)::after {
+                left: 21px;
+            }
+            
+            .join-details {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .modal-header {
+                padding: 20px 20px 0;
+            }
+            
+            .modal-content {
+                padding: 0 20px 20px;
+            }
+        }
+
+        /* Small-screen adjustments for floating UI */
+        @media (max-width: 480px) {
+            .theme-toggle {
+                width: 44px;
+                height: 44px;
+                top: calc(12px + env(safe-area-inset-top));
+                right: calc(12px + env(safe-area-inset-right));
+            }
+
+            .prayer-button {
+                width: 60px;
+                height: 60px;
+                bottom: calc(80px + env(safe-area-inset-bottom));
+                right: calc(12px + env(safe-area-inset-right));
+                font-size: 1.4rem;
+            }
+
+            /* Be extra safe: prevent floating shapes creating scroll on tiny screens */
+            .floating-shapes { display: block; opacity: 0.8; transform: scale(0.9); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Shapes for Background -->
+    <div class="floating-shapes">
+        <div class="shape" style="width: 80px; height: 80px; top: 10%; left: 10%; animation-delay: 0s;"></div>
+        <div class="shape" style="width: 120px; height: 120px; top: 60%; left: 80%; animation-delay: -5s;"></div>
+        <div class="shape" style="width: 60px; height: 60px; top: 80%; left: 20%; animation-delay: -10s;"></div>
+        <div class="shape" style="width: 100px; height: 100px; top: 30%; left: 70%; animation-delay: -2s;"></div>
+        <div class="shape" style="width: 70px; height: 70px; top: 70%; left: 60%; animation-delay: -7s;"></div>
+        <div class="shape" style="width: 90px; height: 90px; top: 40%; left: 30%; animation-delay: -12s;"></div>
+        
+        <div class="sparkle" style="top: 20%; left: 15%; animation-delay: 0s;">✨</div>
+        <div class="sparkle" style="top: 70%; left: 85%; animation-delay: -1s;">✨</div>
+        <div class="sparkle" style="top: 40%; left: 90%; animation-delay: -2s;">✨</div>
+        <div class="sparkle" style="top: 80%; left: 10%; animation-delay: -3s;">✨</div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-sun theme-icon"></i>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        
+        <div class="logo-container">
+            <div class="logo">
+                <img src="images/LOGO.png" width="100%" height="100%" alt="NEBC TEENS LOGO">
+            </div>
+            <div class="logo-text">NEBC Teens</div>
+        </div>
+        <div class="hero-slider">
+            <div class="hero-slide active" style="background-image: url('banner/index/img7.jpg');"></div>
+            <div class="hero-slide" style="background-image: url('banner/index/img8.jpg');"></div>
+            <div class="hero-slide" style="background-image: url('banner/index/img9.jpg');"></div>
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">About NEBC Teens</h1>
+            <p class="hero-subtitle">Who We Are, What We Stand For, and Why We Exist</p>
+        </div>
+    </section>
+
+    <!-- Mission & Vision -->
+    <section class="container">
+        <div class="mission-vision">
+            <div class="mission-card">
+                <div class="card-icon">
+                    <i class="fas fa-bullseye"></i>
+                </div>
+                <h3 class="card-title">Our Mission</h3>
+                <p class="card-text">Raising a generation of spiritually strong, confident, purpose-driven teenagers who passionately follow Jesus and positively impact their world.</p>
+            </div>
+            <div class="vision-card">
+                <div class="card-icon">
+                    <i class="fas fa-eye"></i>
+                </div>
+                <h3 class="card-title">Our Vision</h3>
+                <p class="card-text">To build teens who love God, love people, and shape the future with excellence through authentic faith, meaningful relationships, and purposeful living.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Values -->
+    <section class="container values-section">
+        <h2 class="section-title">Our Core Values</h2>
+        <div class="values-grid">
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="fas fa-cross"></i>
+                </div>
+                <h3 class="value-title">Faith in God</h3>
+                <p class="value-desc">Building our lives on the foundation of God's Word and growing in relationship with Jesus.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h3 class="value-title">Love & Community</h3>
+                <p class="value-desc">Creating a welcoming space where everyone belongs and experiences authentic relationships.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="fas fa-compass"></i>
+                </div>
+                <h3 class="value-title">Purpose & Identity</h3>
+                <p class="value-desc">Helping teens discover their God-given purpose and walk confidently in their identity in Christ.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <h3 class="value-title">Excellence</h3>
+                <p class="value-desc">Doing everything with excellence as an act of worship and testimony to God's goodness.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="fas fa-hands-helping"></i>
+                </div>
+                <h3 class="value-title">Service & Leadership</h3>
+                <p class="value-desc">Equipping teens to serve others and lead with humility, integrity, and compassion.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3 class="value-title">Integrity</h3>
+                <p class="value-desc">Living with honesty and consistency in both public and private aspects of life.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="fas fa-seedling"></i>
+                </div>
+                <h3 class="value-title">Spiritual Growth</h3>
+                <p class="value-desc">Pursuing continuous growth in faith, character, and relationship with God.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Meet the Leaders -->
+    <section class="container leaders-section">
+        <h2 class="section-title">Meet Our Leaders</h2>
+        <div class="leaders-grid">
+            <div class="leader-card">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Pastor Mark" class="leader-img">
+                <h3 class="leader-name">Pastor Mark Johnson</h3>
+                <p class="leader-role">Teen Pastor</p>
+                <p class="leader-bio">With over 10 years of youth ministry experience, Pastor Mark is passionate about helping teens discover their purpose in Christ. He loves basketball, good coffee, and deep conversations about faith.</p>
+            </div>
+            <div class="leader-card">
+                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Sarah Miller" class="leader-img">
+                <h3 class="leader-name">Sarah Miller</h3>
+                <p class="leader-role">Teen Coordinator</p>
+                <p class="leader-bio">Sarah joined our team after graduating with a degree in Youth Ministry. She's passionate about creating spaces where teens feel seen, heard, and valued. In her free time, she enjoys photography and hiking.</p>
+            </div>
+            <div class="leader-card">
+                <img src="banner/index/img7.jpg" alt="David Chen" class="leader-img">
+                <h3 class="leader-name">David Chen</h3>
+                <p class="leader-role">Worship Leader</p>
+                <p class="leader-bio">David leads our teen worship team with passion and authenticity. A talented musician and songwriter, he believes worship is about connecting with God from the heart. He's also a computer science major at the local university.</p>
+            </div>
+            <div class="leader-card">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Michael Rodriguez" class="leader-img">
+                <h3 class="leader-name">Michael Rodriguez</h3>
+                <p class="leader-role">Outreach Coordinator</p>
+                <p class="leader-bio">Michael is passionate about serving the community and helping teens develop a heart for others. He organizes our local outreach programs and mission trips. In his free time, he enjoys playing guitar and volunteering.</p>
+            </div>
+            <div class="leader-card">
+                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Jessica Williams" class="leader-img">
+                <h3 class="leader-name">Jessica Williams</h3>
+                <p class="leader-role">Small Groups Coordinator</p>
+                <p class="leader-bio">Jessica oversees our small group ministry, ensuring every teen has a place to connect and grow. She's passionate about discipleship and mentoring. She enjoys reading, journaling, and spending time with family.</p>
+            </div>
+            <div class="leader-card">
+                <img src="banner/index/img7.jpg" alt="Alex Thompson" class="leader-img">
+                <h3 class="leader-name">Alex Thompson</h3>
+                <p class="leader-role">Creative Arts Director</p>
+                <p class="leader-bio">Alex leads our creative arts team, helping teens express their faith through various artistic mediums. He's a graphic designer and musician who believes creativity is a powerful form of worship.</p>
+            </div>
+            <div class="leader-card">
+                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Emily Carter" class="leader-img">
+                <h3 class="leader-name">Emily Carter</h3>
+                <p class="leader-role">Events Coordinator</p>
+                <p class="leader-bio">Emily plans and coordinates all our teen events, from game nights to retreats. She's passionate about creating memorable experiences that help teens connect with God and each other.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- What Makes Us Different -->
+    <section class="container difference-section">
+        <h2 class="section-title">What Makes Us Different</h2>
+        <div class="difference-grid">
+            <div class="difference-card">
+                <h3 class="difference-title">
+                    <span class="difference-icon"><i class="fas fa-pray"></i></span>
+                    Strong Spiritual Grounding
+                </h3>
+                <p class="difference-desc">We don't just entertain teens—we disciple them. Our teachings are biblically grounded and practically applied to help teens navigate real-life challenges with faith and wisdom.</p>
+            </div>
+            <div class="difference-card">
+                <h3 class="difference-title">
+                    <span class="difference-icon"><i class="fas fa-gamepad"></i></span>
+                    Creative Teen Activities
+                </h3>
+                <p class="difference-desc">From game nights to creative arts, we design engaging activities that help teens connect, have fun, and build meaningful relationships in a safe environment.</p>
+            </div>
+            <div class="difference-card">
+                <h3 class="difference-title">
+                    <span class="difference-icon"><i class="fas fa-users"></i></span>
+                    Real-Life Mentorship
+                </h3>
+                <p class="difference-desc">Our leaders aren't just event organizers—they're mentors who invest in teens' lives, offering guidance, support, and a listening ear through the ups and downs of teenage years.</p>
+            </div>
+            <div class="difference-card">
+                <h3 class="difference-title">
+                    <span class="difference-icon"><i class="fas fa-hands"></i></span>
+                    Safe Space for Questions
+                </h3>
+                <p class="difference-desc">We welcome tough questions and honest doubts. Our environment encourages spiritual exploration and growth without judgment or pressure.</p>
+            </div>
+            <div class="difference-card">
+                <h3 class="difference-title">
+                    <span class="difference-icon"><i class="fas fa-music"></i></span>
+                    Talent Development
+                </h3>
+                <p class="difference-desc">We help teens discover and develop their God-given talents through worship teams, media ministry, creative arts, and leadership opportunities.</p>
+            </div>
+            <div class="difference-card">
+                <h3 class="difference-title">
+                    <span class="difference-icon"><i class="fas fa-hands-helping"></i></span>
+                    Community Impact
+                </h3>
+                <p class="difference-desc">We believe faith should be lived out. Our teens participate in local outreach and service projects, making a tangible difference in our community.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline -->
+    <section class="container timeline-section">
+        <h2 class="section-title">Our Journey</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-year">2015</div>
+                    <div class="timeline-event">NEBC Teens Ministry Launched</div>
+                    <p class="timeline-desc">Started with just 12 teens meeting in a small room, focused on creating authentic community.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-year">2017</div>
+                    <div class="timeline-event">First Summer Retreat</div>
+                    <p class="timeline-desc">Took 35 teens to our first overnight retreat, creating lasting memories and spiritual breakthroughs.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-year">2019</div>
+                    <div class="timeline-event">Teen Worship Team Formed</div>
+                    <p class="timeline-desc">Launched our teen-led worship team, empowering young musicians and vocalists.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-year">2021</div>
+                    <div class="timeline-event">Outreach Program Started</div>
+                    <p class="timeline-desc">Began regular community service projects, teaching teens to live out their faith through action.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-year">2023</div>
+                    <div class="timeline-event">Record Attendance</div>
+                    <p class="timeline-desc">Celebrated serving over 100 teens weekly with multiple small groups and ministry teams.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Join Us Section -->
+    <section class="container">
+        <div class="join-section">
+            <h2 class="join-title">You Belong Here</h2>
+            <p class="join-subtitle">Join us and experience the difference</p>
+            <div class="join-details">
+                <div class="detail-item">
+                    <div class="detail-icon"><i class="fas fa-clock"></i></div>
+                    <div class="detail-text">Sundays at 9:00 AM</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="detail-text">New Estate Baptist Church Gudu Abuja </div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-icon"><i class="fas fa-users"></i></div>
+                    <div class="detail-text">Ages 13-19</div>
+                </div>
+            </div>
+            <button class="join-btn">
+                <i class="fas fa-calendar-alt"></i> View Upcoming Events
+            </button>
+        </div>
+    </section>
+
+    <!-- Prayer Request Button -->
+    <div class="prayer-button" id="prayerButton">
+        <i class="fas fa-hands-praying"></i>
+    </div>
+
+    <!-- Prayer Request Modal -->
+    <div class="modal-overlay" id="prayerModal">
+        <div class="prayer-modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Submit a Prayer Request</h3>
+                <button class="modal-close" id="prayerClose">&times;</button>
+            </div>
+            <div class="modal-content">
+                <form id="prayerForm">
+                    <div class="form-group">
+                        <label class="form-label" for="name">Your Name (Optional)</label>
+                        <input type="text" id="name" class="form-input" placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="request">Prayer Request</label>
+                        <textarea id="request" class="form-textarea" placeholder="Share your prayer request here..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <input type="checkbox" id="anonymous"> Share anonymously
+                        </label>
+                    </div>
+                    <button type="submit" class="submit-btn">Submit Prayer Request</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="motivation.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-fire nav-icon"></i>
+            <span class="nav-label">Boost</span>
+        </a>
+        <a href="devotional.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-book-open nav-icon"></i>
+            <span class="nav-label">Devotionals</span>
+        </a>
+        <a href="ask.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-question-circle nav-icon"></i>
+            <span class="nav-label">Ask</span>
+        </a>
+        <a href="about.html" class="nav-item active">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-info-circle nav-icon"></i>
+            <span class="nav-label">About</span>
+        </a>
+        
+        <a href="contact.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-envelope nav-icon"></i>
+            <span class="nav-label">Contact</span>
+        </a>
+    </nav>
+
+    <script>
+        // DOM Elements
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('.theme-icon');
+        const heroSlides = document.querySelectorAll('.hero-slide');
+        const prayerButton = document.getElementById('prayerButton');
+        const prayerModal = document.getElementById('prayerModal');
+        const prayerClose = document.getElementById('prayerClose');
+        const prayerForm = document.getElementById('prayerForm');
+        const joinBtn = document.querySelector('.join-btn');
+
+        // Initialize the page
+        function initPage() {
+            setupEventListeners();
+            startHeroSlider();
+            setupScrollAnimations();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Theme toggle
+            themeToggle.addEventListener('click', toggleTheme);
+            
+            // Prayer modal
+            prayerButton.addEventListener('click', () => {
+                prayerModal.classList.add('active');
+            });
+            
+            prayerClose.addEventListener('click', () => {
+                prayerModal.classList.remove('active');
+            });
+            
+            prayerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // In a real implementation, this would send to EmailJS
+                prayerModal.classList.remove('active');
+                prayerForm.reset();
+            });
+            
+            // Join button
+            joinBtn.addEventListener('click', () => {
+                // In a real implementation, this would navigate to events page
+                window.location.href = 'event.html';
+            });
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            if (document.body.classList.contains('light-mode')) {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            } else {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+        }
+
+        // Hero slider
+        let currentHeroSlide = 0;
+        
+        function startHeroSlider() {
+            setInterval(() => {
+                heroSlides.forEach(slide => slide.classList.remove('active'));
+                currentHeroSlide = (currentHeroSlide + 1) % heroSlides.length;
+                heroSlides[currentHeroSlide].classList.add('active');
+            }, 5000);
+        }
+
+        // Scroll animations
+        function setupScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all animated elements
+            const animatedElements = document.querySelectorAll('.mission-card, .vision-card, .value-card, .leader-card, .difference-card, .timeline-item');
+            animatedElements.forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>

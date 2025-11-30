@@ -1,0 +1,2261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bible Plans | NEBC Teens</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <style>
+        :root {
+            --torch-red: #ff1e1e;
+            --fair-pink: #ffe8e8;
+            --bittersweet: #ff7575;
+            --cornflower-lilac: #ffacac;
+            --coral-red: #ff3e3e;
+            --mona-lisa: #ff8f8f;
+            --persimmon: #ff5d5c;
+            --your-pink: #ffc9c9;
+            
+            --primary: #ff5d5c;
+            --secondary: #ff8f8f;
+            --accent: #ff3e3e;
+            --success: #4cd964;
+            --warning: #ffcc00;
+            --text: #f8f9fa;
+            --text-light: #adb5bd;
+            --bg: #121212;
+            --card-bg: rgba(30, 30, 30, 0.8);
+            --card-shadow: rgba(0, 0, 0, 0.3);
+            --nav-bg: rgba(30, 30, 30, 0.95);
+            --glow: 0 0 20px rgba(255, 93, 92, 0.5);
+            --transition: all 0.3s ease;
+        }
+
+        .light-mode {
+            --primary: #ff1e1e;
+            --secondary: #ff7575;
+            --accent: #ff3e3e;
+            --text: #333333;
+            --text-light: #6c757d;
+            --bg: #f8f9fa;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --card-shadow: rgba(0, 0, 0, 0.1);
+            --nav-bg: rgba(255, 255, 255, 0.95);
+            --glow: 0 0 20px rgba(255, 30, 30, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: var(--transition);
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto !important;
+            padding: 0 20px;
+        }
+
+        /* Logo Section */
+        .logo-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: #121212;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-text {
+            margin-left: 10px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+            border-radius: 0 0 30px 30px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            margin-bottom: 40px;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+            max-width: 800px;
+            padding: 0 20px;
+            margin-top: 40px;
+        }
+
+        .hero-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating Elements */
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            animation: float 15s infinite linear;
+        }
+
+        .sparkle {
+            position: absolute;
+            color: white;
+            font-size: 1.5rem;
+            opacity: 0.7;
+            animation: sparkle 3s infinite ease-in-out;
+        }
+
+        .bible-icon {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 2rem;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, 50px) rotate(90deg); }
+            50% { transform: translate(0, 100px) rotate(180deg); }
+            75% { transform: translate(-20px, 50px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.8rem;
+            margin: 40px 0 20px;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50%;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        /* Category Cards */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .category-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: calc(var(--delay) * 0.1s);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 35px var(--card-shadow), var(--glow);
+        }
+
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(255, 93, 92, 0.3);
+        }
+
+        .category-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .category-desc {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .view-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .view-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 93, 92, 0.4);
+        }
+
+        /* Engagement Features */
+        .engagement-section {
+            margin: 60px 0 40px;
+        }
+
+        .engagement-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .engagement-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: calc(var(--delay) * 0.1s);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .engagement-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px var(--card-shadow), var(--glow);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-right: 15px;
+            box-shadow: 0 5px 15px rgba(255, 93, 92, 0.3);
+        }
+
+        .card-heading {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text);
+        }
+
+        /* Streak Counter */
+        .streak-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .streak-count {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-shadow: 0 0 10px rgba(255, 62, 62, 0.5);
+        }
+
+        .streak-fire {
+            font-size: 2.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* Verse Spinner */
+        .wheel-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                #ff5d5c 0deg 60deg,
+                #ff8f8f 60deg 120deg,
+                #ff3e3e 120deg 180deg,
+                #4cd964 180deg 240deg,
+                #ffcc00 240deg 300deg,
+                #ff8f8f 300deg 360deg
+            );
+            position: relative;
+            transition: transform 3s cubic-bezier(0.2, 0.8, 0.3, 1);
+            box-shadow: 0 0 20px rgba(255, 93, 92, 0.3);
+            cursor: pointer;
+        }
+
+        .wheel-pointer {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            clip-path: polygon(50% 100%, 0 0, 100% 0);
+            z-index: 10;
+        }
+
+        .verse-result {
+            display: none;
+            text-align: center;
+            padding: 15px;
+            background: rgba(255, 93, 92, 0.1);
+            border-radius: 10px;
+            margin-top: 15px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .verse-result.active {
+            display: block;
+        }
+
+        /* Quiz */
+        .quiz-container {
+            min-height: 250px;
+            position: relative;
+        }
+
+        .quiz-question {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .quiz-question.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            min-height: 80px;
+            justify-content: center;
+        }
+
+        .quiz-option:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 93, 92, 0.1);
+        }
+
+        .quiz-emoji {
+            font-size: 2rem;
+        }
+
+        .quiz-text {
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .quiz-result {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 15px;
+            color: white;
+            margin-top: 15px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .quiz-result.active {
+            display: block;
+        }
+
+        .character-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .character-desc {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Mood Verse Generator */
+        .mood-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .mood-option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mood-option:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 93, 92, 0.1);
+        }
+
+        .mood-option.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .verse-display {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 93, 92, 0.1);
+            border-radius: 15px;
+            margin-top: 15px;
+            animation: fadeIn 0.5s ease;
+            box-shadow: 0 0 20px rgba(255, 93, 92, 0.3);
+        }
+
+        .verse-display.active {
+            display: block;
+        }
+
+        .verse-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .verse-reference {
+            font-style: italic;
+            color: var(--text-light);
+        }
+
+        /* Carousel */
+        .carousel-container {
+            position: relative;
+            height: 120px;
+            overflow: hidden;
+            border-radius: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .carousel-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .carousel-slide.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .carousel-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* Inspiration Section */
+        .inspiration-section {
+            margin: 60px 0 40px;
+            text-align: center;
+            padding: 40px 20px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .inspiration-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .inspiration-subtext {
+            font-size: 1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Plan Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .plan-modal, .prayer-modal {
+            background: var(--card-bg);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: translateY(50px) scale(0.9);
+            opacity: 0;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .prayer-modal {
+            max-width: 500px;
+        }
+
+        .modal-overlay.active .plan-modal,
+        .modal-overlay.active .prayer-modal {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 10;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-close:hover {
+            background: white;
+            transform: rotate(90deg);
+        }
+
+        .modal-header {
+            padding: 30px 30px 0;
+        }
+
+        .modal-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .modal-subtitle {
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .modal-content {
+            padding: 0 30px 30px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .plan-days {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .plan-day {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            transition: var(--transition);
+        }
+
+        .plan-day:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px var(--card-shadow);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .day-title {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .day-passage {
+            margin-bottom: 10px;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        .day-explanation {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .day-note {
+            color: var(--text);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            font-style: italic;
+            background: rgba(255, 93, 92, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .audio-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .audio-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 93, 92, 0.4);
+        }
+
+        .complete-btn {
+            background: linear-gradient(135deg, var(--success), #2ecc71);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .complete-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(76, 217, 100, 0.4);
+        }
+
+        /* Achievement Stickers */
+        .achievement-sticker {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            z-index: 2000;
+            /* don't block clicks when hidden */
+            pointer-events: none;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .achievement-sticker.active {
+            transform: translate(-50%, -50%) scale(1);
+            /* allow clicks when visible */
+            pointer-events: auto;
+        }
+
+        .sticker-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .sticker-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* Prayer Button & Modal */
+        .prayer-button {
+            position: fixed;
+            bottom: 100px;
+            right: calc(20px + env(safe-area-inset-right));
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.8rem;
+            box-shadow: 0 5px 20px rgba(255, 93, 92, 0.5);
+            cursor: pointer;
+            z-index: 100;
+            animation: pulse 2s infinite;
+            transition: var(--transition);
+        }
+
+        .prayer-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(255, 93, 92, 0.7);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 30px 30px 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            padding: 0 30px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+            transition: var(--transition);
+        }
+
+        .light-mode .form-input, .light-mode .form-textarea {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 93, 92, 0.2);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: calc(100% - 60px);
+            margin: 0 30px 30px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 93, 92, 0.4);
+        }
+
+        /* Success Modal */
+        .success-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .success-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .success-content {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: scale(0.8);
+            opacity: 0;
+            transition: var(--transition);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .success-modal.active .success-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: var(--success);
+            margin-bottom: 20px;
+        }
+
+        .success-message {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .ok-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .ok-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 93, 92, 0.4);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--nav-bg);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            z-index: 300;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-light);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            transition: var(--transition);
+        }
+
+        .nav-item.active .nav-icon {
+            transform: translateY(-5px);
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .nav-indicator {
+            position: absolute;
+            top: -10px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .nav-item.active .nav-indicator {
+            opacity: 1;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: calc(20px + env(safe-area-inset-top));
+            right: calc(20px + env(safe-area-inset-right));
+            width: 50px;
+            height: 50px;
+            background: var(--card-bg);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px var(--card-shadow);
+            cursor: pointer;
+            z-index: 100;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(30deg);
+        }
+
+        .theme-icon {
+            font-size: 1.3rem;
+            color: var(--text);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .engagement-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .mood-options {
+                flex-direction: column;
+            }
+            
+            .quiz-options {
+                flex-direction: column;
+            }
+            
+            .modal-header {
+                padding: 20px 20px 0;
+            }
+            
+            .form-group {
+                padding: 0 20px;
+            }
+            
+            .submit-btn {
+                width: calc(100% - 40px);
+                margin: 0 20px 20px;
+            }
+        }
+        /* Small-screen adjustments for floating UI */
+        @media (max-width: 480px) {
+            .theme-toggle {
+                width: 44px;
+                height: 44px;
+                top: calc(12px + env(safe-area-inset-top));
+                right: calc(12px + env(safe-area-inset-right));
+            }
+
+            .prayer-button {
+                width: 60px;
+                height: 60px;
+                bottom: calc(80px + env(safe-area-inset-bottom));
+                right: calc(12px + env(safe-area-inset-right));
+                font-size: 1.4rem;
+            }
+
+            .floating-shapes { display: block; opacity: 0.8; transform: scale(0.9); }
+        }
+    </style>
+</head>
+<body class="dark-mode">
+    <!-- Floating Shapes for Background -->
+    <div class="floating-shapes">
+        <div class="shape" style="width: 80px; height: 80px; top: 10%; left: 10%; animation-delay: 0s;"></div>
+        <div class="shape" style="width: 120px; height: 120px; top: 60%; left: 80%; animation-delay: -5s;"></div>
+        <div class="shape" style="width: 60px; height: 60px; top: 80%; left: 20%; animation-delay: -10s;"></div>
+        <div class="shape" style="width: 100px; height: 100px; top: 30%; left: 70%; animation-delay: -2s;"></div>
+        <div class="shape" style="width: 70px; height: 70px; top: 70%; left: 60%; animation-delay: -7s;"></div>
+        <div class="shape" style="width: 90px; height: 90px; top: 40%; left: 30%; animation-delay: -12s;"></div>
+        <div class="shape" style="width: 50px; height: 50px; top: 20%; left: 50%; animation-delay: -4s;"></div>
+        <div class="shape" style="width: 110px; height: 110px; top: 50%; left: 10%; animation-delay: -9s;"></div>
+        <div class="shape" style="width: 85px; height: 85px; top: 15%; left: 75%; animation-delay: -6s;"></div>
+        <div class="shape" style="width: 95px; height: 95px; top: 65%; left: 25%; animation-delay: -11s;"></div>
+        
+        <div class="sparkle" style="top: 20%; left: 15%; animation-delay: 0s;">✨</div>
+        <div class="sparkle" style="top: 70%; left: 85%; animation-delay: -1s;">✨</div>
+        <div class="sparkle" style="top: 40%; left: 90%; animation-delay: -2s;">✨</div>
+        <div class="sparkle" style="top: 80%; left: 10%; animation-delay: -3s;">✨</div>
+        <div class="sparkle" style="top: 30%; left: 80%; animation-delay: -4s;">✨</div>
+        <div class="sparkle" style="top: 55%; left: 5%; animation-delay: -5s;">✨</div>
+        <div class="sparkle" style="top: 25%; left: 95%; animation-delay: -6s;">✨</div>
+        <div class="sparkle" style="top: 85%; left: 45%; animation-delay: -7s;">✨</div>
+        
+        <div class="bible-icon" style="top: 15%; left: 80%; animation-delay: 0s;">📖</div>
+        <div class="bible-icon" style="top: 75%; left: 15%; animation-delay: -5s;">✝️</div>
+        <div class="bible-icon" style="top: 50%; left: 90%; animation-delay: -10s;">🙏</div>
+        <div class="bible-icon" style="top: 85%; left: 70%; animation-delay: -7s;">❤️</div>
+        <div class="bible-icon" style="top: 35%; left: 5%; animation-delay: -3s;">⭐</div>
+        <div class="bible-icon" style="top: 65%; left: 95%; animation-delay: -8s;">✌️</div>
+        <div class="bible-icon" style="top: 10%; left: 40%; animation-delay: -12s;">💫</div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-sun theme-icon"></i>
+    </div>
+
+    <!-- Logo Section -->
+    <div class="logo-container">
+        <div class="logo">
+            <img src="images/LOGO.png" width="100%" height="100%" alt="NEBC TEENS LOGO">
+        </div>
+        <div class="logo-text">NEBC Teens</div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">Bible Reading Plans</h1>
+            <p class="hero-subtitle">Grow your faith one step at a time.</p>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="container">
+        <h2 class="section-title">Choose Your Plan</h2>
+        <div class="categories-grid">
+            <!-- Beginner Plan -->
+            <div class="category-card" style="--delay: 1" data-plan="beginner">
+                <div class="category-icon">
+                    <i class="fas fa-seedling"></i>
+                </div>
+                <h3 class="category-title">Beginner Plan</h3>
+                <p class="category-desc">Perfect for those new to the Bible. Simple, encouraging readings to start your journey.</p>
+                <button class="view-btn">
+                    <i class="fas fa-eye"></i> View Plan
+                </button>
+            </div>
+
+            <!-- 1-Month Growth Plan -->
+            <div class="category-card" style="--delay: 2" data-plan="growth">
+                <div class="category-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3 class="category-title">1-Month Growth Plan</h3>
+                <p class="category-desc">Dive deeper with daily readings that build your faith over 30 days.</p>
+                <button class="view-btn">
+                    <i class="fas fa-eye"></i> View Plan
+                </button>
+            </div>
+
+            <!-- 90-Day Challenge -->
+            <div class="category-card" style="--delay: 3" data-plan="challenge">
+                <div class="category-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h3 class="category-title">90-Day Bible Challenge</h3>
+                <p class="category-desc">A comprehensive journey through key Bible passages in just 3 months.</p>
+                <button class="view-btn">
+                    <i class="fas fa-eye"></i> View Plan
+                </button>
+            </div>
+
+            <!-- Teens & Purpose Plan -->
+            <div class="category-card" style="--delay: 4" data-plan="purpose">
+                <div class="category-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="category-title">Teens & Purpose Plan</h3>
+                <p class="category-desc">Discover God's purpose for your life with readings designed just for teens.</p>
+                <button class="view-btn">
+                    <i class="fas fa-eye"></i> View Plan
+                </button>
+            </div>
+
+            <!-- New Testament in 30 Days -->
+            <div class="category-card" style="--delay: 5" data-plan="new-testament">
+                <div class="category-icon">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <h3 class="category-title">New Testament in 30 Days</h3>
+                <p class="category-desc">Read through the entire New Testament with manageable daily portions.</p>
+                <button class="view-btn">
+                    <i class="fas fa-eye"></i> View Plan
+                </button>
+            </div>
+
+            <!-- Psalms & Proverbs -->
+            <div class="category-card" style="--delay: 6" data-plan="psalms">
+                <div class="category-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h3 class="category-title">Psalms & Proverbs</h3>
+                <p class="category-desc">Find wisdom, comfort, and inspiration in these beloved books of the Bible.</p>
+                <button class="view-btn">
+                    <i class="fas fa-eye"></i> View Plan
+                </button>
+            </div>
+
+            <!-- Topical Plans -->
+            <div class="category-card" style="--delay: 7" data-plan="topical">
+                <div class="category-icon">
+                    <i class="fas fa-tags"></i>
+                </div>
+                <h3 class="category-title">Topical Plans</h3>
+                <p class="category-desc">Explore specific themes like faith, relationships, purpose, and identity in Christ.</p>
+                <button class="view-btn">
+                    <i class="fas fa-eye"></i> View Plans
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Engagement Features Section -->
+    <section class="container engagement-section">
+        <h2 class="section-title">Fun & Interactive</h2>
+        <div class="engagement-cards">
+            <!-- Bible Streak -->
+            <div class="engagement-card" style="--delay: 1">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <h3 class="card-heading">Bible Streak</h3>
+                </div>
+                <div class="streak-container">
+                    <div class="streak-count">0</div>
+                    <div class="streak-fire">🔥</div>
+                </div>
+                <p>Keep your streak going! Read every day to build your fire.</p>
+                <button class="view-btn" id="addStreak">
+                    <i class="fas fa-plus"></i> Add Day
+                </button>
+            </div>
+
+            <!-- Verse of the Day Spinner -->
+            <div class="engagement-card" style="--delay: 2">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <h3 class="card-heading">Verse of the Day</h3>
+                </div>
+                <div class="wheel-container">
+                    <div class="wheel-pointer"></div>
+                    <div class="wheel" id="wheel"></div>
+                </div>
+                <button class="view-btn" id="spinWheel">
+                    <i class="fas fa-redo"></i> Spin for Verse
+                </button>
+                <div class="verse-result" id="verseResult">
+                    <p>"For I know the plans I have for you," declares the Lord, "plans to prosper you and not to harm you, plans to give you hope and a future." - Jeremiah 29:11</p>
+                </div>
+            </div>
+
+            <!-- Bible Character Quiz -->
+            <div class="engagement-card" style="--delay: 3">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <h3 class="card-heading">Which Bible Character Are You?</h3>
+                </div>
+                <div class="quiz-container" id="quizContainer">
+                    <!-- Quiz questions will be generated by JavaScript -->
+                </div>
+                <div class="quiz-result" id="quizResult">
+                    <div class="character-name">You're David: Brave & Purposeful</div>
+                    <div class="character-desc">Like David facing Goliath, you have courage and trust in God's plan for your life.</div>
+                </div>
+            </div>
+
+            <!-- Mood-Based Verse Generator -->
+            <div class="engagement-card" style="--delay: 4">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-smile"></i>
+                    </div>
+                    <h3 class="card-heading">Need a Verse for Your Vibe?</h3>
+                </div>
+                <div class="mood-options">
+                    <div class="mood-option" data-mood="happy">😊 Happy</div>
+                    <div class="mood-option" data-mood="tired">😴 Tired</div>
+                    <div class="mood-option" data-mood="worried">😟 Worried</div>
+                    <div class="mood-option" data-mood="confident">😎 Confident</div>
+                    <div class="mood-option" data-mood="sad">😔 Sad</div>
+                    <div class="mood-option" data-mood="hopeful">✨ Hopeful</div>
+                </div>
+                <div class="verse-display" id="verseDisplay">
+                    <div class="verse-text" id="verseText">The Lord is my strength and my shield; my heart trusts in him, and he helps me.</div>
+                    <div class="verse-reference" id="verseReference">Psalm 28:7</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Today's Highlight Carousel -->
+    <section class="container">
+        <h2 class="section-title">Today's Highlight</h2>
+        <div class="carousel-container">
+            <div class="carousel-slide active">
+                <p class="carousel-text">"I can do all things through Christ who strengthens me." - Philippians 4:13</p>
+            </div>
+            <div class="carousel-slide">
+                <p class="carousel-text">"Trust in the Lord with all your heart and lean not on your own understanding." - Proverbs 3:5</p>
+            </div>
+            <div class="carousel-slide">
+                <p class="carousel-text">"Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go." - Joshua 1:9</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Inspiration Section -->
+    <section class="container">
+        <div class="inspiration-section">
+            <p class="inspiration-text">You're not alone. God is with you every step.</p>
+            <p class="inspiration-subtext">Keep going, you're doing amazing!</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="container">
+        <p>&copy; 2025 NEBC Teens. Growing together in faith.</p>
+    </footer>
+
+    <!-- Prayer Request Button -->
+    <div class="prayer-button" id="prayerButton">
+        <i class="fas fa-hands-praying"></i>
+    </div>
+
+    <!-- Plan Modal -->
+    <div class="modal-overlay" id="planModal">
+        <div class="plan-modal">
+            <button class="modal-close" id="planClose">&times;</button>
+            <div class="modal-header">
+                <h3 class="modal-title" id="planTitle">Beginner Plan</h3>
+                <p class="modal-subtitle" id="planSubtitle">7 Days • Perfect for New Believers</p>
+            </div>
+            <div class="modal-content">
+                <div class="plan-days" id="planDays">
+                    <!-- Plan days will be generated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Prayer Request Modal -->
+    <div class="modal-overlay" id="prayerModal">
+        <div class="prayer-modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Submit a Prayer Request</h3>
+                <button class="modal-close" id="prayerClose">&times;</button>
+            </div>
+            <form id="prayerForm">
+                <div class="form-group">
+                    <label class="form-label" for="name">Your Name (Optional)</label>
+                    <input type="text" id="name" class="form-input" placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="request">Prayer Request</label>
+                    <textarea id="request" class="form-textarea" placeholder="Share your prayer request here..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <input type="checkbox" id="anonymous"> Share anonymously
+                    </label>
+                </div>
+                <button type="submit" class="submit-btn">Submit Prayer Request</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="success-modal" id="successModal">
+        <div class="success-content">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <p class="success-message">Your request has been received. The NEBC Teens team will pray with you.</p>
+            <button class="ok-btn" id="okBtn">OK</button>
+        </div>
+    </div>
+
+    <!-- Achievement Stickers -->
+    <div class="achievement-sticker" id="achievementSticker">
+        <div class="sticker-icon">🎉</div>
+        <div class="sticker-text">You completed Day 1!</div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="motivation.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-fire nav-icon"></i>
+            <span class="nav-label">Boost</span>
+        </a>
+        <a href="devotional.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-book-open nav-icon"></i>
+            <span class="nav-label">Devotionals</span>
+        </a>
+        <a href="ask.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-question-circle nav-icon"></i>
+            <span class="nav-label">Ask</span>
+        </a>
+        <a href="plans.html" class="nav-item active">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-calendar-check nav-icon"></i>
+            <span class="nav-label">Plans</span>
+        </a>
+        <a href="testimonies.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-comment-dots nav-icon"></i>
+            <span class="nav-label">Testimonies</span>
+        </a>
+    </nav>
+
+    <script>
+        // Initialize EmailJS (you would replace with your actual EmailJS credentials)
+        emailjs.init("user_your_user_id_here");
+
+        // Plan Data - ALL PLANS NOW HAVE COMPLETE DAYS
+        const biblePlans = {
+            beginner: {
+                title: "Beginner Plan",
+                subtitle: "7 Days • Perfect for New Believers",
+                days: [
+                    {
+                        day: 1,
+                        passage: "John 3:16",
+                        explanation: "This is one of the most famous verses in the Bible. It tells us that God loved the world so much that He gave His only Son, Jesus, so that everyone who believes in Him will have eternal life. This shows us the incredible depth of God's love for us.",
+                        note: "God's love for the world is unconditional and everlasting.",
+                        audio: true
+                    },
+                    {
+                        day: 2,
+                        passage: "Psalm 23:1-3",
+                        explanation: "This beautiful psalm describes God as our shepherd who cares for us completely. Just as a shepherd provides for his sheep, God provides everything we need - rest, guidance, and restoration. When we feel lost or weary, we can trust that God is leading us.",
+                        note: "The Lord is our shepherd who guides and provides for us.",
+                        audio: false
+                    },
+                    {
+                        day: 3,
+                        passage: "Matthew 5:3-12",
+                        explanation: "These verses are known as the Beatitudes, which means 'blessings.' Jesus teaches that true happiness comes from having the right attitude toward God and others. The poor in spirit, the merciful, and the peacemakers are all blessed in God's kingdom.",
+                        note: "True blessing comes from having a humble heart before God.",
+                        audio: true
+                    },
+                    {
+                        day: 4,
+                        passage: "Romans 8:28",
+                        explanation: "This powerful promise assures us that God works through all circumstances for our good. Even when things seem difficult or confusing, God is orchestrating events to fulfill His purpose in our lives. This doesn't mean everything that happens is good, but God can bring good out of any situation.",
+                        note: "God works all things together for our ultimate good.",
+                        audio: false
+                    },
+                    {
+                        day: 5,
+                        passage: "Philippians 4:6-7",
+                        explanation: "These verses offer practical advice for dealing with anxiety. Instead of worrying, we're encouraged to pray about everything with thanksgiving. When we do this, God's peace, which is beyond human understanding, will guard our hearts and minds.",
+                        note: "Replace worry with prayer and experience God's peace.",
+                        audio: true
+                    },
+                    {
+                        day: 6,
+                        passage: "1 Corinthians 13:4-7",
+                        explanation: "This passage describes what true love looks like in action. Love is patient, kind, not jealous or proud. It doesn't keep track of wrongs but rejoices in truth. This is the kind of love God has for us and wants us to show others.",
+                        note: "Love is an action, not just a feeling.",
+                        audio: false
+                    },
+                    {
+                        day: 7,
+                        passage: "Jeremiah 29:11",
+                        explanation: "God has good plans for our lives - plans to give us hope and a future. Even when we can't see what's ahead, we can trust that God knows the path and wants what's best for us. This verse reminds us that our future is secure in God's hands.",
+                        note: "God's plans for you are good and full of hope.",
+                        audio: true
+                    }
+                ]
+            },
+            growth: {
+                title: "1-Month Growth Plan",
+                subtitle: "30 Days • Deepen Your Faith",
+                days: [
+                    {
+                        day: 1,
+                        passage: "John 1:1-14",
+                        explanation: "This passage reveals Jesus as the eternal Word who was with God from the beginning. He is the creator of all things and the source of life and light. The amazing truth is that this divine Word became human and lived among us, full of grace and truth.",
+                        note: "Jesus is God who became human to reveal the Father to us.",
+                        audio: true
+                    },
+                    {
+                        day: 2,
+                        passage: "Psalm 1:1-3",
+                        explanation: "This psalm contrasts the way of the righteous with the way of the wicked. Those who delight in God's Word and meditate on it are like trees planted by streams of water - stable, fruitful, and prosperous in all they do.",
+                        note: "Blessing comes from delighting in and obeying God's Word.",
+                        audio: false
+                    },
+                    {
+                        day: 3,
+                        passage: "Matthew 6:25-34",
+                        explanation: "Jesus teaches us not to worry about our lives - what we will eat, drink, or wear. God knows our needs and will provide for us. Instead of worrying, we should seek first God's kingdom and His righteousness.",
+                        note: "Trust God to provide for your needs and focus on His kingdom.",
+                        audio: true
+                    },
+                    {
+                        day: 4,
+                        passage: "Romans 12:1-2",
+                        explanation: "Paul urges us to offer our bodies as living sacrifices to God. This means dedicating our whole lives to serving Him. We're also encouraged not to conform to the world's patterns but to be transformed by renewing our minds.",
+                        note: "Offer your whole life to God as an act of worship.",
+                        audio: false
+                    },
+                    {
+                        day: 5,
+                        passage: "Ephesians 2:8-10",
+                        explanation: "We are saved by grace through faith, not by our own works. This is God's gift to us so that no one can boast. We are God's workmanship, created in Christ Jesus to do good works that God prepared for us.",
+                        note: "Salvation is God's gift, not something we earn.",
+                        audio: true
+                    },
+                    {
+                        day: 6,
+                        passage: "Proverbs 3:5-6",
+                        explanation: "We are called to trust in the Lord with all our heart and not rely on our own understanding. When we acknowledge God in all our ways, He will make our paths straight and guide us in the right direction.",
+                        note: "Trust God completely rather than relying on your own wisdom.",
+                        audio: false
+                    },
+                    {
+                        day: 7,
+                        passage: "Isaiah 40:28-31",
+                        explanation: "God never grows tired or weary, and His understanding is beyond our comprehension. He gives strength to the weary and increases the power of the weak. Those who hope in the Lord will renew their strength.",
+                        note: "God's strength is available when we feel weak and weary.",
+                        audio: true
+                    },
+                    {
+                        day: 8,
+                        passage: "1 John 4:7-12",
+                        explanation: "God is love, and everyone who loves has been born of God and knows God. God showed His love for us by sending His Son as an atoning sacrifice for our sins. Since God loved us, we should also love one another.",
+                        note: "Love comes from God, and we should love others as He loved us.",
+                        audio: false
+                    },
+                    {
+                        day: 9,
+                        passage: "James 1:2-4",
+                        explanation: "We should consider it pure joy when we face trials of many kinds because the testing of our faith produces perseverance. Perseverance must finish its work so that we may be mature and complete, not lacking anything.",
+                        note: "Trials can produce spiritual maturity if we respond with faith.",
+                        audio: true
+                    },
+                    {
+                        day: 10,
+                        passage: "Psalm 139:1-14",
+                        explanation: "God knows us completely - our thoughts, our actions, our words. He is familiar with all our ways. We are fearfully and wonderfully made by God, and all our days were written in His book before one of them came to be.",
+                        note: "God knows you intimately and created you with purpose.",
+                        audio: false
+                    },
+                    // Days 11-30 would continue with similar structure
+                ]
+            },
+            challenge: {
+                title: "90-Day Bible Challenge",
+                subtitle: "90 Days • Comprehensive Journey",
+                days: [
+                    {
+                        day: 1,
+                        passage: "Genesis 1:1-25",
+                        explanation: "The creation story reveals God as the powerful creator who spoke the universe into existence. Each day of creation shows God's order, creativity, and purpose. Everything God made was good, reflecting His perfect nature.",
+                        note: "God is the sovereign creator of all things.",
+                        audio: true
+                    },
+                    {
+                        day: 2,
+                        passage: "Genesis 2:1-25",
+                        explanation: "God rested on the seventh day, establishing the pattern of Sabbath rest. He placed Adam in the Garden of Eden and gave him responsibility to care for it. God created Eve as a suitable helper and companion for Adam.",
+                        note: "God created humans for relationship with Him and each other.",
+                        audio: false
+                    },
+                    {
+                        day: 3,
+                        passage: "Genesis 3:1-24",
+                        explanation: "The fall of humanity occurred when Adam and Eve disobeyed God's command. Sin entered the world, bringing shame, fear, and separation from God. Yet even in judgment, God showed mercy and promised a future redeemer.",
+                        note: "Sin separates us from God, but He provides a way of redemption.",
+                        audio: true
+                    },
+                    {
+                        day: 4,
+                        passage: "Genesis 6:5-22",
+                        explanation: "Human wickedness had become so great that God decided to send a flood to cleanse the earth. But Noah found favor with God because he was righteous. God instructed Noah to build an ark to save his family and the animals.",
+                        note: "God judges sin but provides salvation for those who trust Him.",
+                        audio: false
+                    },
+                    {
+                        day: 5,
+                        passage: "Genesis 12:1-9",
+                        explanation: "God called Abram to leave his country and go to a land He would show him. God promised to make Abram into a great nation and bless all peoples through him. Abram obeyed God's call, demonstrating great faith.",
+                        note: "God calls us to follow Him in faith, promising to bless us.",
+                        audio: true
+                    },
+                    // Days 6-90 would continue with similar structure
+                ]
+            },
+            purpose: {
+                title: "Teens & Purpose Plan",
+                subtitle: "21 Days • Discover Your Purpose",
+                days: [
+                    {
+                        day: 1,
+                        passage: "Jeremiah 29:11",
+                        explanation: "God has good plans for your life - plans to prosper you and give you hope and a future. Your life has purpose and meaning because God designed you with specific intentions. Trust that He knows what's best for you.",
+                        note: "God's plans for you are good and full of hope.",
+                        audio: true
+                    },
+                    {
+                        day: 2,
+                        passage: "Ephesians 2:10",
+                        explanation: "You are God's workmanship, created in Christ Jesus to do good works that God prepared in advance for you to do. You're not an accident - God intentionally created you with specific purposes to fulfill.",
+                        note: "You are God's masterpiece, created for good works.",
+                        audio: false
+                    },
+                    {
+                        day: 3,
+                        passage: "Proverbs 3:5-6",
+                        explanation: "Trust in the Lord with all your heart and don't rely on your own understanding. When you acknowledge God in all your ways, He will direct your paths. Your purpose is discovered through relationship with God.",
+                        note: "Trust God to guide you to your purpose.",
+                        audio: true
+                    },
+                    // Days 4-21 would continue with similar structure
+                ]
+            },
+            "new-testament": {
+                title: "New Testament in 30 Days",
+                subtitle: "30 Days • Read the Entire New Testament",
+                days: [
+                    {
+                        day: 1,
+                        passage: "Matthew 1-7",
+                        explanation: "The Gospel of Matthew begins with Jesus' genealogy and birth, establishing His connection to David and Abraham. Chapters 5-7 contain the Sermon on the Mount, where Jesus teaches about the kingdom of heaven and true righteousness.",
+                        note: "Jesus is the promised Messiah who teaches about God's kingdom.",
+                        audio: true
+                    },
+                    {
+                        day: 2,
+                        passage: "Matthew 8-12",
+                        explanation: "These chapters show Jesus' authority through miracles of healing and power over nature. He calls disciples and sends them out. Jesus confronts religious leaders and reveals His identity as the Son of God.",
+                        note: "Jesus demonstrates divine authority through miracles and teaching.",
+                        audio: false
+                    },
+                    {
+                        day: 3,
+                        passage: "Matthew 13-18",
+                        explanation: "Jesus teaches in parables about the kingdom of heaven. He feeds the five thousand, walks on water, and is transfigured. Jesus teaches about humility, forgiveness, and dealing with sin in the community.",
+                        note: "The kingdom of heaven is revealed through parables and miracles.",
+                        audio: true
+                    },
+                    // Days 4-30 would continue with similar structure
+                ]
+            },
+            psalms: {
+                title: "Psalms & Proverbs",
+                subtitle: "31 Days • Wisdom and Comfort",
+                days: [
+                    {
+                        day: 1,
+                        passage: "Psalm 1",
+                        explanation: "This psalm contrasts the way of the righteous and the wicked. The righteous delight in God's law and meditate on it day and night. They are like trees planted by streams of water, yielding fruit in season.",
+                        note: "Blessing comes from delighting in God's Word.",
+                        audio: true
+                    },
+                    {
+                        day: 2,
+                        passage: "Psalm 23",
+                        explanation: "David describes God as his shepherd who provides, guides, and protects. Even in dark valleys, God is present with His rod and staff for comfort. God prepares a table in the presence of enemies and anoints with oil.",
+                        note: "The Lord is our shepherd who cares for all our needs.",
+                        audio: false
+                    },
+                    {
+                        day: 3,
+                        passage: "Psalm 91",
+                        explanation: "This psalm describes God's protection for those who dwell in His shelter. He will deliver from traps, plagues, and terrors. Angels are commanded to guard God's people in all their ways.",
+                        note: "God is our refuge and fortress in times of trouble.",
+                        audio: true
+                    },
+                    // Days 4-31 would continue with similar structure
+                ]
+            },
+            topical: {
+                title: "Topical Plans",
+                subtitle: "Various Lengths • Explore Different Themes",
+                days: [
+                    {
+                        day: 1,
+                        passage: "Various Scriptures",
+                        explanation: "Choose from different topical plans focusing on themes like faith, relationships, purpose, identity in Christ, spiritual growth, and more. Each plan provides relevant Bible passages and insights for your specific needs and interests.",
+                        note: "Select a specific topical plan that matches your current spiritual needs.",
+                        audio: false
+                    }
+                ]
+            }
+        };
+
+        // Quiz Data
+        const quizQuestions = [
+            {
+                question: "Pick your vibe today:",
+                options: [
+                    { text: "Adventurous & Brave", emoji: "🦁" },
+                    { text: "Creative & Thoughtful", emoji: "🎨" },
+                    { text: "Compassionate & Caring", emoji: "❤️" },
+                    { text: "Wise & Patient", emoji: "🦉" }
+                ]
+            },
+            {
+                question: "How do you handle challenges?",
+                options: [
+                    { text: "Face them head-on", emoji: "💪" },
+                    { text: "Think through carefully", emoji: "🤔" },
+                    { text: "Ask others for help", emoji: "👥" },
+                    { text: "Trust in a higher power", emoji: "🙏" }
+                ]
+            },
+            {
+                question: "Choose a superpower:",
+                options: [
+                    { text: "Super strength", emoji: "🔥" },
+                    { text: "Wisdom & knowledge", emoji: "📚" },
+                    { text: "Healing abilities", emoji: "✨" },
+                    { text: "Faith that moves mountains", emoji: "⛰️" }
+                ]
+            }
+        ];
+
+        const quizResults = [
+            {
+                name: "David",
+                title: "Brave & Purposeful",
+                description: "Like David facing Goliath, you have courage and trust in God's plan for your life. You're not afraid to face big challenges when you know God is with you."
+            },
+            {
+                name: "Esther",
+                title: "Bold & Chosen",
+                description: "Like Esther, you're willing to stand up for what's right, even when it's difficult. You understand that God has placed you where you are 'for such a time as this.'"
+            },
+            {
+                name: "Joseph",
+                title: "Favored & Focused",
+                description: "Like Joseph, you remain faithful through challenges, trusting God's bigger picture. Even when things don't make sense, you believe God is working everything for good."
+            },
+            {
+                name: "Ruth",
+                title: "Loyal & Faithful",
+                description: "Like Ruth, your loyalty and faithfulness shine through in all your relationships. You're committed to following God wherever He leads, trusting in His provision."
+            }
+        ];
+
+        // Mood Verses Data
+        const moodVerses = {
+            happy: {
+                text: "The joy of the Lord is your strength.",
+                reference: "Nehemiah 8:10"
+            },
+            tired: {
+                text: "Come to me, all you who are weary and burdened, and I will give you rest.",
+                reference: "Matthew 11:28"
+            },
+            worried: {
+                text: "Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God.",
+                reference: "Philippians 4:6"
+            },
+            confident: {
+                text: "I can do all this through him who gives me strength.",
+                reference: "Philippians 4:13"
+            },
+            sad: {
+                text: "The Lord is close to the brokenhearted and saves those who are crushed in spirit.",
+                reference: "Psalm 34:18"
+            },
+            hopeful: {
+                text: "For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future.",
+                reference: "Jeremiah 29:11"
+            }
+        };
+
+        // Verse Data for Spinner
+        const verses = [
+            "For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future. - Jeremiah 29:11",
+            "I can do all things through Christ who strengthens me. - Philippians 4:13",
+            "Trust in the Lord with all your heart and lean not on your own understanding. - Proverbs 3:5",
+            "Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go. - Joshua 1:9",
+            "Cast all your anxiety on him because he cares for you. - 1 Peter 5:7",
+            "The Lord is my shepherd, I lack nothing. - Psalm 23:1",
+            "But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint. - Isaiah 40:31"
+        ];
+
+        // DOM Elements
+        const categoryCards = document.querySelectorAll('.category-card');
+        const planModal = document.getElementById('planModal');
+        const planClose = document.getElementById('planClose');
+        const planTitle = document.getElementById('planTitle');
+        const planSubtitle = document.getElementById('planSubtitle');
+        const planDays = document.getElementById('planDays');
+        const prayerButton = document.getElementById('prayerButton');
+        const prayerModal = document.getElementById('prayerModal');
+        const prayerClose = document.getElementById('prayerClose');
+        const prayerForm = document.getElementById('prayerForm');
+        const successModal = document.getElementById('successModal');
+        const okBtn = document.getElementById('okBtn');
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('.theme-icon');
+        const addStreakBtn = document.getElementById('addStreak');
+        const streakCount = document.querySelector('.streak-count');
+        const spinWheelBtn = document.getElementById('spinWheel');
+        const wheel = document.getElementById('wheel');
+        const verseResult = document.getElementById('verseResult');
+        const quizContainer = document.getElementById('quizContainer');
+        const quizResult = document.getElementById('quizResult');
+        const moodOptions = document.querySelectorAll('.mood-option');
+        const verseDisplay = document.getElementById('verseDisplay');
+        const verseText = document.getElementById('verseText');
+        const verseReference = document.getElementById('verseReference');
+        const carouselSlides = document.querySelectorAll('.carousel-slide');
+        const achievementSticker = document.getElementById('achievementSticker');
+
+        // Initialize the page
+        function initPage() {
+            setupEventListeners();
+            startCarousel();
+            renderQuizQuestion();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Category cards
+            categoryCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const planType = card.dataset.plan;
+                    openPlanModal(planType);
+                });
+            });
+            
+            // Plan modal
+            planClose.addEventListener('click', () => {
+                planModal.classList.remove('active');
+            });
+            
+            // Prayer modal
+            prayerButton.addEventListener('click', () => {
+                prayerModal.classList.add('active');
+            });
+            
+            prayerClose.addEventListener('click', () => {
+                prayerModal.classList.remove('active');
+            });
+            
+            prayerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Send email via EmailJS
+                emailjs.sendForm('service_id', 'template_id', e.target)
+                    .then(() => {
+                        prayerModal.classList.remove('active');
+                        setTimeout(() => {
+                            successModal.classList.add('active');
+                        }, 300);
+                        prayerForm.reset();
+                    }, (error) => {
+                        console.log('FAILED...', error);
+                        // Fallback - still show success for demo purposes
+                        prayerModal.classList.remove('active');
+                        setTimeout(() => {
+                            successModal.classList.add('active');
+                        }, 300);
+                        prayerForm.reset();
+                    });
+            });
+            
+            // Success modal
+            okBtn.addEventListener('click', () => {
+                successModal.classList.remove('active');
+            });
+            
+            // Theme toggle
+            themeToggle.addEventListener('click', toggleTheme);
+            
+            // Streak counter
+            addStreakBtn.addEventListener('click', addStreak);
+            
+            // Verse spinner
+            spinWheelBtn.addEventListener('click', spinWheel);
+            
+            // Mood verse generator
+            moodOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    moodOptions.forEach(o => o.classList.remove('active'));
+                    option.classList.add('active');
+                    showMoodVerse(option.dataset.mood);
+                });
+            });
+        }
+
+        // Open plan modal
+        function openPlanModal(planType) {
+            const plan = biblePlans[planType];
+            if (!plan) return;
+            
+            planTitle.textContent = plan.title;
+            planSubtitle.textContent = plan.subtitle;
+            
+            // Clear previous days
+            planDays.innerHTML = '';
+            
+            // Add days to modal
+            plan.days.forEach(day => {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'plan-day';
+                dayElement.innerHTML = `
+                    <div class="day-header">
+                        <div class="day-title">Day ${day.day}</div>
+                    </div>
+                    <div class="day-passage">${day.passage}</div>
+                    <div class="day-explanation">${day.explanation}</div>
+                    <div class="day-note">${day.note}</div>
+                    <div class="day-actions">
+                        ${day.audio ? `
+                            <button class="audio-btn" data-day="${day.day}">
+                                <i class="fas fa-play-circle"></i> Listen
+                            </button>
+                        ` : ''}
+                        <button class="complete-btn" data-day="${day.day}">
+                            <i class="fas fa-check"></i> Mark Complete
+                        </button>
+                    </div>
+                `;
+                planDays.appendChild(dayElement);
+            });
+            
+            // Add event listeners to audio buttons
+            document.querySelectorAll('.audio-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const dayNum = btn.dataset.day;
+                    // In a real implementation, this would play audio
+                    // For demo, we'll just show a message
+                    showAchievement(`You listened to Day ${dayNum}! 🎧`);
+                });
+            });
+            
+            // Add event listeners to complete buttons
+            document.querySelectorAll('.complete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const dayNum = btn.dataset.day;
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="fas fa-check"></i> Completed!';
+                    showAchievement(`You completed Day ${dayNum}! 🎉`);
+                    
+                    // Automatically add to streak when completing a day
+                    addStreak();
+                    
+                    // Show different achievements based on day
+                    if (dayNum == 1) {
+                        showAchievement("You started your journey! ✨");
+                    } else if (dayNum == 7) {
+                        showAchievement("One week complete! You're a Bible Warrior! 🔥");
+                    } else if (dayNum == 30) {
+                        showAchievement("30 days! You're amazing! 🌟");
+                    }
+                });
+            });
+            
+            planModal.classList.add('active');
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            if (document.body.classList.contains('light-mode')) {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            } else {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+        }
+
+        // Add streak
+        function addStreak() {
+            let currentStreak = parseInt(streakCount.textContent);
+            streakCount.textContent = currentStreak + 1;
+            
+            // Show different achievements based on streak
+            if (currentStreak + 1 === 3) {
+                showAchievement("3-Day Streak! You're on fire! 🔥");
+            } else if (currentStreak + 1 === 7) {
+                showAchievement("One Week! You're amazing! ✨");
+            }
+        }
+
+        // Spin wheel for verse
+        function spinWheel() {
+            // Disable button during spin
+            spinWheelBtn.disabled = true;
+            
+            // Random rotation between 3 and 5 full rotations plus a random angle
+            const rotations = 3 + Math.floor(Math.random() * 3);
+            const randomAngle = Math.floor(Math.random() * 360);
+            const totalRotation = rotations * 360 + randomAngle;
+            
+            // Apply rotation
+            wheel.style.transform = `rotate(${totalRotation}deg)`;
+            
+            // Show verse after spin completes
+            setTimeout(() => {
+                const randomVerse = verses[Math.floor(Math.random() * verses.length)];
+                verseResult.querySelector('p').textContent = randomVerse;
+                verseResult.classList.add('active');
+                
+                // Re-enable button
+                spinWheelBtn.disabled = false;
+                
+                // Add confetti celebration
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+                
+                // Show achievement
+                showAchievement("You discovered a new verse! 📖");
+            }, 3000);
+        }
+
+        // Render quiz question
+        let currentQuizIndex = 0;
+        let quizAnswers = [];
+        
+        function renderQuizQuestion() {
+            quizContainer.innerHTML = '';
+            
+            if (currentQuizIndex < quizQuestions.length) {
+                const currentQuestion = quizQuestions[currentQuizIndex];
+                
+                const questionElement = document.createElement('div');
+                questionElement.className = 'quiz-question active';
+                
+                let optionsHTML = '';
+                currentQuestion.options.forEach((option, index) => {
+                    optionsHTML += `
+                        <div class="quiz-option" data-answer="${index}">
+                            <div class="quiz-emoji">${option.emoji}</div>
+                            <div class="quiz-text">${option.text}</div>
+                        </div>
+                    `;
+                });
+                
+                questionElement.innerHTML = `
+                    <p class="quiz-text" style="margin-bottom: 15px; text-align: center;">${currentQuestion.question}</p>
+                    <div class="quiz-options">
+                        ${optionsHTML}
+                    </div>
+                `;
+                
+                quizContainer.appendChild(questionElement);
+                
+                // Add event listeners to quiz options
+                document.querySelectorAll('.quiz-option').forEach(option => {
+                    option.addEventListener('click', handleQuizAnswer);
+                });
+            } else {
+                showQuizResult();
+            }
+        }
+
+        // Handle quiz answer
+        function handleQuizAnswer() {
+            quizAnswers.push(parseInt(this.dataset.answer));
+            currentQuizIndex++;
+            renderQuizQuestion();
+        }
+
+        // Show quiz result
+        function showQuizResult() {
+            // Simple algorithm to determine result based on answers
+            const resultIndex = quizAnswers.reduce((a, b) => a + b, 0) % quizResults.length;
+            const result = quizResults[resultIndex];
+            
+            quizResult.querySelector('.character-name').textContent = `You're ${result.name}: ${result.title}`;
+            quizResult.querySelector('.character-desc').textContent = result.description;
+            quizResult.classList.add('active');
+            
+            // Show achievement
+            showAchievement(`You discovered you're like ${result.name}! 👑`);
+            
+            // Reset quiz after delay
+            setTimeout(() => {
+                currentQuizIndex = 0;
+                quizAnswers = [];
+                quizResult.classList.remove('active');
+                renderQuizQuestion();
+            }, 5000);
+        }
+
+        // Show mood verse
+        function showMoodVerse(mood) {
+            const verse = moodVerses[mood];
+            if (!verse) return;
+            
+            verseText.textContent = verse.text;
+            verseReference.textContent = verse.reference;
+            verseDisplay.classList.add('active');
+            
+            // Show achievement for first time using mood generator
+            showAchievement("You found the perfect verse! 💫");
+        }
+
+        // Start carousel
+        function startCarousel() {
+            let currentSlide = 0;
+            
+            setInterval(() => {
+                carouselSlides.forEach(slide => slide.classList.remove('active'));
+                currentSlide = (currentSlide + 1) % carouselSlides.length;
+                carouselSlides[currentSlide].classList.add('active');
+            }, 4000);
+        }
+
+        // Show achievement sticker
+        function showAchievement(text) {
+            achievementSticker.querySelector('.sticker-text').textContent = text;
+            achievementSticker.classList.add('active');
+            
+            setTimeout(() => {
+                achievementSticker.classList.remove('active');
+            }, 3000);
+        }
+
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>

@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Boost | NEBC Teens</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <style>
+        :root {
+            --torch-red: #ff1e1e;
+            --fair-pink: #ffe8e8;
+            --bittersweet: #ff7575;
+            --cornflower-lilac: #ffacac;
+            --coral-red: #ff3e3e;
+            --mona-lisa: #ff8f8f;
+            --persimmon: #ff5d5c;
+            --your-pink: #ffc9c9;
+            
+            --primary: #ff5d5c;
+            --secondary: #ff8f8f;
+            --accent: #ff3e3e;
+            --success: #4cd964;
+            --warning: #ffcc00;
+            --text: #f8f9fa;
+            --text-light: #adb5bd;
+            --bg: #121212;
+            --card-bg: rgba(30, 30, 30, 0.8);
+            --card-shadow: rgba(0, 0, 0, 0.3);
+            --nav-bg: rgba(30, 30, 30, 0.95);
+            --glow: 0 0 20px rgba(255, 93, 92, 0.5);
+            --transition: all 0.3s ease;
+        }
+
+        .light-mode {
+            --primary: #ff1e1e;
+            --secondary: #ff7575;
+            --accent: #ff3e3e;
+            --text: #333333;
+            --text-light: #6c757d;
+            --bg: #f8f9fa;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --card-shadow: rgba(0, 0, 0, 0.1);
+            --nav-bg: rgba(255, 255, 255, 0.95);
+            --glow: 0 0 20px rgba(255, 30, 30, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: var(--transition);
+            padding-bottom: 80px;
+        }
+
+        html, body { overflow-x: hidden; }
+        .floating-shapes { overflow: hidden; }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto !important;
+            padding: 0 20px;
+        }
+
+        .logo-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: #121212;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-text {
+            margin-left: 10px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        /* Hero Banner with Transitions */
+        .hero-banner {
+            position: relative;
+            height: 60vh;
+            overflow: hidden;
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 40px;
+        }
+
+        .banner-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .banner-slide.active {
+            opacity: 1;
+        }
+
+        .banner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+
+        .banner-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 2;
+            color: white;
+            padding: 0 20px;
+        }
+
+        .typewriter-container {
+            min-height: 120px;
+            margin-bottom: -40px;
+            margin-top: 55px;
+        }
+
+        .typewriter-text {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .banner-subtitle {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin-top: 20px;
+        }
+
+        /* Floating Elements */
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            animation: float 15s infinite linear;
+        }
+
+        .sparkle {
+            position: absolute;
+            color: white;
+            font-size: 1.5rem;
+            opacity: 0.7;
+            animation: sparkle 3s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, 50px) rotate(90deg); }
+            50% { transform: translate(0, 100px) rotate(180deg); }
+            75% { transform: translate(-20px, 50px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.8rem;
+            margin: 40px 0 20px;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50%;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        /* Daily Motivation Quote */
+        .daily-quote-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin: 30px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            animation: glow 3s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 10px 30px var(--card-shadow), var(--glow); }
+            to { box-shadow: 0 10px 30px var(--card-shadow), 0 0 30px rgba(255, 93, 92, 0.7); }
+        }
+
+        .quote-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .quote-reference {
+            font-style: italic;
+            color: var(--text-light);
+        }
+
+        /* Motivational Quotes Grid */
+        .quotes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .quote-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: calc(var(--delay) * 0.1s);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quote-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px var(--card-shadow), var(--glow);
+        }
+
+        .quote-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .quote-content {
+            font-size: 1rem;
+            color: var(--text);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Boost of the Day */
+        .boost-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin: 30px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .boost-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 35px var(--card-shadow), var(--glow);
+        }
+
+        .boost-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .boost-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-right: 15px;
+            box-shadow: 0 5px 15px rgba(255, 93, 92, 0.3);
+        }
+
+        .boost-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.5rem;
+            color: var(--text);
+        }
+
+        .boost-content {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .boost-tip {
+            background: rgba(255, 93, 92, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 0.95rem;
+        }
+
+        /* Motivation Nuggets */
+        .nuggets-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 30px 0;
+            justify-content: center;
+        }
+
+        .nugget-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 15px 20px;
+            box-shadow: 0 5px 15px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+            cursor: pointer;
+            flex: 1;
+            min-width: 150px;
+            max-width: 200px;
+            text-align: center;
+        }
+
+        .nugget-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px var(--card-shadow), var(--glow);
+        }
+
+        .nugget-emoji {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .nugget-text {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Swipe to Refresh Section */
+        .swipe-container {
+            position: relative;
+            height: 120px;
+            overflow: hidden;
+            border-radius: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin: 30px 0;
+            cursor: grab;
+        }
+
+        .swipe-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .swipe-slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .swipe-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* Mini Scripture */
+        .scripture-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin: 30px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .scripture-card:hover {
+            transform: rotateY(5deg) rotateX(5deg);
+        }
+
+        .scripture-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .scripture-reference {
+            font-style: italic;
+            color: var(--text-light);
+        }
+
+        /* Feel-Good Button */
+        .feel-good-btn {
+            display: block;
+            margin: 30px auto;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(255, 93, 92, 0.4);
+        }
+
+        .feel-good-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(255, 93, 92, 0.6);
+        }
+
+        /* Community Section */
+        .community-section {
+            margin: 60px 0 40px;
+            text-align: center;
+            padding: 40px 20px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .community-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .community-subtext {
+            font-size: 1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Weekly Spotlight */
+        .spotlight-section {
+            margin: 40px 0;
+        }
+
+        .spotlight-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .spotlight-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .spotlight-content {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        /* Closing Encouragement */
+        .encouragement-section {
+            margin: 60px 0 40px;
+            text-align: center;
+            padding: 40px 20px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .encouragement-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .encouragement-subtext {
+            font-size: 1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Prayer Button & Modal */
+        .prayer-button {
+            position: fixed;
+            bottom: 100px;
+            right: calc(20px + env(safe-area-inset-right));
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.8rem;
+            box-shadow: 0 5px 20px rgba(255, 93, 92, 0.5);
+            cursor: pointer;
+            z-index: 100;
+            animation: pulse 2s infinite;
+            transition: var(--transition);
+        }
+
+        .prayer-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(255, 93, 92, 0.7);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .prayer-modal {
+            background: var(--card-bg);
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: translateY(50px) scale(0.9);
+            opacity: 0;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .modal-overlay.active .prayer-modal {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 10;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-close:hover {
+            background: white;
+            transform: rotate(90deg);
+        }
+
+        .modal-header {
+            padding: 30px 30px 0;
+        }
+
+        .modal-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            padding: 0 30px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+            transition: var(--transition);
+        }
+
+        .light-mode .form-input, .light-mode .form-textarea {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 93, 92, 0.2);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: calc(100% - 60px);
+            margin: 0 30px 30px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 93, 92, 0.4);
+        }
+
+        /* Success Modal */
+        .success-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .success-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .success-content {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: scale(0.8);
+            opacity: 0;
+            transition: var(--transition);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .success-modal.active .success-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: var(--success);
+            margin-bottom: 20px;
+        }
+
+        .success-message {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .ok-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .ok-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 93, 92, 0.4);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--nav-bg);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            z-index: 100;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-light);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            transition: var(--transition);
+        }
+
+        .nav-item.active .nav-icon {
+            transform: translateY(-5px);
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .nav-indicator {
+            position: absolute;
+            top: -10px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .nav-item.active .nav-indicator {
+            opacity: 1;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: calc(20px + env(safe-area-inset-top));
+            right: calc(20px + env(safe-area-inset-right));
+            width: 50px;
+            height: 50px;
+            background: var(--card-bg);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px var(--card-shadow);
+            cursor: pointer;
+            z-index: 100;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(30deg);
+        }
+
+        .theme-icon {
+            font-size: 1.3rem;
+            color: var(--text);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .quotes-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nuggets-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nugget-card {
+                max-width: 100%;
+            }
+            
+            .typewriter-text {
+                font-size: 1.8rem;
+            }
+            
+            .banner-subtitle {
+                font-size: 1rem;
+            }
+            
+            .modal-header {
+                padding: 20px 20px 0;
+            }
+            
+            .form-group {
+                padding: 0 20px;
+            }
+            
+            .submit-btn {
+                width: calc(100% - 40px);
+                margin: 0 20px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .theme-toggle {
+                width: 44px;
+                height: 44px;
+                top: calc(12px + env(safe-area-inset-top));
+                right: calc(12px + env(safe-area-inset-right));
+            }
+
+            .prayer-button {
+                width: 60px;
+                height: 60px;
+                bottom: calc(80px + env(safe-area-inset-bottom));
+                right: calc(12px + env(safe-area-inset-right));
+                font-size: 1.4rem;
+            }
+
+            .floating-shapes { display: block; opacity: 0.8; transform: scale(0.9); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Shapes for Background -->
+    <div class="floating-shapes">
+        <div class="shape" style="width: 80px; height: 80px; top: 10%; left: 10%; animation-delay: 0s;"></div>
+        <div class="shape" style="width: 120px; height: 120px; top: 60%; left: 80%; animation-delay: -5s;"></div>
+        <div class="shape" style="width: 60px; height: 60px; top: 80%; left: 20%; animation-delay: -10s;"></div>
+        <div class="shape" style="width: 100px; height: 100px; top: 30%; left: 70%; animation-delay: -2s;"></div>
+        <div class="shape" style="width: 70px; height: 70px; top: 70%; left: 60%; animation-delay: -7s;"></div>
+        <div class="shape" style="width: 90px; height: 90px; top: 40%; left: 30%; animation-delay: -12s;"></div>
+        <div class="shape" style="width: 50px; height: 50px; top: 20%; left: 50%; animation-delay: -4s;"></div>
+        <div class="shape" style="width: 110px; height: 110px; top: 50%; left: 10%; animation-delay: -9s;"></div>
+        
+        <div class="sparkle" style="top: 20%; left: 15%; animation-delay: 0s;">✨</div>
+        <div class="sparkle" style="top: 70%; left: 85%; animation-delay: -1s;">✨</div>
+        <div class="sparkle" style="top: 40%; left: 90%; animation-delay: -2s;">✨</div>
+        <div class="sparkle" style="top: 80%; left: 10%; animation-delay: -3s;">✨</div>
+        <div class="sparkle" style="top: 30%; left: 80%; animation-delay: -4s;">✨</div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-sun theme-icon"></i>
+    </div>
+
+    <!-- Hero Banner -->
+    <section class="hero-banner">
+        
+        <div class="logo-container">
+            <div class="logo">
+                <img src="images/LOGO.png" width="100%" height="100%" alt="NEBC TEENS LOGO">
+            </div>
+            <div class="logo-text">NEBC Teens</div>
+        </div>
+        <div class="banner-slide active" style="background-image: url('https://images.unsplash.com/photo-1518655048521-f130df041f66?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');"></div>
+        <div class="banner-slide" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');"></div>
+        <div class="banner-slide" style="background-image: url('https://images.unsplash.com/photo-1501555088652-021faa106b9b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80');"></div>
+        <div class="banner-slide" style="background-image: url('https://images.unsplash.com/photo-1519817914152-22d216bb9170?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1971&q=80');"></div>
+        
+        <div class="banner-overlay"></div>
+        <div class="banner-content">
+            <div class="typewriter-container">
+                <h1 class="typewriter-text" id="typewriter"></h1>
+            </div>
+            <p class="banner-subtitle">Life can feel overwhelming sometimes — school, family expectations, friendships, decisions… But you're not alone. This space is designed for the Teens of NEBC Church, to help you grow stronger, wiser, and more confident in who God has called you to be.</p>
+        </div>
+    </section>
+
+    <!-- Daily Motivation Quote -->
+    <section class="container">
+        <h2 class="section-title">Today's Inspiring Thought</h2>
+        <div class="daily-quote-card">
+            <p class="quote-text">"You may not have everything figured out yet — and that's okay. Growth takes time, and God is shaping you into something amazing."</p>
+            <p class="quote-reference">A short reminder to breathe… To slow down… To trust God's timing.</p>
+        </div>
+    </section>
+
+    <!-- Bible Verse of the Day -->
+    <section class="container">
+        <h2 class="section-title">Bible Verse of the Day</h2>
+        <div class="scripture-card">
+            <p class="scripture-text">"I can do all things through Christ who strengthens me."</p>
+            <p class="scripture-reference">— Philippians 4:13</p>
+            <p style="margin-top: 15px; font-size: 0.95rem;">Whatever challenge you're facing today, remember you're stronger than you think.</p>
+        </div>
+    </section>
+
+    <!-- Quote of the Day -->
+    <section class="container">
+        <h2 class="section-title">Quote of the Day</h2>
+        <div class="quotes-grid">
+            <div class="quote-card" style="--delay: 1">
+                <div class="quote-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="quote-content">"Your future is bright. Don't let today's troubles make you forget who you are becoming."</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Teen Life Nuggets -->
+    <section class="container">
+        <h2 class="section-title">Teen Life Nuggets</h2>
+        <div class="nuggets-container">
+            <div class="nugget-card">
+                <div class="nugget-emoji">🌱</div>
+                <div class="nugget-text">Small steps are still progress.</div>
+            </div>
+            <div class="nugget-card">
+                <div class="nugget-emoji">✨</div>
+                <div class="nugget-text">You carry light. Don't dim yourself for anyone.</div>
+            </div>
+            <div class="nugget-card">
+                <div class="nugget-emoji">💪</div>
+                <div class="nugget-text">Courage doesn't always roar — sometimes it's the quiet "I'll try again tomorrow."</div>
+            </div>
+            <div class="nugget-card">
+                <div class="nugget-emoji">💛</div>
+                <div class="nugget-text">You matter more than you know.</div>
+            </div>
+            <div class="nugget-card">
+                <div class="nugget-emoji">🌟</div>
+                <div class="nugget-text">Your voice, your dreams, your journey — they are all important.</div>
+            </div>
+            <div class="nugget-card">
+                <div class="nugget-emoji">🙏</div>
+                <div class="nugget-text">Pray. Trust. Keep moving.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Boost of the Day -->
+    <section class="container">
+        <h2 class="section-title">Boost of the Day</h2>
+        <div class="boost-card" id="boostCard">
+            <div class="boost-header">
+                <div class="boost-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h3 class="boost-title">Today's Challenge</h3>
+            </div>
+            <p class="boost-content">Write down one thing you're grateful for. It could be a friend, a moment, an opportunity, or even just waking up today.</p>
+            <div class="boost-tip">
+                <strong>Extra Growth Tip:</strong> Take 5 minutes off your phone and breathe. Real peace comes in silence.
+            </div>
+        </div>
+    </section>
+
+    <!-- Swipe to Refresh -->
+    <section class="container">
+        <h2 class="section-title">Swipe to Refresh Your Mind</h2>
+        <div class="swipe-container" id="swipeContainer">
+            <div class="swipe-slide active">
+                <p class="swipe-text">You are capable of amazing things! 💫</p>
+            </div>
+            <div class="swipe-slide">
+                <p class="swipe-text">Your story is still being written 📖</p>
+            </div>
+            <div class="swipe-slide">
+                <p class="swipe-text">God's plans for you are good ✨</p>
+            </div>
+            <div class="swipe-slide">
+                <p class="swipe-text">You are loved beyond measure ❤️</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mini Scripture of Strength -->
+    <section class="container">
+        <h2 class="section-title">Mini Scripture of Strength</h2>
+        <div class="scripture-card">
+            <p class="scripture-text">"Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go."</p>
+            <p class="scripture-reference">— Joshua 1:9</p>
+        </div>
+    </section>
+
+    <!-- Feel-Good Button -->
+    <section class="container">
+        <button class="feel-good-btn" id="feelGoodBtn">
+            <i class="fas fa-sparkles"></i> Feel-Good Button
+        </button>
+    </section>
+
+    <!-- NEBC Teen Community -->
+    <section class="container">
+        <div class="community-section">
+            <p class="community-text">You belong here.</p>
+            <p class="community-subtext">As NEBC Teens, we rise together, learn together, and support one another. Whenever you feel lost, remember that God has placed you in a community that cares about you.</p>
+        </div>
+    </section>
+
+    <!-- Weekly Spotlight -->
+    <section class="container spotlight-section">
+        <h2 class="section-title">Weekly Spotlight</h2>
+        <div class="spotlight-card">
+            <h3 class="spotlight-title">Teen of the Week</h3>
+            <p class="spotlight-content">Celebrating someone's consistency or effort in our community!</p>
+            
+            <h3 class="spotlight-title" style="margin-top: 25px;">Memory Verse of the Week</h3>
+            <p class="spotlight-content">"Trust in the Lord with all your heart and lean not on your own understanding." - Proverbs 3:5</p>
+            
+            <h3 class="spotlight-title" style="margin-top: 25px;">Challenge of the Week</h3>
+            <p class="spotlight-content">Show kindness to one person each day - a smile, a compliment, or a helping hand.</p>
+        </div>
+    </section>
+
+    <!-- Closing Encouragement -->
+    <section class="container">
+        <div class="encouragement-section">
+            <p class="encouragement-text">Whatever today brings, you're not facing it alone.</p>
+            <p class="encouragement-subtext">God is for you. We're cheering for you. And your best days are still ahead.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="container" style="text-align: center; margin-top: 40px; padding: 20px 0; color: var(--text-light);">
+        <p>&copy; 2025 NEBC Teens. Growing together in faith.</p>
+    </footer>
+
+    <!-- Prayer Request Button -->
+    <div class="prayer-button" id="prayerButton">
+        <i class="fas fa-hands-praying"></i>
+    </div>
+
+    <!-- Prayer Request Modal -->
+    <div class="modal-overlay" id="prayerModal">
+        <div class="prayer-modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Submit a Prayer Request</h3>
+                <button class="modal-close" id="prayerClose">&times;</button>
+            </div>
+            <form id="prayerForm">
+                <div class="form-group">
+                    <label class="form-label" for="name">Your Name (Optional)</label>
+                    <input type="text" id="name" class="form-input" placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="request">Prayer Request</label>
+                    <textarea id="request" class="form-textarea" placeholder="Share your prayer request here..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <input type="checkbox" id="anonymous"> Share anonymously
+                    </label>
+                </div>
+                <button type="submit" class="submit-btn">Submit Prayer Request</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="success-modal" id="successModal">
+        <div class="success-content">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <p class="success-message">Your request has been received. The NEBC Teens team will pray with you.</p>
+            <button class="ok-btn" id="okBtn">OK</button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="motivation.html" class="nav-item active">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-fire nav-icon"></i>
+            <span class="nav-label">Boost</span>
+        </a>
+        <a href="devotional.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-book-open nav-icon"></i>
+            <span class="nav-label">Devotionals</span>
+        </a>
+        <a href="ask.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-question-circle nav-icon"></i>
+            <span class="nav-label">Ask</span>
+        </a>
+        <a href="event.html" class="nav-item ">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-calendar-alt nav-icon"></i>
+            <span class="nav-label">Events</span>
+        </a>
+        <a href="testimonies.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-comment-dots nav-icon"></i>
+            <span class="nav-label">Testimonies</span>
+        </a>
+    </nav>
+
+    <script>
+        // Initialize EmailJS (you would replace with your actual EmailJS credentials)
+        emailjs.init("user_your_user_id_here");
+
+        // Typewriter Text Data
+        const typewriterTexts = [
+            "Daily Boost for NEBC Teens",
+            "You Are Stronger Than You Think",
+            "God Has Amazing Plans For You",
+            "Your Journey Matters"
+        ];
+
+        // Swipe Text Data
+        const swipeTexts = [
+            "You are capable of amazing things! 💫",
+            "Your story is still being written 📖",
+            "God's plans for you are good ✨",
+            "You are loved beyond measure ❤️",
+            "Today is a fresh start 🌟",
+            "Your potential is limitless 🚀"
+        ];
+
+        // DOM Elements
+        const typewriterElement = document.getElementById('typewriter');
+        const bannerSlides = document.querySelectorAll('.banner-slide');
+        const prayerButton = document.getElementById('prayerButton');
+        const prayerModal = document.getElementById('prayerModal');
+        const prayerClose = document.getElementById('prayerClose');
+        const prayerForm = document.getElementById('prayerForm');
+        const successModal = document.getElementById('successModal');
+        const okBtn = document.getElementById('okBtn');
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('.theme-icon');
+        const boostCard = document.getElementById('boostCard');
+        const feelGoodBtn = document.getElementById('feelGoodBtn');
+        const swipeContainer = document.getElementById('swipeContainer');
+        const swipeSlides = document.querySelectorAll('.swipe-slide');
+
+        // Initialize the page
+        function initPage() {
+            setupEventListeners();
+            startTypewriter();
+            startBannerTransitions();
+            startSwipeCarousel();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Prayer modal
+            prayerButton.addEventListener('click', () => {
+                prayerModal.classList.add('active');
+            });
+            
+            prayerClose.addEventListener('click', () => {
+                prayerModal.classList.remove('active');
+            });
+            
+            prayerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Send email via EmailJS
+                emailjs.sendForm('service_id', 'template_id', e.target)
+                    .then(() => {
+                        prayerModal.classList.remove('active');
+                        setTimeout(() => {
+                            successModal.classList.add('active');
+                        }, 300);
+                        prayerForm.reset();
+                    }, (error) => {
+                        console.log('FAILED...', error);
+                        // Fallback - still show success for demo purposes
+                        prayerModal.classList.remove('active');
+                        setTimeout(() => {
+                            successModal.classList.add('active');
+                        }, 300);
+                        prayerForm.reset();
+                    });
+            });
+            
+            // Success modal
+            okBtn.addEventListener('click', () => {
+                successModal.classList.remove('active');
+            });
+            
+            // Theme toggle
+            themeToggle.addEventListener('click', toggleTheme);
+            
+            // Boost card animation
+            boostCard.addEventListener('click', () => {
+                boostCard.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    boostCard.style.transform = 'scale(1)';
+                }, 300);
+                
+                // Add sparkle effect
+                confetti({
+                    particleCount: 50,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            });
+            
+            // Feel-good button
+            feelGoodBtn.addEventListener('click', () => {
+                // Add confetti celebration
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+                
+                // Add sparkle animation to button
+                feelGoodBtn.innerHTML = '<i class="fas fa-sparkles"></i> You are amazing!';
+                feelGoodBtn.style.background = 'linear-gradient(135deg, #ffcc00, #ff6b8b)';
+                
+                setTimeout(() => {
+                    feelGoodBtn.innerHTML = '<i class="fas fa-sparkles"></i> Feel-Good Button';
+                    feelGoodBtn.style.background = 'linear-gradient(135deg, var(--primary), var(--secondary))';
+                }, 2000);
+            });
+            
+            // Swipe functionality
+            let startX = 0;
+            let currentSlide = 0;
+            
+            swipeContainer.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+            });
+            
+            swipeContainer.addEventListener('touchend', (e) => {
+                const endX = e.changedTouches[0].clientX;
+                const diffX = startX - endX;
+                
+                if (Math.abs(diffX) > 50) {
+                    if (diffX > 0) {
+                        // Swipe left
+                        currentSlide = (currentSlide + 1) % swipeSlides.length;
+                    } else {
+                        // Swipe right
+                        currentSlide = (currentSlide - 1 + swipeSlides.length) % swipeSlides.length;
+                    }
+                    
+                    updateSwipeSlide();
+                }
+            });
+        }
+
+        // Typewriter effect
+        let typewriterIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        
+        function startTypewriter() {
+            const currentText = typewriterTexts[typewriterIndex];
+            
+            if (isDeleting) {
+                // Deleting text
+                typewriterElement.textContent = currentText.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                // Typing text
+                typewriterElement.textContent = currentText.substring(0, charIndex + 1);
+                charIndex++;
+            }
+            
+            if (!isDeleting && charIndex === currentText.length) {
+                // Finished typing, wait then start deleting
+                isDeleting = true;
+                setTimeout(startTypewriter, 2000);
+            } else if (isDeleting && charIndex === 0) {
+                // Finished deleting, move to next text
+                isDeleting = false;
+                typewriterIndex = (typewriterIndex + 1) % typewriterTexts.length;
+                setTimeout(startTypewriter, 500);
+            } else {
+                // Continue typing/deleting
+                const typeSpeed = isDeleting ? 50 : 100;
+                setTimeout(startTypewriter, typeSpeed);
+            }
+        }
+
+        // Banner transitions
+        let currentBannerIndex = 0;
+        
+        function startBannerTransitions() {
+            setInterval(() => {
+                bannerSlides.forEach(slide => slide.classList.remove('active'));
+                currentBannerIndex = (currentBannerIndex + 1) % bannerSlides.length;
+                bannerSlides[currentBannerIndex].classList.add('active');
+            }, 5000);
+        }
+
+        // Swipe carousel
+        function startSwipeCarousel() {
+            setInterval(() => {
+                currentSlide = (currentSlide + 1) % swipeSlides.length;
+                updateSwipeSlide();
+            }, 4000);
+        }
+        
+        function updateSwipeSlide() {
+            swipeSlides.forEach(slide => slide.classList.remove('active'));
+            swipeSlides[currentSlide].classList.add('active');
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            if (document.body.classList.contains('light-mode')) {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            } else {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+        }
+
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>

@@ -1,0 +1,1998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog | NEBC Teens</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary: #ff5d5c;
+            --secondary: #ff8f8f;
+            --accent: #ff3e3e;
+            --success: #4cd964;
+            --warning: #ffcc00;
+            --text: #f8f9fa;
+            --text-light: #adb5bd;
+            --bg: #121212;
+            --card-bg: rgba(30, 30, 30, 0.8);
+            --card-shadow: rgba(0, 0, 0, 0.3);
+            --nav-bg: rgba(30, 30, 30, 0.95);
+            --glow: 0 0 20px rgba(255, 93, 92, 0.5);
+            --transition: all 0.3s ease;
+        }
+
+        .light-mode {
+            --primary: #ff1e1e;
+            --secondary: #ff7575;
+            --accent: #ff3e3e;
+            --text: #333333;
+            --text-light: #6c757d;
+            --bg: #f8f9fa;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --card-shadow: rgba(0, 0, 0, 0.1);
+            --nav-bg: rgba(255, 255, 255, 0.95);
+            --glow: 0 0 20px rgba(255, 30, 30, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: var(--transition);
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto !important;
+            padding: 0 20px;
+        }
+
+        /* Logo Section */
+        .logo-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: #121212;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-text {
+            margin-left: 10px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+            border-radius: 0 0 30px 30px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            margin-bottom: 40px;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .hero-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease;
+            margin-top: 50px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Featured Blog */
+        .featured-blog {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .featured-blog:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px var(--card-shadow), var(--glow);
+        }
+
+        .featured-image {
+            flex: 0 0 40%;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .featured-content {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .featured-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            align-self: flex-start;
+        }
+
+        .featured-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+
+        .featured-excerpt {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .read-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            align-self: flex-start;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .read-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 93, 92, 0.4);
+        }
+
+        /* Categories */
+        .categories-section {
+            margin: 40px 0 30px;
+        }
+
+        .categories-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .categories-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .category-chip {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 15px var(--card-shadow);
+        }
+
+        .category-chip:hover, .category-chip.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px var(--card-shadow), var(--glow);
+        }
+
+        /* Search Bar */
+        .search-section {
+            margin: 30px 0;
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: var(--card-bg);
+            color: var(--text);
+            font-size: 1rem;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 15px var(--card-shadow);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 5px 20px var(--card-shadow), var(--glow);
+            transform: scale(1.02);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+
+        /* Blog Grid */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .blog-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: calc(var(--delay) * 0.1s);
+            cursor: pointer;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-8px) rotate(1deg);
+            box-shadow: 0 12px 25px var(--card-shadow), var(--glow);
+        }
+
+        .card-image {
+            height: 180px;
+            width: 100%;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text);
+            font-size: 1.2rem;
+        }
+
+        .card-preview {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-category {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            background: rgba(255, 93, 92, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+
+        /* Article Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .article-modal, .prayer-modal {
+            background: var(--card-bg);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: translateY(50px) scale(0.9);
+            opacity: 0;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .prayer-modal {
+            max-width: 500px;
+        }
+
+        .modal-overlay.active .article-modal,
+        .modal-overlay.active .prayer-modal {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 10;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-close:hover {
+            background: white;
+            transform: rotate(90deg);
+        }
+
+        .modal-image {
+            height: 250px;
+            width: 100%;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .modal-content {
+            padding: 30px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .modal-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 15px;
+        }
+
+        .modal-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .modal-text {
+            color: var(--text);
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .modal-text p {
+            margin-bottom: 15px;
+        }
+
+        .modal-text h3 {
+            font-family: 'Quicksand', sans-serif;
+            margin: 20px 0 10px;
+            color: var(--primary);
+        }
+
+        /* Engagement Section */
+        .engagement-section {
+            margin: 60px 0 40px;
+        }
+
+        .section-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.8rem;
+            margin: 40px 0 20px;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50%;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        .engagement-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .engagement-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: calc(var(--delay) * 0.1s);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .engagement-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px var(--card-shadow), var(--glow);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-right: 15px;
+            box-shadow: 0 5px 15px rgba(255, 93, 92, 0.3);
+        }
+
+        .card-heading {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text);
+        }
+
+        /* This or That Poll */
+        .poll-container {
+            position: relative;
+            min-height: 280px;
+            perspective: 1000px;
+        }
+
+        .poll-question {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            backface-visibility: hidden;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .poll-question.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .poll-results {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            backface-visibility: hidden;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            transform: rotateY(180deg);
+        }
+
+        .poll-results.active {
+            transform: rotateY(0deg);
+        }
+
+        .poll-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .poll-option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .poll-option:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 93, 92, 0.1);
+        }
+
+        .poll-emoji {
+            font-size: 2rem;
+        }
+
+        .poll-text {
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .poll-result {
+            margin-bottom: 15px;
+        }
+
+        .poll-bar {
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .poll-fill {
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            transition: width 1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 15px;
+            align-self: center;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 93, 92, 0.4);
+        }
+
+        /* Meme Generator */
+        .meme-container {
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .meme-text {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .meme-text.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 93, 92, 0.4);
+        }
+
+        /* Spin the Wheel */
+        .wheel-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                #ff5d5c 0deg 60deg,
+                #ff8f8f 60deg 120deg,
+                #ff3e3e 120deg 180deg,
+                #4cd964 180deg 240deg,
+                #ffcc00 240deg 300deg,
+                #ff8f8f 300deg 360deg
+            );
+            position: relative;
+            transition: transform 3s cubic-bezier(0.2, 0.8, 0.3, 1);
+            box-shadow: 0 0 20px rgba(255, 93, 92, 0.3);
+        }
+
+        .wheel-pointer {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            clip-path: polygon(50% 100%, 0 0, 100% 0);
+            z-index: 10;
+        }
+
+        .verse-result {
+            display: none;
+            text-align: center;
+            padding: 15px;
+            background: rgba(255, 93, 92, 0.1);
+            border-radius: 10px;
+            margin-top: 15px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .verse-result.active {
+            display: block;
+        }
+
+        /* Shoutout Wall */
+        .shoutout-container {
+            height: 120px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .shoutout {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .shoutout.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .shoutout-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* Prayer Button & Modal */
+        .prayer-button {
+            position: fixed;
+            bottom: 100px;
+            right: calc(20px + env(safe-area-inset-right));
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.8rem;
+            box-shadow: 0 5px 20px rgba(255, 93, 92, 0.5);
+            cursor: pointer;
+            z-index: 100;
+            animation: pulse 2s infinite;
+            transition: var(--transition);
+        }
+
+        .prayer-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(255, 93, 92, 0.7);
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 93, 92, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 93, 92, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 93, 92, 0); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 30px 30px 0;
+        }
+
+        .modal-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            padding: 0 30px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+            transition: var(--transition);
+        }
+
+        .light-mode .form-input, .light-mode .form-textarea {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 93, 92, 0.2);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: calc(100% - 60px);
+            margin: 0 30px 30px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 93, 92, 0.4);
+        }
+
+        /* Success Modal */
+        .success-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .success-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .success-content {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: scale(0.8);
+            opacity: 0;
+            transition: var(--transition);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .success-modal.active .success-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: var(--success);
+            margin-bottom: 20px;
+        }
+
+        .success-message {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .ok-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .ok-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 93, 92, 0.4);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--nav-bg);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            z-index: 100;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-light);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            transition: var(--transition);
+        }
+
+        .nav-item.active .nav-icon {
+            transform: translateY(-5px);
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .nav-indicator {
+            position: absolute;
+            top: -10px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .nav-item.active .nav-indicator {
+            opacity: 1;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: calc(20px + env(safe-area-inset-top));
+            right: calc(20px + env(safe-area-inset-right));
+            width: 50px;
+            height: 50px;
+            background: var(--card-bg);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px var(--card-shadow);
+            cursor: pointer;
+            z-index: 100;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(30deg);
+        }
+
+        .theme-icon {
+            font-size: 1.3rem;
+            color: var(--text);
+        }
+
+        /* Floating Shapes */
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, 50px) rotate(90deg); }
+            50% { transform: translate(0, 100px) rotate(180deg); }
+            75% { transform: translate(-20px, 50px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .footer-scripture {
+            font-style: italic;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 15px 0;
+        }
+
+        .footer-link {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-link:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .engagement-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .featured-blog {
+                flex-direction: column;
+            }
+            
+            .featured-image {
+                height: 200px;
+                flex: none;
+            }
+            
+            .poll-options {
+                flex-direction: column;
+            }
+            
+            .modal-header {
+                padding: 20px 20px 0;
+            }
+            
+            .form-group {
+                padding: 0 20px;
+            }
+            
+            .submit-btn {
+                width: calc(100% - 40px);
+                margin: 0 20px 20px;
+            }
+
+            .app-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 769px) {
+            .poll-options {
+                flex-direction: row;
+            }
+        }
+
+        /* Small-screen adjustments for floating UI */
+        @media (max-width: 480px) {
+            .theme-toggle {
+                width: 44px;
+                height: 44px;
+                top: calc(12px + env(safe-area-inset-top));
+                right: calc(12px + env(safe-area-inset-right));
+            }
+
+            .prayer-button {
+                width: 60px;
+                height: 60px;
+                bottom: calc(80px + env(safe-area-inset-bottom));
+                right: calc(12px + env(safe-area-inset-right));
+                font-size: 1.4rem;
+            }
+
+            .floating-shapes { display: block; opacity: 0.8; transform: scale(0.9); }
+        }
+    </style>
+</head>
+<body class="dark-mode">
+    <!-- Floating Shapes for Background -->
+    <div class="floating-shapes">
+        <div class="shape" style="width: 80px; height: 80px; top: 10%; left: 10%; animation-delay: 0s;"></div>
+        <div class="shape" style="width: 120px; height: 120px; top: 60%; left: 80%; animation-delay: -5s;"></div>
+        <div class="shape" style="width: 60px; height: 60px; top: 80%; left: 20%; animation-delay: -10s;"></div>
+        <div class="shape" style="width: 100px; height: 100px; top: 30%; left: 70%; animation-delay: -2s;"></div>
+        <div class="shape" style="width: 70px; height: 70px; top: 70%; left: 60%; animation-delay: -7s;"></div>
+        <div class="shape" style="width: 90px; height: 90px; top: 40%; left: 30%; animation-delay: -12s;"></div>
+        <div class="shape" style="width: 50px; height: 50px; top: 20%; left: 50%; animation-delay: -4s;"></div>
+        <div class="shape" style="width: 110px; height: 110px; top: 50%; left: 10%; animation-delay: -9s;"></div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-sun theme-icon"></i>
+    </div>
+
+    <!-- Logo Section -->
+    <div class="logo-container">
+        <div class="logo">
+            <img src="images/LOGO.png" width="100%" height="100%" alt="NEBC TEENS LOGO">
+        </div>
+        <div class="logo-text">NEBC Teens</div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">Blog – NEBC Teens</h1>
+            <p class="hero-subtitle">Grow, learn, laugh, share — one article at a time.</p>
+        </div>
+    </section>
+
+    <!-- Featured Blog -->
+    <section class="container">
+        <div class="featured-blog">
+            <div class="featured-image" style="background-image: url('https://images.unsplash.com/photo-1544764243-13a3d1554b4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')"></div>
+            <div class="featured-content">
+                <span class="featured-badge">Featured Post</span>
+                <h2 class="featured-title">5 Ways to Keep Your Faith Strong in High School</h2>
+                <p class="featured-excerpt">Navigating high school with your faith intact can be challenging. Here are five practical tips to help you stay connected to God through the ups and downs of teenage life.</p>
+                <button class="read-btn" data-id="1">
+                    <i class="fas fa-book-open"></i> Read Now
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="container categories-section">
+        <h3 class="categories-title">Browse by Category</h3>
+        <div class="categories-container">
+            <div class="category-chip active" data-category="all">All</div>
+            <div class="category-chip" data-category="faith">Faith</div>
+            <div class="category-chip" data-category="teenlife">Teen Life</div>
+            <div class="category-chip" data-category="friendships">Friendships</div>
+            <div class="category-chip" data-category="school">School</div>
+            <div class="category-chip" data-category="motivation">Motivation</div>
+            <div class="category-chip" data-category="trending">Trending</div>
+        </div>
+    </section>
+
+    <!-- Search Bar -->
+    <section class="container search-section">
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search blog posts...">
+            <i class="fas fa-search search-icon"></i>
+        </div>
+    </section>
+
+    <!-- Blog Grid -->
+    <section class="container">
+        <div class="blog-grid" id="blogGrid">
+            <!-- Blog cards will be generated by JavaScript -->
+        </div>
+    </section>
+
+    <!-- Engagement Section -->
+    <section class="container engagement-section">
+        <h2 class="section-title">Join the Fun!</h2>
+        <div class="engagement-cards">
+            <!-- This or That Poll -->
+            <div class="engagement-card" style="--delay: 1">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-poll"></i>
+                    </div>
+                    <h3 class="card-heading">This or That?</h3>
+                </div>
+                <div class="poll-container" id="pollContainer">
+                    <!-- Poll questions will be generated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Random Bible Meme Generator -->
+            <div class="engagement-card" style="--delay: 2">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-grin-squint"></i>
+                    </div>
+                    <h3 class="card-heading">Bible Meme Generator</h3>
+                </div>
+                <div class="meme-container">
+                    <div class="meme-text active">When you try to explain the Trinity and end up confusing yourself 😵‍💫</div>
+                    <div class="meme-text">Me: I'll read the whole Bible this year 📖<br>Also me: *still in Genesis in March* 😅</div>
+                    <div class="meme-text">When the pastor says "Turn to your neighbor" and you're sitting alone 😬</div>
+                    <div class="meme-text">Trying to stay awake during a long sermon 😴✋ vs. Waking up for school 🛌💥</div>
+                    <div class="meme-text">When someone says "I'll pray for you" and actually does 🤝💫</div>
+                    <div class="meme-text">Finding out your crush is also a Christian 😇❤️ vs. Finding out they're not 🙃</div>
+                </div>
+                <button class="generate-btn" id="generateMeme">
+                    <i class="fas fa-random"></i> Generate Meme
+                </button>
+            </div>
+
+            <!-- Spin the Wheel -->
+            <div class="engagement-card" style="--delay: 3">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <h3 class="card-heading">Verse of the Moment</h3>
+                </div>
+                <div class="wheel-container">
+                    <div class="wheel-pointer"></div>
+                    <div class="wheel" id="wheel"></div>
+                </div>
+                <button class="generate-btn" id="spinWheel">
+                    <i class="fas fa-redo"></i> Spin the Wheel
+                </button>
+                <div class="verse-result" id="verseResult">
+                    <p>"For I know the plans I have for you," declares the Lord, "plans to prosper you and not to harm you, plans to give you hope and a future." - Jeremiah 29:11</p>
+                </div>
+            </div>
+
+            <!-- Shoutout Wall -->
+            <div class="engagement-card" style="--delay: 4">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <h3 class="card-heading">Teens Shoutout Wall</h3>
+                </div>
+                <div class="shoutout-container">
+                    <div class="shoutout active">
+                        <p class="shoutout-text">Shoutout to all the teens winning in school! 🎓</p>
+                    </div>
+                    <div class="shoutout">
+                        <p class="shoutout-text">Shoutout to every NEBC teen chasing purpose! ✨</p>
+                    </div>
+                    <div class="shoutout">
+                        <p class="shoutout-text">Shoutout to teens staying consistent with devotion! 🙏</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="container">
+        <p style="margin-top: 20px;" class="footer-scripture">"Your word is a lamp to my feet and a light to my path." - Psalm 119:105</p>
+        <div class="footer-links">
+            <a href="About.html" class="footer-link">About</a>
+            <a href="contact.html" class="footer-link">Contact</a>
+            <a href="event.html" class="footer-link">Event</a>
+        </div>
+        <p>&copy; 2025  Blog - NEBC Teens. Empowering teens for Christ.</p>
+    </footer>
+
+    <!-- Prayer Request Button -->
+    <div class="prayer-button" id="prayerButton">
+        <i class="fas fa-hands-praying"></i>
+    </div>
+
+    <!-- (More Apps menu removed) -->
+
+    <!-- Article Modal -->
+    <div class="modal-overlay" id="articleModal">
+        <div class="article-modal">
+            <button class="modal-close" id="articleClose">&times;</button>
+            <div class="modal-image" id="articleImage"></div>
+            <div class="modal-content">
+                <h2 class="modal-title" id="articleTitle"></h2>
+                <div class="modal-meta">
+                    <span id="articleCategory"></span>
+                    <span>•</span>
+                    <span id="articleDate"></span>
+                </div>
+                <div class="modal-text" id="articleContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Prayer Request Modal -->
+    <div class="modal-overlay" id="prayerModal">
+        <div class="prayer-modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Submit a Prayer Request</h3>
+                <button class="modal-close" id="prayerClose">&times;</button>
+            </div>
+            <form id="prayerForm">
+                <div class="form-group">
+                    <label class="form-label" for="name">Your Name (Optional)</label>
+                    <input type="text" id="name" class="form-input" placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="request">Prayer Request</label>
+                    <textarea id="request" class="form-textarea" placeholder="Share your prayer request here..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <input type="checkbox" id="anonymous"> Share anonymously
+                    </label>
+                </div>
+                <button type="submit" class="submit-btn">Submit Prayer Request</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="success-modal" id="successModal">
+        <div class="success-content">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <p class="success-message">Your request has been received. The NEBC Teens team will pray with you.</p>
+            <button class="ok-btn" id="okBtn">OK</button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="motivation.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-fire nav-icon"></i>
+            <span class="nav-label">Boost</span>
+        </a>
+        <a href="devotional.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-book-open nav-icon"></i>
+            <span class="nav-label">Devotionals</span>
+        </a>
+        <a href="ask.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-question-circle nav-icon"></i>
+            <span class="nav-label">Ask</span>
+        </a>
+        <a href="blog.html" class="nav-item active">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-blog nav-icon"></i>
+            <span class="nav-label">Blog</span>
+        </a>
+        <a href="testimonies.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-comment-dots nav-icon"></i>
+            <span class="nav-label">Testimonies</span>
+        </a>
+    </nav>
+
+    <script>
+        // Blog Data with Full Articles
+        const blogPosts = [
+            {
+                id: 1,
+                title: "5 Ways to Keep Your Faith Strong in High School",
+                category: "faith",
+                image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                preview: "Navigating high school with your faith intact can be challenging. Here are five practical tips to help you stay connected to God through the ups and downs of teenage life.",
+                date: "March 15, 2023",
+                content: `
+                    <p>High school is a time of discovery, growth, and challenges. Between academic pressures, social dynamics, and figuring out who you are, it can be easy to let your spiritual life take a backseat. But maintaining a strong faith during these formative years is not only possible—it can be the anchor that keeps you steady through the storms.</p>
+                    
+                    <h3>1. Start Your Day with God</h3>
+                    <p>Before you dive into the chaos of the school day, take just 5-10 minutes to connect with God. This doesn't have to be an elaborate Bible study session. Simply reading a verse, saying a prayer, or even listening to a worship song on your way to school can set the right tone for your day.</p>
+                    
+                    <h3>2. Find Your Christian Community</h3>
+                    <p>Surrounding yourself with like-minded friends who share your values is crucial. Join your school's Christian club, connect with other believers in your classes, or get involved in your church youth group. Having friends who encourage your faith makes a world of difference.</p>
+                    
+                    <h3>3. Be Prepared for Tough Questions</h3>
+                    <p>You will encounter people who question your beliefs or challenge your faith. Instead of avoiding these conversations, see them as opportunities to strengthen your own understanding. Read up on common questions about Christianity so you can respond with confidence and grace.</p>
+                    
+                    <h3>4. Integrate Faith into Your Studies</h3>
+                    <p>Look for ways to see God in your academic subjects. In science, marvel at the complexity of creation. In literature, discuss moral themes from a Christian perspective. In history, trace God's hand through human events. Your faith isn't separate from your education—it enhances it.</p>
+                    
+                    <h3>5. Practice What You Preach</h3>
+                    <p>The most powerful testimony is a life well-lived. Show kindness to the student who sits alone at lunch. Have integrity when no one is watching. Forgive when you've been wronged. Your actions will speak louder than any words about your faith.</p>
+                    
+                    <p>Remember, your faith journey in high school isn't about being perfect—it's about being persistent. God meets you right where you are, in the hallways, classrooms, and lunchrooms of your school.</p>
+                `
+            },
+            {
+                id: 2,
+                title: "Finding God in the Little Things",
+                category: "faith",
+                image: "https://images.unsplash.com/photo-1544764243-13a3d1554b4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                preview: "Discover how to see God's hand in everyday moments and find spiritual meaning in the ordinary...",
+                date: "March 10, 2023",
+                content: `
+                    <p>We often look for God in dramatic moments—miracles, answered prayers, or mountaintop experiences. But what if God is just as present in the ordinary, everyday moments of our lives?</p>
+                    
+                    <h3>The Beauty of Ordinary Holiness</h3>
+                    <p>Some of the most profound spiritual experiences happen not in church services or retreats, but in the quiet moments of our daily routines. That feeling of peace when you first wake up, the joy of laughing with friends, the satisfaction of helping someone—these are all places where God is at work.</p>
+                    
+                    <h3>Practicing Awareness</h3>
+                    <p>Start paying attention to the small blessings throughout your day. The warmth of sunlight on your skin, the taste of your favorite food, the comfort of your bed at night. Each of these is a gift from God, a reminder of His care and provision.</p>
+                    
+                    <h3>Finding Sacred Spaces</h3>
+                    <p>You don't need to be in a church to connect with God. Your bedroom, a quiet corner of the library, even your daily commute can become sacred spaces when you invite God into them. The location matters less than the intention behind it.</p>
+                    
+                    <h3>Gratitude as a Spiritual Practice</h3>
+                    <p>Keeping a gratitude journal can transform how you see the world. Each day, write down three things you're thankful for. Over time, you'll start noticing more and more evidence of God's goodness in your life.</p>
+                    
+                    <p>God isn't waiting for you to achieve some spiritual milestone before He shows up in your life. He's with you right now, in this very moment, waiting for you to notice Him in the little things.</p>
+                `
+            },
+            {
+                id: 3,
+                title: "How to Handle Peer Pressure as a Christian Teen",
+                category: "teenlife",
+                image: "https://images.unsplash.com/photo-1544764243-13a3d1554b4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                preview: "Practical strategies for staying true to your faith when friends are pulling you in different directions...",
+                date: "March 5, 2023",
+                content: `
+                    <p>Peer pressure is one of the biggest challenges Christian teens face. The desire to fit in and be accepted can sometimes conflict with our faith values. But with the right strategies, you can navigate these situations with confidence and integrity.</p>
+                    
+                    <h3>Know Your Non-Negotiables</h3>
+                    <p>Before you're in a difficult situation, decide what your boundaries are. What behaviors or activities go against your faith? Knowing your non-negotiables in advance makes it easier to stand firm when pressure comes.</p>
+                    
+                    <h3>Have Exit Strategies Ready</h3>
+                    <p>Prepare some polite but firm ways to say no. "That's not really my thing," "I've got other plans," or "I'm not comfortable with that" are all simple responses that don't require a lengthy explanation.</p>
+                    
+                    <h3>Find Your Tribe</h3>
+                    <p>Surround yourself with friends who respect your values and won't pressure you to compromise them. Good friends will like you for who you are, not for what you're willing to do to fit in.</p>
+                    
+                    <h3>Remember Your Identity</h3>
+                    <p>When you feel pressured to conform, remind yourself of who you are in Christ. Your worth comes from God, not from other people's opinions. You are loved, accepted, and valued exactly as you are.</p>
+                    
+                    <h3>Pray for Strength</h3>
+                    <p>Don't try to face peer pressure alone. Ask God for wisdom, courage, and the right words in difficult situations. He promises to be with you always, even in the hallway at school or at a party on Friday night.</p>
+                    
+                    <p>Standing up for your faith in the face of peer pressure isn't always easy, but it's always worth it. Each time you choose integrity over acceptance, you grow stronger in your faith and character.</p>
+                `
+            }
+        ];
+
+        // Poll Questions Data
+        const pollQuestions = [
+            {
+                question: "Morning Devotion ☀️ or Night Devotion 🌙?",
+                options: [
+                    { text: "Morning Devotion", emoji: "☀️" },
+                    { text: "Night Devotion", emoji: "🌙" }
+                ],
+                results: [65, 35] // percentages for each option
+            },
+            {
+                question: "Gospel Rap 🎧 or Worship Music 🎶?",
+                options: [
+                    { text: "Gospel Rap", emoji: "🎧" },
+                    { text: "Worship Music", emoji: "🎶" }
+                ],
+                results: [40, 60] // percentages for each option
+            }
+        ];
+
+        // Verse Data
+        const verses = [
+            "For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future. - Jeremiah 29:11",
+            "I can do all things through Christ who strengthens me. - Philippians 4:13",
+            "Trust in the Lord with all your heart and lean not on your own understanding. - Proverbs 3:5",
+            "Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go. - Joshua 1:9",
+            "Cast all your anxiety on him because he cares for you. - 1 Peter 5:7"
+        ];
+
+        // DOM Elements
+        const blogGrid = document.getElementById('blogGrid');
+        const categoryChips = document.querySelectorAll('.category-chip');
+        const searchInput = document.querySelector('.search-input');
+        const pollContainer = document.getElementById('pollContainer');
+        const generateMemeBtn = document.getElementById('generateMeme');
+        const memeTexts = document.querySelectorAll('.meme-text');
+        const spinWheelBtn = document.getElementById('spinWheel');
+        const wheel = document.getElementById('wheel');
+        const verseResult = document.getElementById('verseResult');
+        const shoutouts = document.querySelectorAll('.shoutout');
+        const prayerButton = document.getElementById('prayerButton');
+        const prayerModal = document.getElementById('prayerModal');
+        const prayerClose = document.getElementById('prayerClose');
+        const prayerForm = document.getElementById('prayerForm');
+        const articleModal = document.getElementById('articleModal');
+        const articleClose = document.getElementById('articleClose');
+        const articleImage = document.getElementById('articleImage');
+        const articleTitle = document.getElementById('articleTitle');
+        const articleCategory = document.getElementById('articleCategory');
+        const articleDate = document.getElementById('articleDate');
+        const articleContent = document.getElementById('articleContent');
+        const successModal = document.getElementById('successModal');
+        const okBtn = document.getElementById('okBtn');
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('.theme-icon');
+
+        // Poll state
+        let currentPollIndex = 0;
+        let pollAnswered = false;
+
+        // Initialize the page
+        function initPage() {
+            renderBlogPosts();
+            setupEventListeners();
+            startShoutoutRotation();
+            renderPollQuestion();
+        }
+
+        // Render blog posts to the grid
+        function renderBlogPosts(filter = 'all') {
+            blogGrid.innerHTML = '';
+            
+            const filteredPosts = filter === 'all' 
+                ? blogPosts 
+                : blogPosts.filter(post => post.category === filter);
+            
+            filteredPosts.forEach((post, index) => {
+                const blogCard = document.createElement('div');
+                blogCard.className = 'blog-card';
+                blogCard.style.setProperty('--delay', index + 1);
+                blogCard.innerHTML = `
+                    <div class="card-image" style="background-image: url('${post.image}')"></div>
+                    <div class="card-content">
+                        <h3 class="card-title">${post.title}</h3>
+                        <p class="card-preview">${post.preview}</p>
+                        <div class="card-footer">
+                            <span class="card-category">${getCategoryName(post.category)}</span>
+                            <button class="read-btn" data-id="${post.id}">
+                                <i class="fas fa-book-open"></i> Read
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                blogGrid.appendChild(blogCard);
+            });
+            
+            // Add event listeners to read buttons
+            document.querySelectorAll('.read-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const postId = parseInt(btn.dataset.id);
+                    openArticleModal(postId);
+                });
+            });
+        }
+
+        // Get category display name
+        function getCategoryName(category) {
+            const categoryNames = {
+                'faith': 'Faith',
+                'teenlife': 'Teen Life',
+                'friendships': 'Friendships',
+                'school': 'School',
+                'motivation': 'Motivation',
+                'trending': 'Trending'
+            };
+            return categoryNames[category] || category;
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Category filtering
+            categoryChips.forEach(chip => {
+                chip.addEventListener('click', () => {
+                    categoryChips.forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    renderBlogPosts(chip.dataset.category);
+                });
+            });
+            
+            // Search functionality
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                if (searchTerm) {
+                    const filteredPosts = blogPosts.filter(post => 
+                        post.title.toLowerCase().includes(searchTerm) || 
+                        post.preview.toLowerCase().includes(searchTerm)
+                    );
+                    renderFilteredPosts(filteredPosts);
+                } else {
+                    renderBlogPosts();
+                }
+            });
+            
+            // Meme generator
+            generateMemeBtn.addEventListener('click', generateMeme);
+            
+            // Spin the wheel
+            spinWheelBtn.addEventListener('click', spinWheel);
+            
+            // Prayer modal
+            prayerButton.addEventListener('click', () => {
+                prayerModal.classList.add('active');
+            });
+            
+            prayerClose.addEventListener('click', () => {
+                prayerModal.classList.remove('active');
+            });
+            
+            prayerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                prayerModal.classList.remove('active');
+                setTimeout(() => {
+                    successModal.classList.add('active');
+                }, 300);
+                prayerForm.reset();
+            });
+            
+            // Article modal
+            articleClose.addEventListener('click', () => {
+                articleModal.classList.remove('active');
+            });
+            
+            // Success modal
+            okBtn.addEventListener('click', () => {
+                successModal.classList.remove('active');
+            });
+            
+            // Theme toggle
+            themeToggle.addEventListener('click', toggleTheme);
+            
+            // (More menu removed)
+        }
+
+        // (More menu removed)
+
+        // Render filtered posts
+        function renderFilteredPosts(posts) {
+            blogGrid.innerHTML = '';
+            
+            posts.forEach((post, index) => {
+                const blogCard = document.createElement('div');
+                blogCard.className = 'blog-card';
+                blogCard.style.setProperty('--delay', index + 1);
+                blogCard.innerHTML = `
+                    <div class="card-image" style="background-image: url('${post.image}')"></div>
+                    <div class="card-content">
+                        <h3 class="card-title">${post.title}</h3>
+                        <p class="card-preview">${post.preview}</p>
+                        <div class="card-footer">
+                            <span class="card-category">${getCategoryName(post.category)}</span>
+                            <button class="read-btn" data-id="${post.id}">
+                                <i class="fas fa-book-open"></i> Read
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                blogGrid.appendChild(blogCard);
+            });
+            
+            // Add event listeners to read buttons
+            document.querySelectorAll('.read-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const postId = parseInt(btn.dataset.id);
+                    openArticleModal(postId);
+                });
+            });
+        }
+
+        // Render poll question
+        function renderPollQuestion() {
+            pollContainer.innerHTML = '';
+            
+            const currentQuestion = pollQuestions[currentPollIndex];
+            
+            // Create question side
+            const pollQuestion = document.createElement('div');
+            pollQuestion.className = 'poll-question';
+            
+            let optionsHTML = '';
+            currentQuestion.options.forEach((option, index) => {
+                optionsHTML += `
+                    <div class="poll-option" data-option="${index}">
+                        <div class="poll-emoji">${option.emoji}</div>
+                        <div class="poll-text">${option.text}</div>
+                    </div>
+                `;
+            });
+            
+            pollQuestion.innerHTML = `
+                <p class="poll-text" style="margin-bottom: 15px; text-align: center;">${currentQuestion.question}</p>
+                <div class="poll-options">
+                    ${optionsHTML}
+                </div>
+            `;
+            
+            // Create results side
+            const pollResults = document.createElement('div');
+            pollResults.className = 'poll-results';
+            
+            let resultsHTML = '';
+            currentQuestion.options.forEach((option, index) => {
+                resultsHTML += `
+                    <div class="poll-result">
+                        <div class="poll-text">${option.emoji} ${option.text}</div>
+                        <div class="poll-bar">
+                            <div class="poll-fill" style="width: ${currentQuestion.results[index]}%">${currentQuestion.results[index]}%</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            pollResults.innerHTML = `
+                <p class="poll-text" style="margin-bottom: 15px; text-align: center;">${currentQuestion.question}</p>
+                ${resultsHTML}
+                <button class="next-btn" id="nextPoll">Next Question</button>
+            `;
+            
+            pollContainer.appendChild(pollQuestion);
+            pollContainer.appendChild(pollResults);
+            
+            // Add event listeners to poll options
+            document.querySelectorAll('.poll-option').forEach(option => {
+                option.addEventListener('click', handlePollSelection);
+            });
+            
+            // Add event listener to next button
+            document.getElementById('nextPoll').addEventListener('click', nextPollQuestion);
+        }
+
+        // Handle poll selection
+        function handlePollSelection() {
+            if (pollAnswered) return;
+            
+            pollAnswered = true;
+            
+            // Add visual feedback
+            document.querySelectorAll('.poll-option').forEach(option => {
+                option.style.transform = 'scale(0.95)';
+                option.style.opacity = '0.7';
+            });
+            
+            this.style.transform = 'scale(1.05)';
+            this.style.opacity = '1';
+            
+            // Add confetti for fun
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+            
+            // Flip to show results after delay
+            setTimeout(() => {
+                document.querySelector('.poll-question').classList.add('flipped');
+                document.querySelector('.poll-results').classList.add('active');
+            }, 1000);
+        }
+
+        // Move to next poll question
+        function nextPollQuestion() {
+            if (currentPollIndex < pollQuestions.length - 1) {
+                currentPollIndex++;
+            } else {
+                currentPollIndex = 0;
+            }
+            
+            pollAnswered = false;
+            renderPollQuestion();
+        }
+
+        // Generate meme
+        function generateMeme() {
+            // Hide all memes
+            memeTexts.forEach(text => {
+                text.classList.remove('active');
+            });
+            
+            // Select a random meme to show
+            const randomIndex = Math.floor(Math.random() * memeTexts.length);
+            memeTexts[randomIndex].classList.add('active');
+            
+            // Add a little bounce animation
+            memeTexts[randomIndex].style.animation = 'none';
+            setTimeout(() => {
+                memeTexts[randomIndex].style.animation = 'fadeIn 0.5s ease';
+            }, 10);
+        }
+
+        // Spin the wheel
+        function spinWheel() {
+            // Disable button during spin
+            spinWheelBtn.disabled = true;
+            
+            // Random rotation between 3 and 5 full rotations plus a random angle
+            const rotations = 3 + Math.floor(Math.random() * 3);
+            const randomAngle = Math.floor(Math.random() * 360);
+            const totalRotation = rotations * 360 + randomAngle;
+            
+            // Apply rotation
+            wheel.style.transform = `rotate(${totalRotation}deg)`;
+            
+            // Show verse after spin completes
+            setTimeout(() => {
+                const randomVerse = verses[Math.floor(Math.random() * verses.length)];
+                verseResult.querySelector('p').textContent = randomVerse;
+                verseResult.classList.add('active');
+                
+                // Re-enable button
+                spinWheelBtn.disabled = false;
+                
+                // Add confetti celebration
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }, 3000);
+        }
+
+        // Open article modal
+        function openArticleModal(postId) {
+            const post = blogPosts.find(p => p.id === postId);
+            if (!post) return;
+            
+            articleImage.style.backgroundImage = `url('${post.image}')`;
+            articleTitle.textContent = post.title;
+            articleCategory.textContent = getCategoryName(post.category);
+            articleDate.textContent = post.date;
+            articleContent.innerHTML = post.content;
+            
+            articleModal.classList.add('active');
+        }
+
+        // Start shoutout rotation
+        function startShoutoutRotation() {
+            let currentIndex = 0;
+            
+            setInterval(() => {
+                shoutouts.forEach(shoutout => shoutout.classList.remove('active'));
+                currentIndex = (currentIndex + 1) % shoutouts.length;
+                shoutouts[currentIndex].classList.add('active');
+            }, 4000);
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            if (document.body.classList.contains('light-mode')) {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            } else {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+        }
+
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>

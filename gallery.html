@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery | NEBC Teens</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <style>
+        :root {
+            --torch-red: #ff1e1e;
+            --fair-pink: #ffe8e8;
+            --bittersweet: #ff7575;
+            --cornflower-lilac: #ffacac;
+            --coral-red: #ff3e3e;
+            --mona-lisa: #ff8f8f;
+            --persimmon: #ff5d5c;
+            --your-pink: #ffc9c9;
+            
+            --primary: #ff5d5c;
+            --secondary: #ff8f8f;
+            --accent: #ff3e3e;
+            --success: #4cd964;
+            --warning: #ffcc00;
+            --text: #f8f9fa;
+            --text-light: #adb5bd;
+            --bg: #121212;
+            --card-bg: rgba(30, 30, 30, 0.8);
+            --card-shadow: rgba(0, 0, 0, 0.3);
+            --nav-bg: rgba(30, 30, 30, 0.95);
+            --glow: 0 0 20px rgba(255, 93, 92, 0.5);
+            --transition: all 0.3s ease;
+        }
+
+        .light-mode {
+            --primary: #ff1e1e;
+            --secondary: #ff7575;
+            --accent: #ff3e3e;
+            --text: #333333;
+            --text-light: #6c757d;
+            --bg: #f8f9fa;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --card-shadow: rgba(0, 0, 0, 0.1);
+            --nav-bg: rgba(255, 255, 255, 0.95);
+            --glow: 0 0 20px rgba(255, 30, 30, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: var(--transition);
+            padding-bottom: 80px;
+        }
+
+        html, body { overflow-x: hidden; }
+        .floating-shapes { overflow: hidden; }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto !important;
+            padding: 0 20px;
+        }
+
+        /* Logo Section */
+        .logo-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: #121212;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-text {
+            margin-left: 10px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 40px;
+        }
+
+        .hero-slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+        }
+
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .hero-slide.active {
+            opacity: 1;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 93, 92, 0.7), rgba(255, 143, 143, 0.7), rgba(255, 62, 62, 0.7));
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+            max-width: 800px;
+            padding: 0 20px;
+            margin-top: 70px;
+        }
+
+        .hero-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 4rem;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating Elements */
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            animation: float 15s infinite linear;
+        }
+
+        .sparkle {
+            position: absolute;
+            color: white;
+            font-size: 1.5rem;
+            opacity: 0.7;
+            animation: sparkle 3s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, 50px) rotate(90deg); }
+            50% { transform: translate(0, 100px) rotate(180deg); }
+            75% { transform: translate(-20px, 50px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 2rem;
+            margin: 40px 0 20px;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50%;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        /* Gallery Filters */
+        .gallery-filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .filter-btn {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            color: var(--text);
+            box-shadow: 0 5px 15px var(--card-shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px var(--card-shadow);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 93, 92, 0.4);
+        }
+
+        /* Photo Gallery */
+        .masonry-grid {
+            columns: 4;
+            column-gap: 15px;
+            margin: 30px 0;
+        }
+
+        @media (max-width: 1200px) {
+            .masonry-grid {
+                columns: 3;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .masonry-grid {
+                columns: 2;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .theme-toggle {
+                width: 44px;
+                height: 44px;
+                top: calc(12px + env(safe-area-inset-top));
+                right: calc(12px + env(safe-area-inset-right));
+            }
+
+            .prayer-button {
+                width: 60px;
+                height: 60px;
+                bottom: calc(80px + env(safe-area-inset-bottom));
+                right: calc(12px + env(safe-area-inset-right));
+                font-size: 1.4rem;
+            }
+
+            .floating-shapes { display: block; opacity: 0.8; transform: scale(0.9); }
+        }
+
+        @media (max-width: 480px) {
+            .masonry-grid {
+                columns: 1;
+            }
+        }
+
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 15px;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
+            transform: perspective(1000px) rotateX(0) rotateY(0);
+            box-shadow: 0 10px 20px var(--card-shadow);
+        }
+
+        .masonry-item:hover {
+            transform: perspective(1000px) rotateX(5deg) rotateY(5deg) scale(1.05);
+            box-shadow: 0 15px 30px var(--card-shadow), var(--glow);
+        }
+
+        .masonry-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: var(--transition);
+        }
+
+        .masonry-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+            color: white;
+            padding: 15px;
+            transform: translateY(100%);
+            transition: var(--transition);
+        }
+
+        .masonry-item:hover .masonry-caption {
+            transform: translateY(0);
+        }
+
+        .masonry-reactions {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .masonry-item:hover .masonry-reactions {
+            opacity: 1;
+        }
+
+        .reaction-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .reaction-btn:hover {
+            transform: scale(1.2);
+        }
+
+        /* Video Reels */
+        .reels-section {
+            margin: 60px 0 40px;
+        }
+
+        .reels-container {
+            position: relative;
+            height: 500px;
+            overflow: hidden;
+            border-radius: 20px;
+            margin: 30px 0;
+            background: var(--card-bg);
+            box-shadow: 0 10px 30px var(--card-shadow);
+        }
+
+        .reel-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 30px;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .reel-slide.active {
+            opacity: 1;
+        }
+
+        .reel-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+            z-index: 1;
+        }
+
+        .reel-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+        }
+
+        .reel-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .reel-date {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            color: var(--primary);
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 2;
+            animation: pulse 2s infinite;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .play-btn:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            background: white;
+        }
+
+        .reel-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .reel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .reel-dot.active {
+            background: white;
+            transform: scale(1.2);
+        }
+
+        /* Featured Moments Carousel */
+        .carousel-section {
+            margin: 60px 0 40px;
+        }
+
+        .carousel-container {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+            border-radius: 20px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px var(--card-shadow);
+        }
+
+        .carousel-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 30px;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .carousel-slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .carousel-slide.prev {
+            transform: translateX(-100%);
+        }
+
+        .carousel-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+            z-index: 1;
+        }
+
+        .carousel-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .carousel-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .carousel-caption {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .carousel-dot.active {
+            background: white;
+            transform: scale(1.2);
+        }
+
+        /* Engagement Section */
+        .engagement-section {
+            margin: 60px 0 40px;
+        }
+
+        .engagement-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .engagement-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: calc(var(--delay) * 0.1s);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .engagement-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px var(--card-shadow), var(--glow);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-right: 15px;
+            box-shadow: 0 5px 15px rgba(255, 93, 92, 0.3);
+        }
+
+        .card-heading {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text);
+        }
+
+        /* Suggest a Moment Form */
+        .suggest-form {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin: 30px 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+            transition: var(--transition);
+        }
+
+        .dark-mode .form-input, .dark-mode .form-textarea {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 93, 92, 0.2);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .anonymous-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        .toggle-text {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            box-shadow: 0 5px 15px rgba(255, 93, 92, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 93, 92, 0.5);
+        }
+
+        /* Success Modal */
+        .success-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .success-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .success-content {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: scale(0.8);
+            opacity: 0;
+            transition: var(--transition);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .success-modal.active .success-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: var(--success);
+            margin-bottom: 20px;
+        }
+
+        .success-message {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .ok-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .ok-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 93, 92, 0.4);
+        }
+
+        /* Prayer Button */
+        .prayer-button {
+            position: fixed;
+            bottom: 100px;
+            right: calc(20px + env(safe-area-inset-right));
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.8rem;
+            box-shadow: 0 5px 20px rgba(255, 93, 92, 0.5);
+            cursor: pointer;
+            z-index: 100;
+            animation: pulse 2s infinite;
+            transition: var(--transition);
+        }
+
+        .prayer-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(255, 93, 92, 0.7);
+        }
+
+        /* Prayer Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .prayer-modal {
+            background: var(--card-bg);
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: translateY(50px) scale(0.9);
+            opacity: 0;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .modal-overlay.active .prayer-modal {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 10;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-close:hover {
+            background: white;
+            transform: rotate(90deg);
+        }
+
+        .modal-header {
+            padding: 30px 30px 0;
+        }
+
+        .modal-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .modal-subtitle {
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .modal-content {
+            padding: 0 30px 30px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--nav-bg);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            z-index: 100;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-light);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            transition: var(--transition);
+        }
+
+        .nav-item.active .nav-icon {
+            transform: translateY(-5px);
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .nav-indicator {
+            position: absolute;
+            top: -10px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .nav-item.active .nav-indicator {
+            opacity: 1;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: calc(20px + env(safe-area-inset-top));
+            right: calc(20px + env(safe-area-inset-right));
+            width: 50px;
+            height: 50px;
+            background: var(--card-bg);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px var(--card-shadow);
+            cursor: pointer;
+            z-index: 100;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(30deg);
+        }
+
+        .theme-icon {
+            font-size: 1.3rem;
+            color: var(--text);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .engagement-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .masonry-grid {
+                columns: 2;
+            }
+            
+            .modal-header {
+                padding: 20px 20px 0;
+            }
+            
+            .modal-content {
+                padding: 0 20px 20px;
+            }
+        }
+    </style>
+</head>
+<body class="dark-mode">
+    <!-- Floating Shapes for Background -->
+    <div class="floating-shapes">
+        <div class="shape" style="width: 80px; height: 80px; top: 10%; left: 10%; animation-delay: 0s;"></div>
+        <div class="shape" style="width: 120px; height: 120px; top: 60%; left: 80%; animation-delay: -5s;"></div>
+        <div class="shape" style="width: 60px; height: 60px; top: 80%; left: 20%; animation-delay: -10s;"></div>
+        <div class="shape" style="width: 100px; height: 100px; top: 30%; left: 70%; animation-delay: -2s;"></div>
+        <div class="shape" style="width: 70px; height: 70px; top: 70%; left: 60%; animation-delay: -7s;"></div>
+        <div class="shape" style="width: 90px; height: 90px; top: 40%; left: 30%; animation-delay: -12s;"></div>
+        <div class="shape" style="width: 50px; height: 50px; top: 20%; left: 50%; animation-delay: -4s;"></div>
+        <div class="shape" style="width: 110px; height: 110px; top: 50%; left: 10%; animation-delay: -9s;"></div>
+        <div class="shape" style="width: 85px; height: 85px; top: 15%; left: 85%; animation-delay: -6s;"></div>
+        <div class="shape" style="width: 95px; height: 95px; top: 65%; left: 15%; animation-delay: -8s;"></div>
+        
+        <div class="sparkle" style="top: 20%; left: 15%; animation-delay: 0s;">✨</div>
+        <div class="sparkle" style="top: 70%; left: 85%; animation-delay: -1s;">✨</div>
+        <div class="sparkle" style="top: 40%; left: 90%; animation-delay: -2s;">✨</div>
+        <div class="sparkle" style="top: 80%; left: 10%; animation-delay: -3s;">✨</div>
+        <div class="sparkle" style="top: 25%; left: 75%; animation-delay: -4s;">✨</div>
+        <div class="sparkle" style="top: 55%; left: 25%; animation-delay: -5s;">✨</div>
+        <div class="sparkle" style="top: 85%; left: 65%; animation-delay: -6s;">✨</div>
+        <div class="sparkle" style="top: 35%; left: 45%; animation-delay: -7s;">✨</div>
+    </div>
+
+    <!-- Logo Section -->
+    <div class="logo-container">
+        <div class="logo">
+            <img src="images/LOGO.png" width="100%" height="100%" alt="NEBC TEENS LOGO">
+        </div>
+        <div class="logo-text">NEBC Teens</div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-sun theme-icon"></i>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-slider">
+            <div class="hero-slide active" style="background-image: url('banner/index/img6.jpg');"></div>
+            <div class="hero-slide" style="background-image: url('banner/index/img2.jpg');"></div>
+            <div class="hero-slide" style="background-image: url('banner/index/img3.jpg');"></div>
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">NEBC Teens Moments</h1>
+            <p class="hero-subtitle">Relive the Fun, Worship, and Fellowship</p>
+        </div>
+    </section>
+
+    <!-- Gallery Filters -->
+    <section class="container">
+        <div class="gallery-filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="worship">Worship</button>
+            <button class="filter-btn" data-filter="games">Games</button>
+            <button class="filter-btn" data-filter="outreach">Outreach</button>
+            <button class="filter-btn" data-filter="hangouts">Hangouts</button>
+        </div>
+    </section>
+
+    <!-- Photo Gallery -->
+    <section class="container">
+        <h2 class="section-title">Our Gallery</h2>
+        <div class="masonry-grid" id="photoGallery">
+            <!-- Photos will be loaded from JavaScript -->
+        </div>
+    </section>
+
+    <!-- Video Reels -->
+    <section class="container reels-section">
+        <h2 class="section-title">Video Highlights</h2>
+        <div class="reels-container">
+            <div class="reel-slide active" style="background-image: url('banner/index/img4.jpg');">
+                <div class="reel-overlay"></div>
+                <div class="play-btn">
+                    <i class="fas fa-play"></i>
+                </div>
+                <div class="reel-content">
+                    <h3 class="reel-title">Teen Worship Night</h3>
+                    <p class="reel-date">October 15, 2023</p>
+                </div>
+            </div>
+            <div class="reel-slide" style="background-image: url('banner/index/img1.jpg');">
+                <div class="reel-overlay"></div>
+                <div class="play-btn">
+                    <i class="fas fa-play"></i>
+                </div>
+                <div class="reel-content">
+                    <h3 class="reel-title">Hangout Day</h3>
+                    <p class="reel-date">September 22, 2023</p>
+                </div>
+            </div>
+            <div class="reel-slide" style="background-image: url('banner/index/img5.jpg');">
+                <div class="reel-overlay"></div>
+                <div class="play-btn">
+                    <i class="fas fa-play"></i>
+                </div>
+                <div class="reel-content">
+                    <h3 class="reel-title">Games Sunday</h3>
+                    <p class="reel-date">August 30, 2023</p>
+                </div>
+            </div>
+        </div>
+        <div class="reel-controls">
+            <div class="reel-dot active"></div>
+            <div class="reel-dot"></div>
+            <div class="reel-dot"></div>
+        </div>
+    </section>
+
+    <!-- Featured Moments Carousel -->
+    <section class="container carousel-section">
+        <h2 class="section-title">Featured Moments</h2>
+        <div class="carousel-container">
+            <div class="carousel-slide active" style="background-image: url('banner/index/img1.jpg');">
+                <div class="carousel-overlay"></div>
+                <div class="carousel-content">
+                    <h3 class="carousel-title">Youth Concert</h3>
+                    <p class="carousel-caption">"The energy was incredible! We felt God's presence in a powerful way."</p>
+                </div>
+            </div>
+            <div class="carousel-slide" style="background-image: url('banner/index/img2.jpg');">
+                <div class="carousel-overlay"></div>
+                <div class="carousel-content">
+                    <h3 class="carousel-title">Beach Day</h3>
+                    <p class="carousel-caption">"Sun, sand, and fellowship - the perfect combination for summer memories."</p>
+                </div>
+            </div>
+            <div class="carousel-slide" style="background-image: url('banner/index/img6.jpg');">
+                <div class="carousel-overlay"></div>
+                <div class="carousel-content">
+                    <h3 class="carousel-title">Small Group Discussions</h3>
+                    <p class="carousel-caption">"Deep conversations that strengthened our faith and friendships."</p>
+                </div>
+            </div>
+            <div class="carousel-slide" style="background-image: url('banner/index/img8.jpg');">
+                <div class="carousel-overlay"></div>
+                <div class="carousel-content">
+                    <h3 class="carousel-title">Game Night Extravaganza</h3>
+                    <p class="carousel-caption">"Laughter, competition, and community - what more could we ask for?"</p>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-controls">
+            <div class="carousel-dot active"></div>
+            <div class="carousel-dot"></div>
+            <div class="carousel-dot"></div>
+            <div class="carousel-dot"></div>
+        </div>
+    </section>
+
+    <!-- Engagement Section -->
+    <section class="container engagement-section">
+        <h2 class="section-title">Join the Conversation</h2>
+        <div class="engagement-cards">
+            <!-- React to Moments -->
+            <div class="engagement-card" style="--delay: 1">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3 class="card-heading">React to Moments</h3>
+                </div>
+                <p>Hover over any photo and click an emoji to show your reaction!</p>
+                <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
+                    <div class="reaction-btn">❤️</div>
+                    <div class="reaction-btn">🙌</div>
+                    <div class="reaction-btn">🔥</div>
+                    <div class="reaction-btn">🎉</div>
+                </div>
+            </div>
+
+            <!-- Suggest a Moment -->
+            <div class="engagement-card" style="--delay: 2">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3 class="card-heading">Suggest a Moment</h3>
+                </div>
+                <p>Share your favorite memory or suggest a moment to capture next time!</p>
+                <div class="suggest-form" style="margin: 20px 0 0; padding: 20px;">
+                    <form id="suggestForm">
+                        <div class="form-group">
+                            <label class="form-label" for="momentTitle">Moment Title</label>
+                            <input type="text" id="momentTitle" class="form-input" placeholder="Give your moment a name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="momentDescription">Description</label>
+                            <textarea id="momentDescription" class="form-textarea" placeholder="Tell us about this special moment..." required></textarea>
+                        </div>
+                        <div class="anonymous-toggle">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="momentAnonymous" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <span class="toggle-text">Submit anonymously</span>
+                        </div>
+                        <button type="submit" class="submit-btn">Share Moment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Modal -->
+    <div class="success-modal" id="successModal">
+        <div class="success-content">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <p class="success-message" id="successMessage">Your moment has been shared!</p>
+            <button class="ok-btn" id="okBtn">OK</button>
+        </div>
+    </div>
+
+    <!-- Prayer Request Button -->
+    <div class="prayer-button" id="prayerButton">
+        <i class="fas fa-hands-praying"></i>
+    </div>
+
+    <!-- Prayer Request Modal -->
+    <div class="modal-overlay" id="prayerModal">
+        <div class="prayer-modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Submit a Prayer Request</h3>
+                <button class="modal-close" id="prayerClose">&times;</button>
+            </div>
+            <div class="modal-content">
+                <form id="prayerForm">
+                    <div class="form-group">
+                        <label class="form-label" for="name">Your Name (Optional)</label>
+                        <input type="text" id="name" class="form-input" placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="request">Prayer Request</label>
+                        <textarea id="request" class="form-textarea" placeholder="Share your prayer request here..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <input type="checkbox" id="anonymous"> Share anonymously
+                        </label>
+                    </div>
+                    <button type="submit" class="submit-btn">Submit Prayer Request</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="motivation.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-fire nav-icon"></i>
+            <span class="nav-label">Boost</span>
+        </a>
+        <a href="devotional.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-book-open nav-icon"></i>
+            <span class="nav-label">Devotionals</span>
+        </a>
+        <a href="gallery.html" class="nav-item active">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-images nav-icon"></i>
+            <span class="nav-label">Gallery</span>
+        </a>
+        <a href="ask.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-question-circle nav-icon"></i>
+            <span class="nav-label">Ask</span>
+        </a>
+        <a href="testimonies.html" class="nav-item">
+            <span class="nav-indicator"></span>
+            <i class="fas fa-comment-dots nav-icon"></i>
+            <span class="nav-label">Testimonies</span>
+        </a>
+    </nav>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "your-api-key",
+            authDomain: "your-auth-domain",
+            projectId: "your-project-id",
+            storageBucket: "your-storage-bucket",
+            messagingSenderId: "your-sender-id",
+            appId: "your-app-id"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Sample gallery data (in a real app, this would come from Firebase)
+        const galleryPhotos = [
+            { id: 1, src: "banner/Gallery/img (1).jpg", caption: "Summer Retreat 2023", category: "worship" },
+            { id: 2, src: "banner/Gallery/img (2).jpg", caption: "Worship Night", category: "worship" },
+            { id: 3, src: "banner/Gallery/img (3).jpg", caption: "Game Night Extravaganza", category: "games" },
+            { id: 4, src: "banner/Gallery/img (4).jpg", caption: "Beach Day", category: "hangouts" },
+            { id: 5, src: "banner/Gallery/img (5).jpg", caption: "Youth Concert", category: "worship" },
+            { id: 6, src: "banner/Gallery/img (6).jpg", caption: "Small Group Discussions", category: "hangouts" },
+            { id: 7, src: "banner/Gallery/img (7).jpg", caption: "Games Sunday", category: "games" },
+            { id: 8, src: "banner/Gallery/img (8).jpg", caption: "Teen Worship Night", category: "worship" },
+            { id: 9, src: "banner/Gallery/img (9).jpg", caption: "Hangout Day", category: "hangouts" },
+            { id: 10, src: "banner/Gallery/img (10).jpg", caption: "Community Outreach", category: "outreach" },
+            { id: 11, src: "banner/Gallery/img (11).jpg", caption: "Nature Retreat", category: "hangouts" },
+            { id: 12, src: "banner/Gallery/img (12).jpg", caption: "Mountain Hike", category: "hangouts" },
+            { id: 13, src: "banner/Gallery/img (13).jpg", caption: "Board Game Night", category: "games" },
+            { id: 14, src: "banner/Gallery/img (14).jpg", caption: "Video Game Tournament", category: "games" },
+            { id: 15, src: "banner/Gallery/img (15).jpg", caption: "Team Building Games", category: "games" },
+            { id: 16, src: "banner/Gallery/img (16).jpg", caption: "Beach Bonfire", category: "hangouts" },
+            { id: 17, src: "banner/Gallery/img (17).jpg", caption: "Sunset Worship", category: "worship" },
+            { id: 18, src: "banner/Gallery/img (18).jpg", caption: "Outdoor Adventure", category: "hangouts" },
+            { id: 19, src: "banner/Gallery/img (19).jpg", caption: "Pizza Party", category: "hangouts" },
+            { id: 20, src: "banner/Gallery/img (20).jpg", caption: "Community Service", category: "outreach" },
+            { id: 21, src: "banner/Gallery/img (21).jpg", caption: "Concert Night", category: "worship" },
+            { id: 22, src: "banner/Gallery/img (22).jpg", caption: "Bible Study", category: "worship" },
+            { id: 23, src: "banner/Gallery/img (23).jpg", caption: "Sports Day", category: "games" },
+            { id: 24, src: "banner/Gallery/img (24).jpg", caption: "Prayer Circle", category: "worship" },
+            { id: 25, src: "banner/Gallery/img (25).jpg", caption: "Friendship Day", category: "hangouts" }
+        ];
+
+        // DOM Elements
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('.theme-icon');
+        const heroSlides = document.querySelectorAll('.hero-slide');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const photoGallery = document.getElementById('photoGallery');
+        const reelSlides = document.querySelectorAll('.reel-slide');
+        const reelDots = document.querySelectorAll('.reel-dot');
+        const playBtns = document.querySelectorAll('.play-btn');
+        const carouselSlides = document.querySelectorAll('.carousel-slide');
+        const carouselDots = document.querySelectorAll('.carousel-dot');
+        const reactionBtns = document.querySelectorAll('.reaction-btn');
+        const suggestForm = document.getElementById('suggestForm');
+        const prayerButton = document.getElementById('prayerButton');
+        const prayerModal = document.getElementById('prayerModal');
+        const prayerClose = document.getElementById('prayerClose');
+        const prayerForm = document.getElementById('prayerForm');
+        const successModal = document.getElementById('successModal');
+        const successMessage = document.getElementById('successMessage');
+        const okBtn = document.getElementById('okBtn');
+
+        // Initialize the page
+        function initPage() {
+            setupEventListeners();
+            startHeroSlider();
+            startReelSlider();
+            startCarousel();
+            loadGalleryPhotos();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Theme toggle
+            themeToggle.addEventListener('click', toggleTheme);
+            
+            // Filter buttons
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remove active class from all buttons
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    btn.classList.add('active');
+                    
+                    // Filter gallery photos
+                    filterGalleryPhotos(btn.dataset.filter);
+                });
+            });
+            
+            // Reel dots
+            reelDots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    showReelSlide(index);
+                });
+            });
+            
+            // Play buttons
+            playBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // In a real implementation, this would play the video
+                    btn.innerHTML = '<i class="fas fa-pause"></i>';
+                    setTimeout(() => {
+                        btn.innerHTML = '<i class="fas fa-play"></i>';
+                    }, 3000);
+                });
+            });
+            
+            // Carousel dots
+            carouselDots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    showCarouselSlide(index);
+                });
+            });
+            
+            // Reaction buttons
+            reactionBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Add animation
+                    btn.style.transform = 'scale(1.5)';
+                    setTimeout(() => {
+                        btn.style.transform = 'scale(1)';
+                    }, 300);
+                    
+                    // Show confetti for positive engagement
+                    confetti({
+                        particleCount: 30,
+                        spread: 70,
+                        origin: { y: 0.6 }
+                    });
+                });
+            });
+            
+            // Suggest form
+            suggestForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Get form data
+                const title = document.getElementById('momentTitle').value;
+                const description = document.getElementById('momentDescription').value;
+                const isAnonymous = document.getElementById('momentAnonymous').checked;
+                
+                // In a real implementation, this would save to Firebase
+                console.log('Submitting moment suggestion:', { title, description, isAnonymous });
+                
+                // Show success message
+                suggestForm.reset();
+                successMessage.textContent = "Your moment has been shared!";
+                successModal.classList.add('active');
+            });
+            
+            // Prayer modal
+            prayerButton.addEventListener('click', () => {
+                prayerModal.classList.add('active');
+            });
+            
+            prayerClose.addEventListener('click', () => {
+                prayerModal.classList.remove('active');
+            });
+            
+            prayerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // In a real implementation, this would send to EmailJS
+                prayerModal.classList.remove('active');
+                setTimeout(() => {
+                    successMessage.textContent = "Your prayer request has been received. The NEBC Teens team will pray with you.";
+                    successModal.classList.add('active');
+                }, 300);
+                prayerForm.reset();
+            });
+            
+            // Success modal
+            okBtn.addEventListener('click', () => {
+                successModal.classList.remove('active');
+            });
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            if (document.body.classList.contains('light-mode')) {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            } else {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+        }
+
+        // Hero slider
+        let currentHeroSlide = 0;
+        
+        function startHeroSlider() {
+            setInterval(() => {
+                heroSlides.forEach(slide => slide.classList.remove('active'));
+                currentHeroSlide = (currentHeroSlide + 1) % heroSlides.length;
+                heroSlides[currentHeroSlide].classList.add('active');
+            }, 5000);
+        }
+
+        // Reel slider
+        let currentReelSlide = 0;
+        
+        function startReelSlider() {
+            setInterval(() => {
+                showReelSlide((currentReelSlide + 1) % reelSlides.length);
+            }, 6000);
+        }
+        
+        function showReelSlide(index) {
+            reelSlides.forEach(slide => slide.classList.remove('active'));
+            reelDots.forEach(dot => dot.classList.remove('active'));
+            
+            reelSlides[index].classList.add('active');
+            reelDots[index].classList.add('active');
+            currentReelSlide = index;
+        }
+
+        // Carousel
+        let currentCarouselSlide = 0;
+        
+        function startCarousel() {
+            setInterval(() => {
+                showCarouselSlide((currentCarouselSlide + 1) % carouselSlides.length);
+            }, 7000);
+        }
+        
+        function showCarouselSlide(index) {
+            carouselSlides.forEach(slide => {
+                slide.classList.remove('active', 'prev');
+                if (parseInt(slide.dataset.index) < index) {
+                    slide.classList.add('prev');
+                }
+            });
+            carouselDots.forEach(dot => dot.classList.remove('active'));
+            
+            carouselSlides[index].classList.add('active');
+            carouselDots[index].classList.add('active');
+            currentCarouselSlide = index;
+        }
+
+        // Load gallery photos
+        function loadGalleryPhotos(filter = 'all') {
+            photoGallery.innerHTML = '';
+            
+            const filteredPhotos = filter === 'all' 
+                ? galleryPhotos 
+                : galleryPhotos.filter(photo => photo.category === filter);
+            
+            filteredPhotos.forEach(photo => {
+                const photoElement = document.createElement('div');
+                photoElement.className = 'masonry-item';
+                photoElement.dataset.category = photo.category;
+                
+                photoElement.innerHTML = `
+                    <img src="${photo.src}" alt="${photo.caption}" class="masonry-img">
+                    <div class="masonry-caption">${photo.caption}</div>
+                    <div class="masonry-reactions">
+                        <div class="reaction-btn">❤️</div>
+                        <div class="reaction-btn">🙌</div>
+                        <div class="reaction-btn">🔥</div>
+                        <div class="reaction-btn">🎉</div>
+                    </div>
+                `;
+                
+                photoGallery.appendChild(photoElement);
+                
+                // Add event listeners to reaction buttons
+                const reactionButtons = photoElement.querySelectorAll('.reaction-btn');
+                reactionButtons.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        
+                        // Add animation
+                        btn.style.transform = 'scale(1.5)';
+                        setTimeout(() => {
+                            btn.style.transform = 'scale(1)';
+                        }, 300);
+                        
+                        // Show confetti for positive engagement
+                        confetti({
+                            particleCount: 20,
+                            spread: 70,
+                            origin: { y: 0.6 }
+                        });
+                    });
+                });
+            });
+        }
+
+        // Filter gallery photos
+        function filterGalleryPhotos(filter) {
+            const allPhotos = document.querySelectorAll('.masonry-item');
+            
+            allPhotos.forEach(photo => {
+                if (filter === 'all' || photo.dataset.category === filter) {
+                    photo.style.display = 'block';
+                    setTimeout(() => {
+                        photo.style.opacity = '1';
+                        photo.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+                    }, 100);
+                } else {
+                    photo.style.opacity = '0';
+                    photo.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(0.8)';
+                    setTimeout(() => {
+                        photo.style.display = 'none';
+                    }, 300);
+                }
+            });
+        }
+
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>
